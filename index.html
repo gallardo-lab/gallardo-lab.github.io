@@ -1,663 +1,723 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LIBAC | Dr. Hugo Gallardo-Blanco</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Web Biosketch | Dr. Hugo Gallardo-Blanco</title>
 
 <style>
-html { scroll-behavior: smooth; }
+  :root{
+    --ink:#0b2545;
+    --accent:#2a6f97;
+    --bg:#f5f7fa;
+    --card:#ffffff;
+    --muted:#556070;
+    --border:#c8d3df;
+  }
 
-body{
+  html{ scroll-behavior:smooth; }
+  body{
     font-family: Arial, Helvetica, sans-serif;
     margin:0;
-    background:#f5f7fa;
+    background:var(--bg);
     color:#222;
-}
+  }
 
-header{
-    background:#0b2545;
+  /* Header */
+  header{
+    background:var(--ink);
     color:white;
-    padding:60px 20px;
+    padding:52px 20px 28px 20px;
     text-align:center;
-}
-
-header h1{
+  }
+  header h1{
     margin:0;
-    font-size:38px;
-}
-
-header .subtitle{
-    margin-top:10px;
-    font-size:18px;
-    opacity:0.95;
-}
-
-header .affil{
+    font-size:34px;
+    letter-spacing:0.2px;
+  }
+  header .subtitle{
     margin-top:10px;
     font-size:16px;
-    opacity:0.9;
-}
+    opacity:0.96;
+    max-width:980px;
+    margin-left:auto;
+    margin-right:auto;
+    line-height:1.4;
+  }
+  header .affil{
+    margin-top:10px;
+    font-size:15px;
+    opacity:0.92;
+    max-width:980px;
+    margin-left:auto;
+    margin-right:auto;
+    line-height:1.35;
+  }
 
-.section{
-    max-width:900px;
-    margin:28px auto;
-    padding:20px;
-    background:white;
+  /* Top navigation (anchors) */
+  .topnav-wrap{
+    position:sticky;
+    top:0;
+    z-index:999;
+    background:rgba(245,247,250,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom:1px solid rgba(200,211,223,0.7);
+  }
+  .topnav{
+    max-width:980px;
+    margin:0 auto;
+    padding:10px 16px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+  }
+  .navlinks{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px 14px;
+    align-items:center;
+  }
+  .navlinks a{
+    color:var(--ink);
+    text-decoration:none;
+    font-weight:700;
+    font-size:13px;
+    padding:6px 10px;
     border-radius:10px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
-}
-
-h2{
-    color:#0b2545;
-    border-bottom:3px solid #2a6f97;
-    padding-bottom:5px;
-}
-
-ul{
-    line-height:1.6;
-}
-
-.pub{
-    margin-bottom:14px;
-}
-
-.smallnote{
-    font-size:14px;
-    color:#555;
-}
-
-.contact{
-    text-align:center;
-    font-size:18px;
-}
-
-.langbar{
-    max-width:900px;
-    margin:12px auto 0 auto;
-    padding:0 20px;
-    text-align:right;
-}
-
-.langbtn{
-    border:1px solid #c8d3df;
+    border:1px solid transparent;
+  }
+  .navlinks a:hover{
+    border-color:rgba(42,111,151,0.35);
     background:#ffffff;
-    color:#0b2545;
-    padding:8px 12px;
-    border-radius:8px;
+  }
+
+  /* Language buttons */
+  .langbtn{
+    border:1px solid var(--border);
+    background:#ffffff;
+    color:var(--ink);
+    padding:7px 10px;
+    border-radius:10px;
     cursor:pointer;
-    font-weight:600;
-    margin-left:8px;
-}
-
-.langbtn.active{
-    background:#0b2545;
+    font-weight:800;
+    margin-left:6px;
+    font-size:13px;
+  }
+  .langbtn.active{
+    background:var(--ink);
     color:#fff;
-    border-color:#0b2545;
-}
+    border-color:var(--ink);
+  }
 
-footer{
+  /* Sections */
+  .section{
+    max-width:980px;
+    margin:22px auto;
+    padding:20px;
+    background:var(--card);
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  }
+  .section h2{
+    color:var(--ink);
+    border-bottom:3px solid var(--accent);
+    padding-bottom:6px;
+    margin-top:0;
+  }
+  .smallnote{
+    font-size:14px;
+    color:var(--muted);
+  }
+  ul{ line-height:1.6; margin-top:10px; }
+  li{ margin-bottom:6px; }
+
+  .grid2{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:14px;
+  }
+  @media (max-width: 860px){
+    .grid2{ grid-template-columns:1fr; }
+  }
+
+  .tagrow{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:10px;
+  }
+  .tag{
+    border:1px solid rgba(42,111,151,0.25);
+    background:rgba(42,111,151,0.06);
+    color:var(--ink);
+    padding:6px 10px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:13px;
+  }
+
+  .pub{
+    margin:12px 0;
+    padding:12px 12px;
+    border:1px solid rgba(200,211,223,0.7);
+    border-radius:10px;
+    background:#fbfcfe;
+  }
+  .pub b{ color:var(--ink); }
+
+  .contact{
     text-align:center;
-    margin:30px;
+    font-size:16px;
+  }
+  .contact a{ font-weight:800; }
+
+  /* Anchor offset so sticky nav doesn't cover headings */
+  section[id]{ scroll-margin-top: 74px; }
+
+  footer{
+    text-align:center;
+    margin:28px 12px 40px 12px;
     color:#777;
-}
-
-/* Top navigation */
-.topnav{
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    background: rgba(245,247,250,0.95);
-    backdrop-filter: blur(6px);
-    border-bottom: 1px solid #d9e2ec;
-}
-
-.topnav-inner{
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 10px 20px;
-    display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.navlinks{
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-.navlinks a{
-    text-decoration: none;
-    color: #0b2545;
-    font-weight: 600;
-    font-size: 14px;
-    padding: 6px 10px;
-    border-radius: 8px;
-}
-
-.navlinks a:hover{
-    background: #e9eef5;
-}
-
-.navhint{
-    font-size: 13px;
-    color: #4a5a6a;
-}
-
-/* Active section highlight */
-.navlinks a.active{
-    background:#0b2545;
-    color:#ffffff;
-}
+    font-size:13px;
+  }
 </style>
 </head>
 
 <body>
 
 <header>
-    <h1>LIBAC</h1>
+  <h1>
+    <span data-lang="en">Web Biosketch</span>
+    <span data-lang="es" style="display:none;">Biosketch web</span>
+  </h1>
 
-    <div class="subtitle" data-lang="en">
-        Basic–Clinical Research Laboratory • Targeted Nanomedicine and Oncogenic Protein Interference
-    </div>
-    <div class="subtitle" data-lang="es" style="display:none;">
-        Laboratorio de Investigación Básico–Clínica • Nanomedicina dirigida e interferencia de proteínas oncogénicas
-    </div>
+  <div class="subtitle" data-lang="en">
+    Nanomedicine & Molecular Oncology • Myc/Max program modulation and targeted delivery platforms (HER2+)
+  </div>
+  <div class="subtitle" data-lang="es" style="display:none;">
+    Nanomedicina y Oncología Molecular • Modulación de programas Myc/Max y plataformas de liberación dirigida (HER2+)
+  </div>
 
-    <div class="affil" data-lang="en">
-        Dr. Hugo Gallardo-Blanco • Universidad Autónoma de Nuevo León – School of Medicine
-    </div>
-    <div class="affil" data-lang="es" style="display:none;">
-        Dr. Hugo Gallardo-Blanco • Universidad Autónoma de Nuevo León – Facultad de Medicina
-    </div>
+  <div class="affil" data-lang="en">
+    Dr. Hugo Gallardo-Blanco • Oncology Service, University Hospital “Dr. José Eleuterio González” & School of Medicine, Universidad Autónoma de Nuevo León (UANL)
+  </div>
+  <div class="affil" data-lang="es" style="display:none;">
+    Dr. Hugo Gallardo-Blanco • Servicio de Oncología, Hospital Universitario “Dr. José Eleuterio González” y Facultad de Medicina, Universidad Autónoma de Nuevo León (UANL)
+  </div>
 </header>
 
-<!-- Top navigation (anchors) -->
-<nav class="topnav">
-  <div class="topnav-inner">
-    <div class="navlinks" data-lang="en">
-      <a class="navlink" href="#research">Research</a>
-      <a class="navlink" href="#keywords">Keywords</a>
-      <a class="navlink" href="#publications">Publications</a>
-      <a class="navlink" href="#onepager">One-Pager</a>
-      <a class="navlink" href="#contact">Contact</a>
+<!-- Sticky navigation + language toggle -->
+<div class="topnav-wrap">
+  <div class="topnav">
+    <div class="navlinks">
+      <a href="#personal">
+        <span data-lang="en">Personal Statement</span>
+        <span data-lang="es" style="display:none;">Declaración personal</span>
+      </a>
+      <a href="#keywords">
+        <span data-lang="en">Keywords</span>
+        <span data-lang="es" style="display:none;">Palabras clave</span>
+      </a>
+      <a href="#projects">
+        <span data-lang="en">Research Projects</span>
+        <span data-lang="es" style="display:none;">Proyectos</span>
+      </a>
+      <a href="#publications">
+        <span data-lang="en">Selected Publications</span>
+        <span data-lang="es" style="display:none;">Publicaciones</span>
+      </a>
+      <a href="#synergy">
+        <span data-lang="en">Synergistic Activities</span>
+        <span data-lang="es" style="display:none;">Actividades sinérgicas</span>
+      </a>
+      <a href="#honors">
+        <span data-lang="en">Honors</span>
+        <span data-lang="es" style="display:none;">Distinciones</span>
+      </a>
+      <a href="#onepager">
+        <span data-lang="en">One-Pager (PDF)</span>
+        <span data-lang="es" style="display:none;">One-pager (PDF)</span>
+      </a>
+      <a href="#contact">
+        <span data-lang="en">Contact</span>
+        <span data-lang="es" style="display:none;">Contacto</span>
+      </a>
+        <a href="#appointments">
+  <span data-lang="en">Appointments</span>
+  <span data-lang="es" style="display:none;">Nombramientos</span>
+</a>
     </div>
 
-    <div class="navlinks" data-lang="es" style="display:none;">
-      <a class="navlink" href="#research">Investigación</a>
-      <a class="navlink" href="#keywords">Palabras clave</a>
-      <a class="navlink" href="#publications">Publicaciones</a>
-      <a class="navlink" href="#onepager">One-pager</a>
-      <a class="navlink" href="#contact">Contacto</a>
+    <div>
+      <button id="btnEN" class="langbtn" onclick="setLang('en')">EN</button>
+      <button id="btnES" class="langbtn" onclick="setLang('es')">ES</button>
     </div>
-
-    <div class="navhint" data-lang="en">Jump to section</div>
-    <div class="navhint" data-lang="es" style="display:none;">Ir a sección</div>
   </div>
-</nav>
-
-<!-- Language toggle bar -->
-<div class="langbar">
-  <button id="btnEN" class="langbtn" onclick="setLang('en')">EN</button>
-  <button id="btnES" class="langbtn" onclick="setLang('es')">ES</button>
 </div>
 
 <script>
-function setLang(lang){
-  document.querySelectorAll('[data-lang]').forEach(el=>{
-    el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
-  });
-  localStorage.setItem('libac_lang', lang);
+  function setLang(lang){
+    document.querySelectorAll('[data-lang]').forEach(el=>{
+      el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+    });
+    localStorage.setItem('biosketch_lang', lang);
 
-  const en = document.getElementById('btnEN');
-  const es = document.getElementById('btnES');
-  if(en && es){
-    en.classList.toggle('active', lang === 'en');
-    es.classList.toggle('active', lang === 'es');
+    const en = document.getElementById('btnEN');
+    const es = document.getElementById('btnES');
+    if(en && es){
+      en.classList.toggle('active', lang === 'en');
+      es.classList.toggle('active', lang === 'es');
+    }
+    document.documentElement.lang = lang;
   }
-
-  document.documentElement.lang = lang;
-}
-(function(){
-  const saved = localStorage.getItem('libac_lang') || 'en';
-  setLang(saved);
-})();
+  (function(){
+    const saved = localStorage.getItem('biosketch_lang') || 'en';
+    setLang(saved);
+  })();
 </script>
 
-<!-- Scroll-spy: highlight active nav item -->
-<script>
-(function(){
-  const sectionIds = ["research","keywords","publications","onepager","contact"];
-  const sections = sectionIds
-    .map(id => document.getElementById(id))
-    .filter(Boolean);
+<!-- PERSONAL STATEMENT -->
+<section id="personal" class="section">
+  <h2>
+    <span data-lang="en">A. Personal Statement</span>
+    <span data-lang="es" style="display:none;">A. Declaración personal</span>
+  </h2>
 
-  const allNavLinks = () => Array.from(document.querySelectorAll('a.navlink'));
-
-  function clearActive(){
-    allNavLinks().forEach(a => a.classList.remove('active'));
-  }
-
-  function setActiveById(id){
-    clearActive();
-    allNavLinks().forEach(a=>{
-      const href = a.getAttribute('href') || '';
-      if(href === '#' + id) a.classList.add('active');
-    });
-  }
-
-  // instant feedback on click
-  document.addEventListener('click', (e)=>{
-    const a = e.target.closest && e.target.closest('a.navlink');
-    if(!a) return;
-    const href = a.getAttribute('href') || '';
-    if(href.startsWith('#')) setActiveById(href.slice(1));
-  });
-
-  // observe sections
-  if('IntersectionObserver' in window && sections.length){
-    const io = new IntersectionObserver((entries)=>{
-      const visible = entries
-        .filter(en => en.isIntersecting)
-        .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if(visible && visible.target && visible.target.id){
-        setActiveById(visible.target.id);
-      }
-    },{
-      root: null,
-      threshold: [0.2, 0.35, 0.5, 0.65]
-    });
-
-    sections.forEach(sec => io.observe(sec));
-    setActiveById(sections[0].id);
-  }
-})();
-</script>
-
-<!-- Research Statement (anchored) -->
-<div class="section" id="research">
   <div data-lang="en">
-    <h2>Research Statement</h2>
     <p>
-      LIBAC-Nanomedicine focuses on <b>Myc/Max biology</b> and actionable strategies to modulate oncogenic transcriptional programs, with an emphasis on
-      mechanism-first designs that translate into measurable cellular outcomes. In parallel, we develop targeted nanomedicine approaches
-      as enabling technology to address a central bottleneck in cancer intervention: efficient intracellular access to mechanistically defined targets.
+      My work focuses on <b>Myc/Max biology</b> and actionable strategies to modulate oncogenic transcriptional programs,
+      prioritizing “mechanism-first” intervention packages that translate into measurable cellular outcomes. In parallel,
+      I develop <b>targeted delivery platforms</b> (including receptor-guided systems in <b>HER2+ breast cancer</b>) as enabling
+      technology to address a persistent bottleneck in cancer intervention: reliable intracellular access to mechanistically
+      defined targets.
     </p>
     <p>
-      Two programs anchor our work and collaboration portfolio: <b>Myc/Max programs</b> (competitive blockade and ubiquitination-informed,
-      degradation-inspired concepts to alter transcriptional circuitry) and <b>HER2+ breast cancer</b> (receptor-guided targeting and intracellular routing
-      to support selective modulation). Across both, we treat delivery and mechanism as a coupled system—prioritizing interventions whose effects
-      can be explained by uptake routes, intracellular trafficking, and pathway-level responses.
+      Across programs, I treat delivery and mechanism as a coupled system—selecting constructs whose effects can be explained
+      by uptake routes, intracellular trafficking, and pathway-level responses. This framing is designed to support international
+      collaborations that culminate in rigorous manuscripts and competitive proposals.
     </p>
     <p class="smallnote">
-      We structure intervention → mechanism → readout packages to enable collaborations that culminate in publications and competitive proposals.
+      Note: A collaboration on antimicrobial nanomaterials for chronic wound infections is listed under “Research Projects” as an
+      external collaborative effort with limited time allocation.
     </p>
   </div>
 
   <div data-lang="es" style="display:none;">
-    <h2>Declaración de investigación</h2>
     <p>
-      LIBAC-Nanomedicina se centra en la <b>biología Myc/Max</b> y en estrategias accionables para modular programas transcripcionales oncogénicos, con énfasis en
-      diseños “mecanismo primero” que se traduzcan en resultados celulares medibles. En paralelo, desarrollamos enfoques de nanomedicina dirigida
-      como tecnología habilitadora para resolver un cuello de botella central: el acceso intracelular eficiente a blancos definidos mecanísticamente.
+      Mi trabajo se centra en la <b>biología Myc/Max</b> y en estrategias accionables para modular programas transcripcionales oncogénicos,
+      priorizando paquetes de intervención “mecanismo primero” que se traduzcan en resultados celulares medibles. En paralelo,
+      desarrollo <b>plataformas de liberación dirigida</b> (incluyendo sistemas guiados por receptor en <b>cáncer de mama HER2+</b>)
+      como tecnología habilitadora para resolver un cuello de botella persistente: el acceso intracelular confiable a blancos definidos
+      mecanísticamente.
     </p>
     <p>
-      Dos programas anclan nuestro trabajo y portafolio de colaboración: <b>programas Myc/Max</b> (bloqueo competitivo y conceptos informados por ubiquitinación,
-      inspirados en degradación, para alterar circuitos transcripcionales) y <b>cáncer de mama HER2+</b> (dirigimiento por receptor y enrutamiento intracelular
-      para apoyar modulación selectiva). En ambos, tratamos liberación y mecanismo como un sistema acoplado—priorizando intervenciones cuyos efectos puedan
-      explicarse por rutas de entrada, tráfico intracelular y respuestas a nivel de vías.
+      A través de estos programas, trato liberación y mecanismo como un sistema acoplado—seleccionando constructos cuyos efectos puedan explicarse
+      por rutas de entrada, tráfico intracelular y respuestas a nivel de vías. Este enfoque está diseñado para facilitar colaboraciones internacionales
+      que culminen en manuscritos rigurosos y propuestas competitivas.
     </p>
     <p class="smallnote">
-      Estructuramos intervención → mecanismo → lectura (readout) para facilitar colaboraciones que culminen en publicaciones y propuestas competitivas.
+      Nota: Una colaboración en nanomateriales antimicrobianos para infecciones en heridas crónicas se incluye en “Proyectos” como esfuerzo externo
+      con dedicación limitada.
     </p>
   </div>
-</div>
+</section>
 
-<!-- Specific Research Directions -->
-<div class="section" data-lang="en">
-<h2>Specific Research Directions</h2>
-<ul>
-<li><b>HER2+ breast cancer (targeted nanomedicine):</b> receptor-guided platforms and biologically responsive biomaterials for selective tumor modulation</li>
-<li><b>Myc/Max programs (oncogenic interference):</b> peptide blockers and degrader-inspired strategies for challenging protein targets</li>
-<li><b>Mechanistic trafficking:</b> uptake pathways, endosomal routing, and intracellular fate linked to functional outcomes</li>
-<li><b>Translational molecular insights:</b> pathway-level signals connected to tumor-relevant phenotypes and clinically meaningful interpretation</li>
-</ul>
-</div>
+<!-- KEYWORDS -->
+<section id="keywords" class="section">
+  <h2>
+    <span data-lang="en">Keywords / Expertise (Myc/Max Prioritized)</span>
+    <span data-lang="es" style="display:none;">Palabras clave / Experiencia (prioridad Myc/Max)</span>
+  </h2>
 
-<div class="section" data-lang="es" style="display:none;">
-<h2>Direcciones específicas de investigación</h2>
-<ul>
-<li><b>Cáncer de mama HER2+ (nanomedicina dirigida):</b> plataformas guiadas por receptor y biomateriales responsivos para modulación tumoral selectiva</li>
-<li><b>Programas Myc/Max (interferencia oncogénica):</b> bloqueadores peptídicos y estrategias inspiradas en degradación para blancos difíciles</li>
-<li><b>Tráfico mecanístico:</b> rutas de entrada, enrutamiento endosomal y destino intracelular ligados a resultados funcionales</li>
-<li><b>Perspectiva traslacional:</b> señales a nivel de vías conectadas con fenotipos tumorales relevantes e interpretación clínicamente útil</li>
-</ul>
-</div>
-
-<!-- Keywords / Expertise (Myc/Max prioritized, anchored) -->
-<div class="section" id="keywords">
-  <div data-lang="en">
-    <h2>Keywords / Expertise</h2>
-    <p class="smallnote">Target areas and methods (selected):</p>
-    <ul>
-      <li>Myc/Max biology and oncogenic transcriptional programs</li>
-      <li>Myc/Max interference (competitive blockade concepts)</li>
-      <li>Transcriptional circuitry modulation</li>
-      <li>Protein–protein interaction inhibition (conceptual + experimental framing)</li>
-      <li>Ubiquitination-informed / degradation-inspired strategies (conceptual)</li>
-      <li>Mechanism-first experimental design</li>
-      <li>Pathway-level response interpretation</li>
-      <li>Transcriptomic readouts and signature-driven framing</li>
-      <li>Targeted delivery to enable intracellular access</li>
-      <li>Intracellular trafficking & uptake mechanisms</li>
-      <li>Endosomal routing / delivery barriers</li>
-      <li>HER2+ breast cancer (targeted nanomedicine program)</li>
-    </ul>
+  <div class="tagrow" data-lang="en">
+    <span class="tag">Myc/Max biology</span>
+    <span class="tag">oncogenic transcriptional programs</span>
+    <span class="tag">protein–protein interaction inhibition</span>
+    <span class="tag">degradation-inspired concepts</span>
+    <span class="tag">mechanism-first design</span>
+    <span class="tag">pathway-level readouts</span>
+    <span class="tag">transcriptomic signatures</span>
+    <span class="tag">intracellular access</span>
+    <span class="tag">uptake & trafficking</span>
+    <span class="tag">endosomal routing</span>
+    <span class="tag">HER2+ breast cancer</span>
+    <span class="tag">targeted nanomedicine</span>
   </div>
 
   <div data-lang="es" style="display:none;">
-    <h2>Palabras clave / Experiencia</h2>
-    <p class="smallnote">Áreas objetivo y métodos (selección):</p>
-    <ul>
-      <li>Biología Myc/Max y programas transcripcionales oncogénicos</li>
-      <li>Interferencia Myc/Max (conceptos de bloqueo competitivo)</li>
-      <li>Modulación de circuitos transcripcionales</li>
-      <li>Inhibición de interacciones proteína–proteína (conceptual + planteamiento experimental)</li>
-      <li>Diseño informado por ubiquitinación / estrategias inspiradas en degradación (conceptual)</li>
-      <li>Diseño experimental “mecanismo primero”</li>
-      <li>Interpretación de respuesta a nivel de vías</li>
-      <li>Lecturas transcriptómicas y enfoque por firmas moleculares</li>
-      <li>Liberación dirigida para habilitar acceso intracelular</li>
-      <li>Tráfico intracelular y mecanismos de entrada</li>
-      <li>Enrutamiento endosomal / barreras de liberación</li>
-      <li>Cáncer de mama HER2+ (programa de nanomedicina dirigida)</li>
-    </ul>
+    <div class="tagrow">
+      <span class="tag">biología Myc/Max</span>
+      <span class="tag">programas transcripcionales oncogénicos</span>
+      <span class="tag">inhibición de interacciones proteína–proteína</span>
+      <span class="tag">conceptos inspirados en degradación</span>
+      <span class="tag">diseño “mecanismo primero”</span>
+      <span class="tag">lecturas a nivel de vías</span>
+      <span class="tag">firmas transcriptómicas</span>
+      <span class="tag">acceso intracelular</span>
+      <span class="tag">entrada y tráfico intracelular</span>
+      <span class="tag">enrutamiento endosomal</span>
+      <span class="tag">cáncer de mama HER2+</span>
+      <span class="tag">nanomedicina dirigida</span>
+    </div>
   </div>
-</div>
 
-<!-- Current Projects -->
-<div class="section" data-lang="en">
-<h2>Current Projects</h2>
-<ul>
-<li>HER2-targeted aptamer/polymer nanosystems for selective cellular inhibition and mechanistic validation</li>
-<li>Myc/Max competitive blockade concepts and downstream pathway response profiling</li>
-<li>Mechanism-driven evaluation of cell–material interactions and intracellular routing</li>
-<li>Translational molecular signatures linked to clinically relevant phenotypes in cancer-related contexts</li>
-</ul>
-</div>
+  <div class="grid2" style="margin-top:14px;">
+    <div data-lang="en">
+      <p class="smallnote"><b>Method framing</b></p>
+      <ul>
+        <li>Intervention → mechanism → readout packaging for collaborations and grant-ready workstreams</li>
+        <li>Mechanistic trafficking hypotheses linked to experiment-ready functional endpoints</li>
+        <li>Signature-driven interpretation to reduce uncertainty and prioritize actionable effects</li>
+      </ul>
+    </div>
 
-<div class="section" data-lang="es" style="display:none;">
-<h2>Proyectos actuales</h2>
-<ul>
-<li>Nanosistemas aptámero/polímero dirigidos a HER2 para inhibición selectiva y validación mecanística</li>
-<li>Conceptos de bloqueo competitivo Myc/Max y perfilado de respuesta a nivel de vías</li>
-<li>Evaluación guiada por mecanismo de interacciones célula–material y enrutamiento intracelular</li>
-<li>Firmas moleculares traslacionales vinculadas a fenotipos clínicamente relevantes en contextos de cáncer</li>
-</ul>
-</div>
+    <div data-lang="es" style="display:none;">
+      <p class="smallnote"><b>Planteamiento metodológico</b></p>
+      <ul>
+        <li>Intervención → mecanismo → lectura (readout) para colaboraciones y módulos listos para propuestas</li>
+        <li>Hipótesis de tráfico intracelular vinculadas a end points funcionales listos para experimento</li>
+        <li>Interpretación guiada por firmas para reducir incertidumbre y priorizar efectos accionables</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-<!-- Capabilities -->
-<div class="section" data-lang="en">
-<h2>Capabilities</h2>
-<ul>
-<li><b>Construct and platform design:</b> formulation logic, functionalization strategy, and stability rationale for targeted systems</li>
-<li><b>In vitro evaluation:</b> cytotoxicity workflows, methodological controls, and rigorous result interpretation</li>
-<li><b>Mechanistic endpoints:</b> uptake/trafficking hypotheses with experiment-ready functional readouts</li>
-<li><b>Data-driven framing:</b> pathway-level interpretation to prioritize actionable molecular effects</li>
-</ul>
-<p class="smallnote">
-Exact assay panels and instrumentation details can be shared upon request depending on collaboration needs and scope.
-</p>
-</div>
+<!-- RESEARCH PROJECTS -->
+<section id="projects" class="section">
+  <h2>
+    <span data-lang="en">B. Research Projects (Current / Active Themes)</span>
+    <span data-lang="es" style="display:none;">B. Proyectos (temas actuales)</span>
+  </h2>
 
-<div class="section" data-lang="es" style="display:none;">
-<h2>Capacidades</h2>
-<ul>
-<li><b>Diseño de constructos/plataformas:</b> lógica de formulación, estrategia de funcionalización y fundamento de estabilidad</li>
-<li><b>Evaluación in vitro:</b> flujos de citotoxicidad, controles metodológicos e interpretación rigurosa</li>
-<li><b>End points mecanísticos:</b> hipótesis de entrada/tráfico con lecturas funcionales listas para experimentar</li>
-<li><b>Enfoque basado en datos:</b> interpretación a nivel de vías para priorizar efectos moleculares accionables</li>
-</ul>
-<p class="smallnote">
-Los paneles exactos de ensayos e instrumentación pueden detallarse bajo solicitud según las necesidades de colaboración.
-</p>
-</div>
-
-<!-- Selected Publications (anchored) -->
-<div class="section" id="publications">
   <div data-lang="en">
-    <h2>Selected Publications</h2>
+    <ul>
+      <li><b>Myc/Max programs:</b> competitive blockade concepts and downstream pathway response profiling; framing of degradation-inspired strategies (conceptual → experiment-ready endpoints)</li>
+      <li><b>HER2+ breast cancer:</b> receptor-guided nanosystems and intracellular routing logic to support selective modulation and mechanistic validation</li>
+      <li><b>Mechanistic trafficking:</b> uptake pathways, endosomal routing, and intracellular fate linked to measurable outcomes</li>
+      <li><b>External collaboration (limited time allocation):</b> “Nanomaterials with antimicrobial activity with potential application for chronic wound infections” (collaboration with Biochemistry & Molecular Medicine, UANL; PI: Dra. Celia Nohemí Sánchez Domínguez)</li>
+    </ul>
+    <p class="smallnote">
+      Collaboration formats prioritized: mechanism-first validation, targeted delivery + functional readouts, translational framing, and co-authored manuscripts/proposals.
+    </p>
+  </div>
 
+  <div data-lang="es" style="display:none;">
+    <ul>
+      <li><b>Programas Myc/Max:</b> conceptos de bloqueo competitivo y perfilado de respuesta a nivel de vías; planteamiento de estrategias inspiradas en degradación (conceptual → end points listos)</li>
+      <li><b>Cáncer de mama HER2+:</b> nanosistemas guiados por receptor y lógica de enrutamiento intracelular para modulación selectiva y validación mecanística</li>
+      <li><b>Tráfico mecanístico:</b> rutas de entrada, enrutamiento endosomal y destino intracelular ligados a resultados medibles</li>
+      <li><b>Colaboración externa (dedicación limitada):</b> “Nanomateriales con actividad antimicrobiana con una potencial aplicación para el tratamiento de infecciones en heridas crónicas” (colaboración con Bioquímica y Medicina Molecular, UANL; IP: Dra. Celia Nohemí Sánchez Domínguez)</li>
+    </ul>
+    <p class="smallnote">
+      Formatos de colaboración priorizados: validación “mecanismo primero”, liberación dirigida + lecturas funcionales, enfoque traslacional, y manuscritos/propuestas co-autoradas.
+    </p>
+  </div>
+</section>
+
+    <!-- APPOINTMENTS & AFFILIATIONS -->
+<!-- APPOINTMENTS & AFFILIATIONS -->
+<section id="appointments" class="section">
+  <h2>
+    <span data-lang="en">Appointments & Affiliations</span>
+    <span data-lang="es" style="display:none;">Nombramientos y afiliaciones</span>
+  </h2>
+
+  <div data-lang="en">
+    <ul>
+      <li><b>Oncology Service</b> — University Hospital “Dr. José Eleuterio González”, UANL (present)</li>
+      <li><b>School of Medicine</b> — Universidad Autónoma de Nuevo León (UANL) (present)</li>
+      <li><b>Professor appointment</b> — School of Medicine, UANL (2023–present)</li>
+    </ul>
+    </p>
+  </div>
+
+  <div data-lang="es" style="display:none;">
+    <ul>
+      <li><b>Servicio de Oncología</b> — Hospital Universitario “Dr. José Eleuterio González”, UANL (actual)</li>
+      <li><b>Facultad de Medicina</b> — Universidad Autónoma de Nuevo León (UANL) (actual)</li>
+      <li><b>Nombramiento como profesor</b> — Facultad de Medicina, UANL (2023–actual)</li>
+    </ul>
+    </p>
+  </div>
+</section>
+
+    
+<!-- SELECTED PUBLICATIONS -->
+<section id="publications" class="section">
+  <h2>
+    <span data-lang="en">C. Selected Peer-Reviewed Publications</span>
+    <span data-lang="es" style="display:none;">C. Publicaciones seleccionadas (arbitradas)</span>
+  </h2>
+
+  <div data-lang="en">
     <div class="pub">
-      <b>Cancers (2025)</b> – Genetic insights into breast cancer in Northeastern Mexico: unveiling gene-environment interactions and links to obesity/metabolic diseases.
-      <br>
+      <b>Cancers (2025)</b> – Genetic insights into breast cancer in Northeastern Mexico: unveiling gene-environment interactions and links to obesity/metabolic diseases.<br>
       DOI: <a href="https://doi.org/10.3390/cancers17060982" target="_blank" rel="noopener">10.3390/cancers17060982</a>
     </div>
 
     <div class="pub">
-      <b>Polymers (2025)</b> – pH-sensitive chitosan-based hydrogels trap polymicrobial biofilms and inhibit bacterial growth.
-      <br>
+      <b>Polymers (2025)</b> – pH-sensitive chitosan-based hydrogels trap polymicrobial biofilms and inhibit bacterial growth.<br>
       DOI: <a href="https://doi.org/10.3390/polym17101335" target="_blank" rel="noopener">10.3390/polym17101335</a>
     </div>
 
     <div class="pub">
-      <b>Springer Proceedings in Materials (2025)</b> – Development of a chitosan-poloxamer 407 copolymer for biomedical applications.
-      <br>
+      <b>Springer Proceedings in Materials (2025)</b> – Development of a chitosan-poloxamer 407 copolymer for biomedical applications.<br>
       DOI: <a href="https://doi.org/10.1007/978-3-031-99987-1_25" target="_blank" rel="noopener">10.1007/978-3-031-99987-1_25</a>
     </div>
 
     <div class="pub">
-      <b>Springer Proceedings in Materials (2025)</b> – Mixed poloxamer-TPGS micelles: an innovative strategy for drug delivery applications.
-      <br>
+      <b>Springer Proceedings in Materials (2025)</b> – Mixed poloxamer-TPGS micelles: an innovative strategy for drug delivery applications.<br>
       DOI: <a href="https://doi.org/10.1007/978-3-031-99987-1_2" target="_blank" rel="noopener">10.1007/978-3-031-99987-1_2</a>
     </div>
 
     <div class="pub">
-      <b>Springer Proceedings in Materials (2025)</b> – Impact of methodological variations on MTT assay results: implications for cytotoxicity testing of biomaterials.
-      <br>
+      <b>Springer Proceedings in Materials (2025)</b> – Impact of methodological variations on MTT assay results: implications for cytotoxicity testing of biomaterials.<br>
       DOI: <a href="https://doi.org/10.1007/978-3-031-99987-1_1" target="_blank" rel="noopener">10.1007/978-3-031-99987-1_1</a>
     </div>
+
+    <p class="smallnote">
+      (Optional upgrade) You can add a “Full list” button linking to Google Scholar.
+    </p>
   </div>
 
   <div data-lang="es" style="display:none;">
-    <h2>Publicaciones seleccionadas</h2>
-
     <div class="pub">
-      <b>Cancers (2025)</b> – Genetic insights into breast cancer in Northeastern Mexico: unveiling gene-environment interactions and links to obesity/metabolic diseases.
-      <br>
+      <b>Cancers (2025)</b> – Genetic insights into breast cancer in Northeastern Mexico: unveiling gene-environment interactions and links to obesity/metabolic diseases.<br>
       DOI: <a href="https://doi.org/10.3390/cancers17060982" target="_blank" rel="noopener">10.3390/cancers17060982</a>
     </div>
 
     <div class="pub">
-      <b>Polymers (2025)</b> – pH-sensitive chitosan-based hydrogels trap polymicrobial biofilms and inhibit bacterial growth.
-      <br>
+      <b>Polymers (2025)</b> – pH-sensitive chitosan-based hydrogels trap polymicrobial biofilms and inhibit bacterial growth.<br>
       DOI: <a href="https://doi.org/10.3390/polym17101335" target="_blank" rel="noopener">10.3390/polym17101335</a>
     </div>
 
     <div class="pub">
-      <b>Springer Proceedings in Materials (2025)</b> – Development of a chitosan-poloxamer 407 copolymer for biomedical applications.
-      <br>
+      <b>Springer Proceedings in Materials (2025)</b> – Development of a chitosan-poloxamer 407 copolymer for biomedical applications.<br>
       DOI: <a href="https://doi.org/10.1007/978-3-031-99987-1_25" target="_blank" rel="noopener">10.1007/978-3-031-99987-1_25</a>
     </div>
 
     <div class="pub">
-      <b>Springer Proceedings in Materials (2025)</b> – Mixed poloxamer-TPGS micelles: an innovative strategy for drug delivery applications.
-      <br>
+      <b>Springer Proceedings in Materials (2025)</b> – Mixed poloxamer-TPGS micelles: an innovative strategy for drug delivery applications.<br>
       DOI: <a href="https://doi.org/10.1007/978-3-031-99987-1_2" target="_blank" rel="noopener">10.1007/978-3-031-99987-1_2</a>
     </div>
 
     <div class="pub">
-      <b>Springer Proceedings in Materials (2025)</b> – Impact of methodological variations on MTT assay results: implications for cytotoxicity testing of biomaterials.
-      <br>
+      <b>Springer Proceedings in Materials (2025)</b> – Impact of methodological variations on MTT assay results: implications for cytotoxicity testing of biomaterials.<br>
       DOI: <a href="https://doi.org/10.1007/978-3-031-99987-1_1" target="_blank" rel="noopener">10.1007/978-3-031-99987-1_1</a>
     </div>
+
+    <p class="smallnote">
+      (Mejora opcional) Puedes agregar un botón “Lista completa” enlazando a Google Scholar.
+    </p>
   </div>
-</div>
+</section>
 
-<!-- Collaboration Priorities -->
-<div class="section" data-lang="en">
-<h2>Collaboration Priorities</h2>
-<p>
-We actively seek international collaborations anchored in <b>HER2+ breast cancer</b> and <b>Myc/Max</b> pathway modulation. High-impact formats include:
-</p>
-<ul>
-<li><b>Mechanism-first validation:</b> partners provide specialized assays/imaging/omics; we co-design constructs and deliver mechanistic hypotheses with testable endpoints</li>
-<li><b>Targeted delivery + functional readouts:</b> joint evaluation of uptake/trafficking and pathway responses after intervention</li>
-<li><b>Translational framing:</b> connect molecular effects to tumor-relevant phenotypes or clinically anchored datasets</li>
-<li><b>Co-authored manuscripts and grant-ready packages:</b> modular workstreams that map cleanly onto Specific Aims</li>
-</ul>
-</div>
+<!-- SYNERGISTIC ACTIVITIES -->
+<section id="synergy" class="section">
+  <h2>
+    <span data-lang="en">D. Synergistic Activities</span>
+    <span data-lang="es" style="display:none;">D. Actividades sinérgicas</span>
+  </h2>
 
-<div class="section" data-lang="es" style="display:none;">
-<h2>Prioridades de colaboración</h2>
-<p>
-Buscamos activamente colaboraciones internacionales ancladas en <b>cáncer de mama HER2+</b> y modulación de vías <b>Myc/Max</b>. Formatos de alto impacto incluyen:
-</p>
-<ul>
-<li><b>Validación “mecanismo primero”:</b> el socio aporta ensayos/imágenes/ómicas; co-diseñamos constructos e hipótesis con end points verificables</li>
-<li><b>Liberación dirigida + lecturas funcionales:</b> evaluación conjunta de entrada/tráfico y respuesta a nivel de vías tras la intervención</li>
-<li><b>Enfoque traslacional:</b> conectar efectos moleculares con fenotipos tumorales relevantes o datasets clínicamente anclados</li>
-<li><b>Manuscritos y paquetes listos para grants:</b> módulos de trabajo que se mapean limpiamente a Specific Aims</li>
-</ul>
-</div>
+  <div class="grid2">
+    <div data-lang="en">
+      <p class="smallnote"><b>Teaching (selected)</b></p>
+      <ul>
+        <li><b>Molecular Biomedicine</b>; Nanotheranostics — Graduate Program in Basic Sciences, School of Medicine, UANL</li>
+        <li><b>Basic Sciences I</b> — Graduate Program in Medicine, School of Medicine, UANL</li>
+        <li><b>Selected Topics in Nanotechnology II (Nanomedicine)</b> — CIMAV</li>
+      </ul>
 
-<!-- What we can contribute quickly -->
-<div class="section" data-lang="en">
-<h2>What We Can Contribute Quickly</h2>
-<ul>
-<li>Clear experimental logic connecting construct design to mechanism and measurable biological outcomes</li>
-<li>Collaboration-ready drafts: rationale, aim structure, and mechanistic figure concepts for manuscripts and proposals</li>
-<li>Methodological rigor for cell-based evaluation of functional biomaterials and inhibitory constructs</li>
-<li>Pathway-level interpretation to prioritize actionable molecular effects and reduce experimental uncertainty</li>
-</ul>
-</div>
+      <p class="smallnote"><b>Mentoring (theses supervised / co-supervised)</b></p>
+      <ul>
+        <li>Bachelor’s: 2 (co-supervised)</li>
+        <li>M.Sc.: 5 (co-supervised)</li>
+        <li>Ph.D. in Science: 6 (co-supervised)</li>
+        <li>Ph.D. in Medicine: 1 (supervised), 1 (co-supervised)</li>
+        <li>Medical Specialty: 3 (co-supervised)</li>
+      </ul>
+    </div>
 
-<div class="section" data-lang="es" style="display:none;">
-<h2>Qué podemos aportar rápidamente</h2>
-<ul>
-<li>Lógica experimental clara que conecte el diseño del constructo con el mecanismo y resultados biológicos medibles</li>
-<li>Borradores listos para colaboración: racional, estructura de aims y conceptos de figuras mecanísticas para manuscritos/propuestas</li>
-<li>Rigor metodológico para evaluación celular de biomateriales funcionales y constructos inhibitorios</li>
-<li>Interpretación a nivel de vías para priorizar efectos moleculares accionables y reducir incertidumbre experimental</li>
-</ul>
-</div>
+    <div data-lang="en">
+      <p class="smallnote"><b>Evaluation & service (selected)</b></p>
+      <ul>
+        <li>Reviewer — Postdoctoral Fellowships in Mexico</li>
+        <li>Reviewer — SECIHTI projects</li>
+        <li>Journal peer review (selected)</li>
+      </ul>
+      <p class="smallnote">
+        If you want, I can replace “selected” with exact journal names + counts where you prefer to show them.
+      </p>
+    </div>
 
-<!-- Team & Opportunities -->
-<div class="section" data-lang="en">
-<h2>Team & Opportunities</h2>
-<ul>
-<li><b>Graduate students:</b> project-based supervision in nanomedicine and molecular oncology</li>
-<li><b>International partners:</b> open to joint work on HER2+ targeting and Myc/Max pathway interference programs</li>
-<li><b>Trainees:</b> inquiries welcome with a brief CV and a one-paragraph statement of research interest</li>
-</ul>
-</div>
+    <div data-lang="es" style="display:none;">
+      <p class="smallnote"><b>Docencia (selección)</b></p>
+      <ul>
+        <li><b>Biomedicina Molecular</b>; Nanoteranóstico — Posgrado en Ciencias Básicas, Facultad de Medicina, UANL</li>
+        <li><b>Ciencias Básicas I</b> — Posgrado en Medicina, Facultad de Medicina, UANL</li>
+        <li><b>Temas Selectos de Nanotecnología II (Nanomedicina)</b> — CIMAV</li>
+      </ul>
 
-<div class="section" data-lang="es" style="display:none;">
-<h2>Equipo y oportunidades</h2>
-<ul>
-<li><b>Posgrado:</b> supervisión por proyectos en nanomedicina y oncología molecular</li>
-<li><b>Socios internacionales:</b> abierto a trabajo conjunto en targeting HER2+ e interferencia de vías Myc/Max</li>
-<li><b>Estancias/tesistas:</b> se reciben consultas con CV breve y un párrafo de interés</li>
-</ul>
-</div>
+      <p class="smallnote"><b>Mentoría (tesis dirigidas / co-dirigidas)</b></p>
+      <ul>
+        <li>Licenciatura: 2 co-dirigidas</li>
+        <li>Maestría en Ciencias: 5 co-dirigidas</li>
+        <li>Doctorado en Ciencias: 6 co-dirigidas</li>
+        <li>Doctorado en Medicina: 1 dirigida, 1 co-dirigida</li>
+        <li>Especialidad en Medicina: 3 co-dirigidas</li>
+      </ul>
+    </div>
 
-<!-- One-pager PDF link (anchored) -->
-<div class="section" id="onepager">
+    <div data-lang="es" style="display:none;">
+      <p class="smallnote"><b>Evaluación y servicio (selección)</b></p>
+      <ul>
+        <li>Evaluación — Estancias Posdoctorales por México</li>
+        <li>Evaluación — Proyectos SECIHTI</li>
+        <li>Arbitraje de revistas (selección)</li>
+      </ul>
+      <p class="smallnote">
+        Si quieres, puedo sustituir “selección” por nombres de revistas + número de revisiones (si deseas mostrarlo).
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- HONORS -->
+<section id="honors" class="section">
+  <h2>
+    <span data-lang="en">E. Honors</span>
+    <span data-lang="es" style="display:none;">E. Distinciones</span>
+  </h2>
+
   <div data-lang="en">
-    <h2>LIBAC One-Pager</h2>
-    <p>
-      <a href="./LIBAC_onepager.pdf" target="_blank" rel="noopener">Download the 1-page lab summary (PDF)</a>
+    <ul>
+      <li><b>SNI Level I</b> (appointments across 2016–2027)</li>
+      <li><b>PRODEP desirable profile</b> (2019–2025)</li>
+      <li><b>Appointment:</b> Profesor Ordinario, Department of Genetics, School of Medicine, UANL (2023)</li>
+    </ul>
+    <p class="smallnote">
+      If you want, we can add select award items (e.g., prizes/recognitions) as a second sub-list, but only those you prefer to highlight.
     </p>
   </div>
 
   <div data-lang="es" style="display:none;">
-    <h2>One-pager de LIBAC</h2>
-    <p>
-      <a href="./LIBAC_onepager.pdf" target="_blank" rel="noopener">Descargar resumen de 1 página (PDF)</a>
+    <ul>
+      <li><b>SNI Nivel I</b> (nombramientos a lo largo de 2016–2027)</li>
+      <li><b>Perfil PRODEP deseable</b> (2019–2025)</li>
+      <li><b>Nombramiento:</b> Profesor Ordinario, Departamento de Genética, Facultad de Medicina, UANL (2023)</li>
+    </ul>
+    <p class="smallnote">
+      Si quieres, agregamos una sub-lista con premios/reconocimientos, pero solo los que decidas destacar.
     </p>
   </div>
-</div>
+</section>
 
-<!-- Suggested citation -->
-<div class="section" data-lang="en">
-<h2>Suggested Citation</h2>
-<p>
-Gallardo-Blanco H. <b>LIBAC — Basic–Clinical Research Laboratory</b>: Targeted nanomedicine and oncogenic protein interference (HER2+ breast cancer; Myc/Max programs).
-Online profile. Accessed: <span id="accessDateEN"></span>.
-</p>
-<p class="smallnote">
-Permanent links: ORCID and Google Scholar are provided in the Contact section.
-</p>
-</div>
+<!-- ONE-PAGER PDF -->
+<section id="onepager" class="section">
+  <h2>
+    <span data-lang="en">LIBAC / Lab One-Pager</span>
+    <span data-lang="es" style="display:none;">One-pager del laboratorio</span>
+  </h2>
 
-<div class="section" data-lang="es" style="display:none;">
-<h2>Cómo citar</h2>
-<p>
-Gallardo-Blanco H. <b>LIBAC — Laboratorio de Investigación Básico–Clínica</b>: Nanomedicina dirigida e interferencia de proteínas oncogénicas (cáncer de mama HER2+; programas Myc/Max).
-Perfil en línea. Consultado el: <span id="accessDateES"></span>.
-</p>
-<p class="smallnote">
-Enlaces permanentes: ORCID y Google Scholar están disponibles en la sección de Contacto.
-</p>
-</div>
+  <div data-lang="en">
+    <p>
+      <a href="./LIBAC_onepager.pdf" target="_blank" rel="noopener">
+        Download the 1-page lab summary (PDF)
+      </a>
+    </p>
+    <p class="smallnote">
+      Keep the filename exactly as <b>LIBAC_onepager.pdf</b> in the repository root.
+    </p>
+  </div>
+
+  <div data-lang="es" style="display:none;">
+    <p>
+      <a href="./LIBAC_onepager.pdf" target="_blank" rel="noopener">
+        Descargar resumen de 1 página (PDF)
+      </a>
+    </p>
+    <p class="smallnote">
+      Mantén el nombre exacto <b>LIBAC_onepager.pdf</b> en la raíz del repositorio.
+    </p>
+  </div>
+</section>
+
+<!-- SUGGESTED CITATION -->
+<section class="section">
+  <h2>
+    <span data-lang="en">Suggested Citation</span>
+    <span data-lang="es" style="display:none;">Cómo citar</span>
+  </h2>
+
+  <div data-lang="en">
+    <p>
+      Gallardo-Blanco H. <b>Web Biosketch</b>: Nanomedicine & Molecular Oncology (Myc/Max programs; targeted delivery in HER2+ breast cancer).
+      Online profile. Accessed: <span id="accessDateEN"></span>.
+    </p>
+  </div>
+
+  <div data-lang="es" style="display:none;">
+    <p>
+      Gallardo-Blanco H. <b>Biosketch web</b>: Nanomedicina y Oncología Molecular (programas Myc/Max; liberación dirigida en cáncer de mama HER2+).
+      Perfil en línea. Consultado el: <span id="accessDateES"></span>.
+    </p>
+  </div>
+</section>
 
 <script>
-(function(){
-  const d = new Date();
-  const en = d.toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
-  const es = d.toLocaleDateString('es-MX', {year:'numeric', month:'long', day:'numeric'});
-  const aEN = document.getElementById('accessDateEN');
-  const aES = document.getElementById('accessDateES');
-  if(aEN) aEN.textContent = en;
-  if(aES) aES.textContent = es;
-})();
+  (function(){
+    const d = new Date();
+    const en = d.toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+    const es = d.toLocaleDateString('es-MX', {year:'numeric', month:'long', day:'numeric'});
+    const aEN = document.getElementById('accessDateEN');
+    const aES = document.getElementById('accessDateES');
+    if(aEN) aEN.textContent = en;
+    if(aES) aES.textContent = es;
+  })();
 </script>
 
-<!-- Contact (anchored) -->
-<div class="section contact" id="contact">
-  <div data-lang="en">
-    <h2>Contact</h2>
+<!-- CONTACT -->
+<section id="contact" class="section contact">
+  <h2>
+    <span data-lang="en">Contact</span>
+    <span data-lang="es" style="display:none;">Contacto</span>
+  </h2>
 
+  <div data-lang="en">
     <p>
-      <a href="mailto:hugoleonid2011@icloud.com?subject=LIBAC%20-%20International%20Collaboration%20(HER2%2FMyc-Max)" target="_blank" rel="noopener">
+      <a href="mailto:hugoleonid2011@icloud.com?subject=Collaboration%20-%20Myc%2FMax%20or%20HER2%2B" target="_blank" rel="noopener">
         Contact for international collaboration
       </a>
     </p>
-
     <p>Email: <a href="mailto:hugoleonid2011@icloud.com">hugoleonid2011@icloud.com</a></p>
-
     <p>
       <a href="https://orcid.org/0000-0002-7816-4967" target="_blank" rel="noopener">ORCID</a> |
       <a href="https://scholar.google.com/citations?user=ehqLAwcAAAAJ&hl=es" target="_blank" rel="noopener">Google Scholar</a> |
-      <a href="https://www.linkedin.com/in/hugo-gallardo-blanco-498671233/" target="_blank" rel="noopener">LinkedIn (optional)</a>
+      <a href="https://www.linkedin.com/in/hugo-gallardo-blanco-498671233/" target="_blank" rel="noopener">LinkedIn</a>
     </p>
   </div>
 
   <div data-lang="es" style="display:none;">
-    <h2>Contacto</h2>
-
     <p>
-      <a href="mailto:hugoleonid2011@icloud.com?subject=LIBAC%20-%20Colaboraci%C3%B3n%20internacional%20(HER2%2FMyc-Max)" target="_blank" rel="noopener">
+      <a href="mailto:hugoleonid2011@icloud.com?subject=Colaboraci%C3%B3n%20-%20Myc%2FMax%20o%20HER2%2B" target="_blank" rel="noopener">
         Contactar para colaboración internacional
       </a>
     </p>
-
     <p>Email: <a href="mailto:hugoleonid2011@icloud.com">hugoleonid2011@icloud.com</a></p>
-
     <p>
       <a href="https://orcid.org/0000-0002-7816-4967" target="_blank" rel="noopener">ORCID</a> |
       <a href="https://scholar.google.com/citations?user=ehqLAwcAAAAJ&hl=es" target="_blank" rel="noopener">Google Scholar</a> |
-      <a href="https://www.linkedin.com/in/hugo-gallardo-blanco-498671233/" target="_blank" rel="noopener">LinkedIn (opcional)</a>
+      <a href="https://www.linkedin.com/in/hugo-gallardo-blanco-498671233/" target="_blank" rel="noopener">LinkedIn</a>
     </p>
   </div>
-</div>
+</section>
 
-<footer data-lang="en">Academic mini-lab profile</footer>
-<footer data-lang="es" style="display:none;">Perfil académico tipo mini-lab</footer>
+<footer>
+  <span data-lang="en">NIH-style biosketch-like web profile</span>
+  <span data-lang="es" style="display:none;">Perfil web tipo NIH Biosketch</span>
+</footer>
 
 </body>
 </html>
