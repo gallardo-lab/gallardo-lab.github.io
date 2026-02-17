@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Dr. Hugo Gallardo | Molecular Biotechnology & Nanomedicine</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LIBAC | Dr. Hugo Gallardo-Blanco</title>
 
 <style>
 body{
@@ -24,23 +25,21 @@ header h1{
     font-size:38px;
 }
 
-header p{
+header .subtitle{
     margin-top:10px;
     font-size:18px;
+    opacity:0.95;
+}
+
+header .affil{
+    margin-top:10px;
+    font-size:16px;
     opacity:0.9;
 }
 
-    <div class="section">
-<h2>Lab Mission</h2>
-<p>
-We develop targeted nanomedicine and molecular inhibition strategies to interrogate and modulate oncogenic pathways.
-Our work integrates functional biomaterials, delivery engineering, and mechanistic readouts to support translational cancer research.
-</p>
-</div>
-    
 .section{
     max-width:900px;
-    margin:40px auto;
+    margin:28px auto;
     padding:20px;
     background:white;
     border-radius:10px;
@@ -61,9 +60,38 @@ ul{
     margin-bottom:14px;
 }
 
+.smallnote{
+    font-size:14px;
+    color:#555;
+}
+
 .contact{
     text-align:center;
     font-size:18px;
+}
+
+.langbar{
+    max-width:900px;
+    margin:18px auto 0 auto;
+    padding:0 20px;
+    text-align:right;
+}
+
+.langbtn{
+    border:1px solid #c8d3df;
+    background:#ffffff;
+    color:#0b2545;
+    padding:8px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+    margin-left:8px;
+}
+
+.langbtn.active{
+    background:#0b2545;
+    color:#fff;
+    border-color:#0b2545;
 }
 
 footer{
@@ -77,49 +105,159 @@ footer{
 <body>
 
 <header>
-    <h1>Dr. Hugo Gallardo-Blanco</h1>
-    <p>Targeted Nanomedicine and Oncogenic Protein Inhibition Strategies</p>
-    <p>Universidad Autónoma de Nuevo León – School of Medicine</p>
+    <h1>LIBAC</h1>
+
+    <div class="subtitle" data-lang="en">
+        Basic–Clinical Research Laboratory • Targeted Nanomedicine and Oncogenic Protein Interference
+    </div>
+    <div class="subtitle" data-lang="es" style="display:none;">
+        Laboratorio de Investigación Básico–Clínica • Nanomedicina dirigida e interferencia de proteínas oncogénicas
+    </div>
+
+    <div class="affil" data-lang="en">
+        Dr. Hugo Gallardo-Blanco • Universidad Autónoma de Nuevo León – School of Medicine
+    </div>
+    <div class="affil" data-lang="es" style="display:none;">
+        Dr. Hugo Gallardo-Blanco • Universidad Autónoma de Nuevo León – Facultad de Medicina
+    </div>
 </header>
 
-<div class="section">
-<h2>Research Programs</h2>
-<ul>
-<li><b>Targeted nanomedicine:</b> receptor-directed platforms and biologically responsive biomaterials</li>
-<li><b>Oncogenic inhibition:</b> peptide blockers and degradation-inspired concepts for challenging targets</li>
-<li><b>Mechanistic trafficking:</b> uptake routes, intracellular routing, and functional endpoints</li>
-<li><b>Translational genomics:</b> population-focused molecular insights linked to clinical phenotypes</li>
-</ul>
+<!-- Language toggle bar -->
+<div class="langbar">
+  <button id="btnEN" class="langbtn" onclick="setLang('en')">EN</button>
+  <button id="btnES" class="langbtn" onclick="setLang('es')">ES</button>
 </div>
 
-<div class="section">
-<h2>Current Projects</h2>
-<ul>
-<li>HER2-targeted aptamer nanosystems for selective cellular inhibition</li>
-<li>Competitive blockade and destabilization of Myc-dependent transcriptional activity</li>
-<li>Molecular response profiling after oncogenic pathway interference</li>
-<li>Development of biologically guided delivery platforms for intracellular targets</li>
-</ul>
-</div>
+<script>
+function setLang(lang){
+  document.querySelectorAll('[data-lang]').forEach(el=>{
+    el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+  });
+  localStorage.setItem('libac_lang', lang);
 
-<div class="section">
-<h2>Capabilities</h2>
-<ul>
-<li><b>Biomaterial/nanosystem design:</b> formulation, functionalization concepts, and stability rationale</li>
-<li><b>In vitro evaluation:</b> cytotoxicity workflows, methodological controls, and result interpretation</li>
-<li><b>Mechanistic assays:</b> uptake/trafficking hypotheses with experiment-ready endpoints</li>
-<li><b>Data-driven readouts:</b> transcriptomic response framing and pathway-level interpretation</li>
-</ul>
-<p style="font-size:14px; color:#555;">
-Note: exact assays and instrumentation can be detailed upon request depending on collaboration needs.
+  const en = document.getElementById('btnEN');
+  const es = document.getElementById('btnES');
+  if(en && es){
+    en.classList.toggle('active', lang === 'en');
+    es.classList.toggle('active', lang === 'es');
+  }
+
+  document.documentElement.lang = lang;
+}
+(function(){
+  const saved = localStorage.getItem('libac_lang') || 'en';
+  setLang(saved);
+})();
+</script>
+
+<!-- NIH-style Research Statement -->
+<div class="section" data-lang="en">
+<h2>Research Statement</h2>
+<p>
+LIBAC develops targeted nanomedicine and molecular inhibition strategies to address central bottlenecks in cancer biology:
+efficient intracellular access, mechanistic specificity, and translational interpretability. We integrate functional biomaterials,
+delivery engineering, and pathway-level readouts to design interventions that can be tested rigorously in cell models and aligned
+with clinically meaningful phenotypes.
+</p>
+<p>
+Two programs anchor our work and collaboration portfolio: <b>HER2+ breast cancer</b> (receptor-guided targeting and intracellular routing)
+and <b>Myc/Max programs</b> (competitive blockade and degradation-inspired concepts to modulate oncogenic transcriptional circuitry).
+Across both, we treat delivery and mechanism as a coupled system—prioritizing constructs whose biological effects can be explained by
+uptake routes, intracellular trafficking, and measurable downstream responses.
 </p>
 </div>
-    
-<div class="section">
+
+<div class="section" data-lang="es" style="display:none;">
+<h2>Declaración de investigación</h2>
+<p>
+LIBAC desarrolla estrategias de nanomedicina dirigida e inhibición molecular para atender cuellos de botella centrales en biología del cáncer:
+acceso intracelular eficiente, especificidad mecanística e interpretabilidad traslacional. Integramos biomateriales funcionales,
+ingeniería de liberación y lecturas a nivel de vías para diseñar intervenciones que puedan probarse rigurosamente en modelos celulares y
+alinearse con fenotipos clínicamente significativos.
+</p>
+<p>
+Dos programas anclan nuestro trabajo y portafolio de colaboración: <b>cáncer de mama HER2+</b> (dirigimiento por receptor y enrutamiento intracelular)
+y <b>programas Myc/Max</b> (bloqueo competitivo y conceptos inspirados en degradación para modular circuitos transcripcionales oncogénicos).
+En ambos, tratamos liberación y mecanismo como un sistema acoplado—priorizando constructos cuyos efectos biológicos se expliquen por rutas de entrada,
+tráfico intracelular y respuestas medibles aguas abajo.
+</p>
+</div>
+
+<!-- Specific Research Directions -->
+<div class="section" data-lang="en">
+<h2>Specific Research Directions</h2>
+<ul>
+<li><b>HER2+ breast cancer (targeted nanomedicine):</b> receptor-guided platforms and biologically responsive biomaterials for selective tumor modulation</li>
+<li><b>Myc/Max programs (oncogenic interference):</b> peptide blockers and degrader-inspired strategies for challenging protein targets</li>
+<li><b>Mechanistic trafficking:</b> uptake pathways, endosomal routing, and intracellular fate linked to functional outcomes</li>
+<li><b>Translational molecular insights:</b> pathway-level signals connected to tumor-relevant phenotypes and clinically meaningful interpretation</li>
+</ul>
+</div>
+
+<div class="section" data-lang="es" style="display:none;">
+<h2>Direcciones específicas de investigación</h2>
+<ul>
+<li><b>Cáncer de mama HER2+ (nanomedicina dirigida):</b> plataformas guiadas por receptor y biomateriales responsivos para modulación tumoral selectiva</li>
+<li><b>Programas Myc/Max (interferencia oncogénica):</b> bloqueadores peptídicos y estrategias inspiradas en degradación para blancos difíciles</li>
+<li><b>Tráfico mecanístico:</b> rutas de entrada, enrutamiento endosomal y destino intracelular ligados a resultados funcionales</li>
+<li><b>Perspectiva traslacional:</b> señales a nivel de vías conectadas con fenotipos tumorales relevantes e interpretación clínicamente útil</li>
+</ul>
+</div>
+
+<!-- Current Projects -->
+<div class="section" data-lang="en">
+<h2>Current Projects</h2>
+<ul>
+<li>HER2-targeted aptamer/polymer nanosystems for selective cellular inhibition and mechanistic validation</li>
+<li>Myc/Max competitive blockade concepts and downstream pathway response profiling</li>
+<li>Mechanism-driven evaluation of cell–material interactions and intracellular routing</li>
+<li>Translational molecular signatures linked to clinically relevant phenotypes in cancer-related contexts</li>
+</ul>
+</div>
+
+<div class="section" data-lang="es" style="display:none;">
+<h2>Proyectos actuales</h2>
+<ul>
+<li>Nanosistemas aptámero/polímero dirigidos a HER2 para inhibición selectiva y validación mecanística</li>
+<li>Conceptos de bloqueo competitivo Myc/Max y perfilado de respuesta a nivel de vías</li>
+<li>Evaluación guiada por mecanismo de interacciones célula–material y enrutamiento intracelular</li>
+<li>Firmas moleculares traslacionales vinculadas a fenotipos clínicamente relevantes en contextos de cáncer</li>
+</ul>
+</div>
+
+<!-- Capabilities -->
+<div class="section" data-lang="en">
+<h2>Capabilities</h2>
+<ul>
+<li><b>Construct and platform design:</b> formulation logic, functionalization strategy, and stability rationale for targeted systems</li>
+<li><b>In vitro evaluation:</b> cytotoxicity workflows, methodological controls, and rigorous result interpretation</li>
+<li><b>Mechanistic endpoints:</b> uptake/trafficking hypotheses with experiment-ready functional readouts</li>
+<li><b>Data-driven framing:</b> pathway-level interpretation to prioritize actionable molecular effects</li>
+</ul>
+<p class="smallnote">
+Exact assay panels and instrumentation details can be shared upon request depending on collaboration needs and scope.
+</p>
+</div>
+
+<div class="section" data-lang="es" style="display:none;">
+<h2>Capacidades</h2>
+<ul>
+<li><b>Diseño de constructos/plataformas:</b> lógica de formulación, estrategia de funcionalización y fundamento de estabilidad</li>
+<li><b>Evaluación in vitro:</b> flujos de citotoxicidad, controles metodológicos e interpretación rigurosa</li>
+<li><b>End points mecanísticos:</b> hipótesis de entrada/tráfico con lecturas funcionales listas para experimentar</li>
+<li><b>Enfoque basado en datos:</b> interpretación a nivel de vías para priorizar efectos moleculares accionables</li>
+</ul>
+<p class="smallnote">
+Los paneles exactos de ensayos e instrumentación pueden detallarse bajo solicitud según las necesidades de colaboración.
+</p>
+</div>
+
+<!-- Selected Publications -->
+<div class="section" data-lang="en">
 <h2>Selected Publications</h2>
 
 <div class="pub">
-<b>Cancers (2025)</b> – Genetic insights into breast cancer in Northeastern Mexico.
+<b>Cancers (2025)</b> – Genetic insights into breast cancer in Northeastern Mexico: unveiling gene-environment interactions and links to obesity/metabolic diseases.
 <br>
 DOI: <a href="https://doi.org/10.3390/cancers17060982" target="_blank" rel="noopener">10.3390/cancers17060982</a>
 </div>
@@ -148,62 +286,205 @@ DOI: <a href="https://doi.org/10.1007/978-3-031-99987-1_2" target="_blank" rel="
 DOI: <a href="https://doi.org/10.1007/978-3-031-99987-1_1" target="_blank" rel="noopener">10.1007/978-3-031-99987-1_1</a>
 </div>
 
-<div class="section">
-<h2>Collaboration Interests</h2>
+</div>
+
+<div class="section" data-lang="es" style="display:none;">
+<h2>Publicaciones seleccionadas</h2>
+
+<div class="pub">
+<b>Cancers (2025)</b> – Genetic insights into breast cancer in Northeastern Mexico: unveiling gene-environment interactions and links to obesity/metabolic diseases.
+<br>
+DOI: <a href="https://doi.org/10.3390/cancers17060982" target="_blank" rel="noopener">10.3390/cancers17060982</a>
+</div>
+
+<div class="pub">
+<b>Polymers (2025)</b> – pH-sensitive chitosan-based hydrogels trap polymicrobial biofilms and inhibit bacterial growth.
+<br>
+DOI: <a href="https://doi.org/10.3390/polym17101335" target="_blank" rel="noopener">10.3390/polym17101335</a>
+</div>
+
+<div class="pub">
+<b>Springer Proceedings in Materials (2025)</b> – Development of a chitosan-poloxamer 407 copolymer for biomedical applications.
+<br>
+DOI: <a href="https://doi.org/10.1007/978-3-031-99987-1_25" target="_blank" rel="noopener">10.1007/978-3-031-99987-1_25</a>
+</div>
+
+<div class="pub">
+<b>Springer Proceedings in Materials (2025)</b> – Mixed poloxamer-TPGS micelles: an innovative strategy for drug delivery applications.
+<br>
+DOI: <a href="https://doi.org/10.1007/978-3-031-99987-1_2" target="_blank" rel="noopener">10.1007/978-3-031-99987-1_2</a>
+</div>
+
+<div class="pub">
+<b>Springer Proceedings in Materials (2025)</b> – Impact of methodological variations on MTT assay results: implications for cytotoxicity testing of biomaterials.
+<br>
+DOI: <a href="https://doi.org/10.1007/978-3-031-99987-1_1" target="_blank" rel="noopener">10.1007/978-3-031-99987-1_1</a>
+</div>
+
+</div>
+
+<!-- Collaboration Priorities -->
+<div class="section" data-lang="en">
+<h2>Collaboration Priorities</h2>
+<p>
+We actively seek international collaborations anchored in <b>HER2+ breast cancer</b> and <b>Myc/Max</b> pathway modulation. High-impact formats include:
+</p>
 <ul>
-<li>Protein degradation technologies</li>
-<li>RNA-targeting therapeutics</li>
-<li>Clinical translation of nanomedicine</li>
-<li>International research partnerships</li>
+<li><b>Mechanism-first validation:</b> partners provide specialized assays/imaging/omics; we co-design constructs and deliver mechanistic hypotheses with testable endpoints</li>
+<li><b>Targeted delivery + functional readouts:</b> joint evaluation of uptake/trafficking and pathway responses after intervention</li>
+<li><b>Translational framing:</b> connect molecular effects to tumor-relevant phenotypes or clinically anchored datasets</li>
+<li><b>Co-authored manuscripts and grant-ready packages:</b> modular workstreams that map cleanly onto Specific Aims</li>
 </ul>
 </div>
 
-<div class="section">
-<h2>Students & Training</h2>
+<div class="section" data-lang="es" style="display:none;">
+<h2>Prioridades de colaboración</h2>
+<p>
+Buscamos activamente colaboraciones internacionales ancladas en <b>cáncer de mama HER2+</b> y modulación de vías <b>Myc/Max</b>. Formatos de alto impacto incluyen:
+</p>
 <ul>
-<li>Graduate thesis supervision (MSc & PhD)</li>
-<li>Undergraduate research mentoring</li>
-<li>Bioinformatics and molecular biology training</li>
+<li><b>Validación “mecanismo primero”:</b> el socio aporta ensayos/imágenes/ómicas; co-diseñamos constructos e hipótesis con end points verificables</li>
+<li><b>Liberación dirigida + lecturas funcionales:</b> evaluación conjunta de entrada/tráfico y respuesta a nivel de vías tras la intervención</li>
+<li><b>Enfoque traslacional:</b> conectar efectos moleculares con fenotipos tumorales relevantes o datasets clínicamente anclados</li>
+<li><b>Manuscritos y paquetes listos para grants:</b> módulos de trabajo que se mapean limpiamente a Specific Aims</li>
 </ul>
 </div>
 
-<div class="section">
-<h2>Collaboration Pathways</h2>
+<!-- What we can contribute quickly -->
+<div class="section" data-lang="en">
+<h2>What We Can Contribute Quickly</h2>
 <ul>
-<li><b>Co-development:</b> jointly design and test targeted delivery or inhibitory constructs</li>
-<li><b>Mechanistic packages:</b> validate uptake/trafficking models with functional assays</li>
-<li><b>Translational framing:</b> connect molecular findings to clinically relevant phenotypes</li>
-<li><b>Visiting trainees:</b> short-term training and project-based mentorship (MSc/PhD)</li>
+<li>Clear experimental logic connecting construct design to mechanism and measurable biological outcomes</li>
+<li>Collaboration-ready drafts: rationale, aim structure, and mechanistic figure concepts for manuscripts and proposals</li>
+<li>Methodological rigor for cell-based evaluation of functional biomaterials and inhibitory constructs</li>
+<li>Pathway-level interpretation to prioritize actionable molecular effects and reduce experimental uncertainty</li>
 </ul>
 </div>
 
-<div class="section">
+<div class="section" data-lang="es" style="display:none;">
+<h2>Qué podemos aportar rápidamente</h2>
+<ul>
+<li>Lógica experimental clara que conecte el diseño del constructo con el mecanismo y resultados biológicos medibles</li>
+<li>Borradores listos para colaboración: racional, estructura de aims y conceptos de figuras mecanísticas para manuscritos/propuestas</li>
+<li>Rigor metodológico para evaluación celular de biomateriales funcionales y constructos inhibitorios</li>
+<li>Interpretación a nivel de vías para priorizar efectos moleculares accionables y reducir incertidumbre experimental</li>
+</ul>
+</div>
+
+<!-- Team & Opportunities -->
+<div class="section" data-lang="en">
 <h2>Team & Opportunities</h2>
 <ul>
 <li><b>Graduate students:</b> project-based supervision in nanomedicine and molecular oncology</li>
-<li><b>Collaborators:</b> open to international partners seeking mechanistic + translational integration</li>
-<li><b>Students:</b> motivated trainees are welcome to inquire with a brief CV and interests</li>
+<li><b>International partners:</b> open to joint work on HER2+ targeting and Myc/Max pathway interference programs</li>
+<li><b>Trainees:</b> inquiries welcome with a brief CV and a one-paragraph statement of research interest</li>
 </ul>
 </div>
-    
-<div class="section contact">
-<h2>Contact</h2>
-<p><a href="mailto:hugo.gallardobl@uanl.edu.mx?subject=Collaboration%20Inquiry" target="_blank" rel="noopener">
-Contact for collaboration
-</a></p>
-<p>Email: hugo.gallardobl@uanl.edu.mx, hugoleonid2008@gmail.com</p>
-<p>ORCID https://orcid.org/0000-0002-7816-4967 / Google Scholar https://scholar.google.com/citations?user=ehqLAwcAAAAJ&hl=es </p>
+
+<div class="section" data-lang="es" style="display:none;">
+<h2>Equipo y oportunidades</h2>
+<ul>
+<li><b>Posgrado:</b> supervisión por proyectos en nanomedicina y oncología molecular</li>
+<li><b>Socios internacionales:</b> abierto a trabajo conjunto en targeting HER2+ e interferencia de vías Myc/Max</li>
+<li><b>Estancias/tesistas:</b> se reciben consultas con CV breve y un párrafo de interés</li>
+</ul>
 </div>
-    
-<a href="https://orcid.org/0000-0002-7816-4967" target="_blank">ORCID</a> |
-<a href="https://scholar.google.com/citations?user=ehqLAwcAAAAJ&hl=es" target="_blank">Google Scholar</a>
+
+<!-- One-pager PDF link -->
+<div class="section" data-lang="en">
+<h2>LIBAC One-Pager</h2>
+<p>
+<a href="./LIBAC_onepager.pdf" target="_blank" rel="noopener">Download the 1-page lab summary (PDF)</a>
+</p>
+<p class="smallnote">
+Upload the PDF to this repository root with the exact filename: <b>LIBAC_onepager.pdf</b>.
 </p>
 </div>
 
-<footer>
-Academic profile page https://www.uanl.mx/investigadores/hugo-leonid-gallardo-blanco/
-</footer>
+<div class="section" data-lang="es" style="display:none;">
+<h2>One-pager de LIBAC</h2>
+<p>
+<a href="./LIBAC_onepager.pdf" target="_blank" rel="noopener">Descargar resumen de 1 página (PDF)</a>
+</p>
+<p class="smallnote">
+Sube el PDF a la raíz del repositorio con el nombre exacto: <b>LIBAC_onepager.pdf</b>.
+</p>
+</div>
+
+<!-- Suggested citation -->
+<div class="section" data-lang="en">
+<h2>Suggested Citation</h2>
+<p>
+Gallardo-Blanco H. <b>LIBAC — Basic–Clinical Research Laboratory</b>: Targeted nanomedicine and oncogenic protein interference (HER2+ breast cancer; Myc/Max programs).
+Online profile. Accessed: <span id="accessDateEN"></span>.
+</p>
+<p class="smallnote">
+Permanent links: ORCID and Google Scholar are provided in the Contact section.
+</p>
+</div>
+
+<div class="section" data-lang="es" style="display:none;">
+<h2>Cómo citar</h2>
+<p>
+Gallardo-Blanco H. <b>LIBAC — Laboratorio de Investigación Básico–Clínica</b>: Nanomedicina dirigida e interferencia de proteínas oncogénicas (cáncer de mama HER2+; programas Myc/Max).
+Perfil en línea. Consultado el: <span id="accessDateES"></span>.
+</p>
+<p class="smallnote">
+Enlaces permanentes: ORCID y Google Scholar están disponibles en la sección de Contacto.
+</p>
+</div>
+
+<script>
+(function(){
+  const d = new Date();
+  const en = d.toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+  const es = d.toLocaleDateString('es-MX', {year:'numeric', month:'long', day:'numeric'});
+  const aEN = document.getElementById('accessDateEN');
+  const aES = document.getElementById('accessDateES');
+  if(aEN) aEN.textContent = en;
+  if(aES) aES.textContent = es;
+})();
+</script>
+
+<!-- Contact -->
+<div class="section contact" data-lang="en">
+<h2>Contact</h2>
+
+<p>
+<a href="mailto:hugoleonid2011@icloud.com?subject=LIBAC%20-%20International%20Collaboration%20(HER2%2FMyc-Max)" target="_blank" rel="noopener">
+Contact for international collaboration
+</a>
+</p>
+
+<p>Email: <a href="mailto:hugoleonid2011@icloud.com">hugoleonid2011@icloud.com</a></p>
+
+<p>
+<a href="https://orcid.org/0000-0002-7816-4967" target="_blank" rel="noopener">ORCID</a> |
+<a href="https://scholar.google.com/citations?user=ehqLAwcAAAAJ&hl=es" target="_blank" rel="noopener">Google Scholar</a> |
+<a href="https://www.linkedin.com/in/hugo-gallardo-blanco-498671233/" target="_blank" rel="noopener">LinkedIn (optional)</a>
+</p>
+</div>
+
+<div class="section contact" data-lang="es" style="display:none;">
+<h2>Contacto</h2>
+
+<p>
+<a href="mailto:hugoleonid2011@icloud.com?subject=LIBAC%20-%20Colaboraci%C3%B3n%20internacional%20(HER2%2FMyc-Max)" target="_blank" rel="noopener">
+Contactar para colaboración internacional
+</a>
+</p>
+
+<p>Email: <a href="mailto:hugoleonid2011@icloud.com">hugoleonid2011@icloud.com</a></p>
+
+<p>
+<a href="https://orcid.org/0000-0002-7816-4967" target="_blank" rel="noopener">ORCID</a> |
+<a href="https://scholar.google.com/citations?user=ehqLAwcAAAAJ&hl=es" target="_blank" rel="noopener">Google Scholar</a> |
+<a href="https://www.linkedin.com/in/hugo-gallardo-blanco-498671233/" target="_blank" rel="noopener">LinkedIn (opcional)</a>
+</p>
+</div>
+
+<footer data-lang="en">Academic mini-lab profile</footer>
+<footer data-lang="es" style="display:none;">Perfil académico tipo mini-lab</footer>
 
 </body>
 </html>
-
