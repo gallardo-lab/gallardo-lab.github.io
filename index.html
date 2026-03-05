@@ -299,6 +299,59 @@
       background:#fbfcfe;
     }
     .pub b{ color:var(--ink); }
+
+    /* ── Collaborator cards ───────────────────────────────────── */
+    .collab-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+      gap:14px;
+      margin-top:14px;
+    }
+    .collab-card{
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:14px 16px;
+      background:#f8fafc;
+      transition:box-shadow 0.15s;
+    }
+    .collab-card:hover{ box-shadow:0 4px 14px rgba(42,111,151,0.14); }
+    .collab-name{
+      font-weight:700;
+      color:var(--ink);
+      font-size:15px;
+      margin:0 0 4px 0;
+    }
+    .collab-inst{
+      font-size:13px;
+      color:var(--muted);
+      margin:0 0 8px 0;
+    }
+    .collab-links{ display:flex; gap:8px; flex-wrap:wrap; }
+    .collab-links a{
+      font-size:12px;
+      font-weight:700;
+      padding:3px 9px;
+      border-radius:999px;
+      border:1px solid rgba(42,111,151,0.3);
+      color:var(--accent);
+      text-decoration:none;
+      background:#fff;
+    }
+    .collab-links a:hover{ background:var(--accent); color:#fff; }
+
+    /* ── Open positions ───────────────────────────────────────── */
+    .position-item{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      padding:10px 12px;
+      border-left:3px solid var(--accent);
+      background:#f8fafc;
+      border-radius:0 8px 8px 0;
+      margin-bottom:10px;
+    }
+    .position-icon{ font-size:20px; flex-shrink:0; margin-top:2px; }
+
     .pub .pub-status{
       display:inline-block;
       font-size:11px;
@@ -515,9 +568,21 @@
         <span data-lang="en">Honors</span>
         <span data-lang="es" style="display:none;">Distinciones</span>
       </a>
+      <a href="#lab-team">
+        <span data-lang="en">Lab Team</span>
+        <span data-lang="es" style="display:none;">Grupo</span>
+      </a>
+      <a href="#collaborators">
+        <span data-lang="en">Collaborators</span>
+        <span data-lang="es" style="display:none;">Colaboradores</span>
+      </a>
       <a href="#appointments">
         <span data-lang="en">Appointments</span>
         <span data-lang="es" style="display:none;">Nombramientos</span>
+      </a>
+      <a href="#positions">
+        <span data-lang="en">Positions</span>
+        <span data-lang="es" style="display:none;">Posiciones</span>
       </a>
       <a href="#onepager">
         <span data-lang="en">PDF</span>
@@ -592,6 +657,96 @@
       por rutas de entrada, tráfico intracelular y respuestas a nivel de vías. Este enfoque está diseñado para facilitar colaboraciones internacionales
       que culminen en manuscritos rigurosos y propuestas competitivas.
     </p>
+  </div>
+</section>
+
+<!-- LAB TEAM -->
+<section id="lab-team" class="section">
+  <h2>
+    <span data-lang="en">Lab Team &amp; Research Environment</span>
+    <span data-lang="es" style="display:none;">Grupo de trabajo y entorno de investigación</span>
+  </h2>
+  <div data-lang="en">
+    <p>
+      Our research environment focuses on mechanism-driven cancer biology and translational nanomedicine.
+      The group integrates molecular biology, bioinformatics, and targeted delivery strategies to investigate
+      oncogenic transcriptional programs, such as MYC/MAX, and receptor-guided interventions in HER2-positive
+      breast cancer. We value collaborative, hypothesis-driven research where experimental design, mechanistic
+      interpretation, and quantitative analysis are tightly integrated.
+      Students and collaborators are encouraged to develop independent ideas while contributing to
+      internationally collaborative research projects.
+    </p>
+  </div>
+  <div data-lang="es" style="display:none;">
+    <p>
+      Nuestro entorno de investigación se enfoca en la biología del cáncer basada en mecanismos y en la
+      nanomedicina traslacional. El grupo integra biología molecular, bioinformática y estrategias de
+      liberación dirigida para estudiar programas transcripcionales oncogénicos, como MYC/MAX, y estrategias
+      de intervención guiadas por receptor en el cáncer de mama HER2 positivo. Promovemos un enfoque
+      colaborativo y basado en hipótesis, en el que el diseño experimental, la interpretación mecanística
+      y el análisis cuantitativo se integran estrechamente.
+      Los estudiantes y colaboradores desarrollan ideas propias mientras contribuyen a proyectos de
+      investigación con potencial de colaboración internacional.
+    </p>
+  </div>
+</section>
+
+<!-- COLLABORATORS -->
+<section id="collaborators" class="section">
+  <h2>
+    <span data-lang="en">Current Collaborators</span>
+    <span data-lang="es" style="display:none;">Colaboradores actuales</span>
+  </h2>
+  <p class="smallnote" data-lang="en">Primary academic collaborators — shared research lines and co-authored work.</p>
+  <p class="smallnote" data-lang="es" style="display:none;">Colaboradores académicos principales — líneas de investigación compartidas y trabajo en co-autoría.</p>
+
+  <div class="collab-grid">
+
+    <div class="collab-card">
+      <p class="collab-name">Dr. Oscar Vidal Gutiérrez</p>
+      <p class="collab-inst">
+        <span data-lang="en">Universidad Autónoma de Nuevo León (UANL)</span>
+        <span data-lang="es" style="display:none;">Universidad Autónoma de Nuevo León (UANL)</span>
+      </p>
+      <div class="collab-links">
+        <a href="https://www.uanl.mx/investigadores/oscar-vidal-gutierrez/" target="_blank" rel="noopener noreferrer">
+          <span data-lang="en">UANL Profile</span>
+          <span data-lang="es" style="display:none;">Perfil UANL</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="collab-card">
+      <p class="collab-name">Dra. Celia N. Sánchez Domínguez</p>
+      <p class="collab-inst">
+        <span data-lang="en">Universidad Autónoma de Nuevo León (UANL)</span>
+        <span data-lang="es" style="display:none;">Universidad Autónoma de Nuevo León (UANL)</span>
+      </p>
+      <div class="collab-links">
+        <a href="https://www.uanl.mx/investigadores/celia-nohemi-sanchez-dominguez/" target="_blank" rel="noopener noreferrer">
+          <span data-lang="en">UANL Profile</span>
+          <span data-lang="es" style="display:none;">Perfil UANL</span>
+        </a>
+        <a href="https://orcid.org/0000-0002-3444-9565" target="_blank" rel="noopener noreferrer">ORCID</a>
+        <a href="mailto:celia.sanchezdm@uanl.edu.mx">Email</a>
+      </div>
+    </div>
+
+    <div class="collab-card">
+      <p class="collab-name">Dra. Margarita Sánchez Domínguez</p>
+      <p class="collab-inst">
+        <span data-lang="en">Centro de Investigación en Materiales Avanzados (CIMAV)</span>
+        <span data-lang="es" style="display:none;">Centro de Investigación en Materiales Avanzados (CIMAV)</span>
+      </p>
+      <div class="collab-links">
+        <a href="https://cimav.edu.mx/perfil/margarita.sanchez/" target="_blank" rel="noopener noreferrer">
+          <span data-lang="en">CIMAV Profile</span>
+          <span data-lang="es" style="display:none;">Perfil CIMAV</span>
+        </a>
+        <a href="https://orcid.org/0000-0003-4755-4441" target="_blank" rel="noopener noreferrer">ORCID</a>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -876,6 +1031,68 @@
       <li><b>Facultad de Medicina</b> — Universidad Autónoma de Nuevo León (UANL) (actual)</li>
       <li><b>Nombramiento como profesor</b> — Facultad de Medicina, UANL (2023–actual)</li>
     </ul>
+  </div>
+</section>
+
+<!-- OPEN POSITIONS -->
+<section id="positions" class="section">
+  <h2>
+    <span data-lang="en">Open Positions &amp; Collaboration Opportunities</span>
+    <span data-lang="es" style="display:none;">Posiciones disponibles y oportunidades de colaboración</span>
+  </h2>
+  <div data-lang="en">
+    <p>
+      We periodically welcome motivated students and collaborators interested in cancer biology,
+      nanomedicine, and molecular oncology.
+    </p>
+    <div class="position-item">
+      <div class="position-icon">🎓</div>
+      <div><b>Graduate students (M.Sc. / Ph.D.)</b> interested in MYC/MAX biology, nanomedicine, or cancer genomics.</div>
+    </div>
+    <div class="position-item">
+      <div class="position-icon">🔬</div>
+      <div><b>Medical or biomedical thesis students</b> working on translational oncology projects.</div>
+    </div>
+    <div class="position-item">
+      <div class="position-icon">✈️</div>
+      <div><b>Short-term research stays</b> for international students and visiting collaborators.</div>
+    </div>
+    <div class="position-item">
+      <div class="position-icon">🤝</div>
+      <div><b>Collaborative projects</b> with laboratories working on transcriptional regulation, drug delivery, or cancer systems biology.</div>
+    </div>
+    <p style="margin-top:14px;">
+      Prospective students and collaborators are encouraged to
+      <a href="mailto:hugo.gallardobl@uanl.edu.mx?subject=Position%20Inquiry">contact us</a>
+      with a brief description of their interests and CV.
+    </p>
+  </div>
+  <div data-lang="es" style="display:none;">
+    <p>
+      Periódicamente recibimos estudiantes y colaboradores interesados en biología del cáncer,
+      nanomedicina y oncología molecular.
+    </p>
+    <div class="position-item">
+      <div class="position-icon">🎓</div>
+      <div><b>Estudiantes de posgrado (Maestría / Doctorado)</b> interesados en biología MYC/MAX, nanomedicina o genómica del cáncer.</div>
+    </div>
+    <div class="position-item">
+      <div class="position-icon">🔬</div>
+      <div><b>Tesistas de medicina o de ciencias biomédicas</b> que deseen trabajar en proyectos de oncología traslacional.</div>
+    </div>
+    <div class="position-item">
+      <div class="position-icon">✈️</div>
+      <div><b>Estancias de investigación de corta duración</b> para estudiantes internacionales o colaboradores visitantes.</div>
+    </div>
+    <div class="position-item">
+      <div class="position-icon">🤝</div>
+      <div><b>Proyectos de colaboración</b> con laboratorios que trabajen en regulación transcripcional, sistemas de liberación o biología de sistemas del cáncer.</div>
+    </div>
+    <p style="margin-top:14px;">
+      Los interesados pueden
+      <a href="mailto:hugo.gallardobl@uanl.edu.mx?subject=Consulta%20sobre%20posiciones">enviar un correo</a>
+      con una breve descripción de sus intereses y CV.
+    </p>
   </div>
 </section>
 
