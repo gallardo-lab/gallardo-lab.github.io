@@ -5,7 +5,6 @@
   <meta name="robots" content="index, follow">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- NEW: theme-color colors the browser chrome on Android/Chrome -->
   <meta name="theme-color" content="#0b2545">
   <title>Hugo Leonid Gallardo Blanco | Nanomedicine &amp; Molecular Oncology (Myc/Max, HER2+)</title>
   <meta name="description" content="Dr. Hugo Leonid Gallardo Blanco (UANL) — Nanomedicine &amp; Molecular Oncology. Myc/Max program modulation and targeted delivery platforms in HER2+ breast cancer. International collaborations welcome." />
@@ -18,7 +17,7 @@
   <meta name="citation_author_email" content="hugo.gallardobl@uanl.edu.mx">
   <meta name="citation_public_url" content="https://hugoleonid2008-ops.github.io/hugo-gallardo/">
   <link rel="canonical" href="https://hugoleonid2008-ops.github.io/hugo-gallardo/" />
-  <!-- Open Graph — profile.jpg must be in the same folder as index.html -->
+  <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Hugo Leonid Gallardo-Blanco | Web Biosketch" />
   <meta property="og:description" content="Nanomedicine &amp; Molecular Oncology — Myc/Max programs and targeted delivery in HER2+ breast cancer (UANL)." />
@@ -29,24 +28,27 @@
   <meta name="twitter:title" content="Hugo Leonid Gallardo-Blanco | Web Biosketch" />
   <meta name="twitter:description" content="Nanomedicine &amp; Molecular Oncology — Myc/Max programs and targeted delivery in HER2+ breast cancer (UANL)." />
   <meta name="twitter:image" content="https://hugoleonid2008-ops.github.io/hugo-gallardo/profile.jpg" />
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-X5BT5RP5WF"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-X5BT5RP5WF');
-</script>
-  <!-- Schema.org Person -->
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X5BT5RP5WF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-X5BT5RP5WF');
+  </script>
+  <!-- Schema.org Person
+       FIX: alternateName was a duplicate key (invalid JSON).
+       Corrected to an array so both values are preserved by search crawlers. -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Person",
     "@id": "https://orcid.org/0000-0002-7816-4967",
     "name": "Hugo Leonid Gallardo Blanco",
-    "alternateName": "Hugo Leonid Gallardo-Blanco",
-    "alternateName": "Hugo Gallardo-Blanco",
+    "alternateName": [
+      "Hugo Leonid Gallardo-Blanco",
+      "Hugo Gallardo-Blanco"
+    ],
     "email": "hugo.gallardobl@uanl.edu.mx",
     "url": "https://hugoleonid2008-ops.github.io/hugo-gallardo/",
     "image": "https://hugoleonid2008-ops.github.io/hugo-gallardo/profile.jpg",
@@ -99,7 +101,6 @@
     }
   }
   </script>
-
   <style>
     :root{
       --ink:#0b2545;
@@ -116,7 +117,6 @@
       background:var(--bg);
       color:#222;
     }
-
     /* ── Skip-to-content link (accessibility) ─────────────────── */
     .skip-link{
       position:absolute;
@@ -140,7 +140,6 @@
       z-index:10000;
       text-decoration:none;
     }
-
     /* ── Header ───────────────────────────────────────────────── */
     header{
       background:var(--ink);
@@ -189,7 +188,6 @@
       opacity:0.88;
       line-height:1.35;
     }
-
     /* ── Metrics row ──────────────────────────────────────────── */
     .metrics-row{
       display:flex;
@@ -208,7 +206,6 @@
       white-space:nowrap;
     }
     .metric-chip b{ font-size:16px; }
-
     /* ── Sticky nav ───────────────────────────────────────────── */
     .topnav-wrap{
       position:sticky;
@@ -263,7 +260,6 @@
       color:#fff;
       border-color:var(--ink);
     }
-
     /* ── Sections ─────────────────────────────────────────────── */
     .section{
       max-width:980px;
@@ -311,7 +307,6 @@
       background:#fbfcfe;
     }
     .pub b{ color:var(--ink); }
-
     /* ── Collaborator cards ───────────────────────────────────── */
     .collab-grid{
       display:grid;
@@ -350,7 +345,6 @@
       background:#fff;
     }
     .collab-links a:hover{ background:var(--accent); color:#fff; }
-
     /* ── Open positions ───────────────────────────────────────── */
     .position-item{
       display:flex;
@@ -363,7 +357,6 @@
       margin-bottom:10px;
     }
     .position-icon{ font-size:20px; flex-shrink:0; margin-top:2px; }
-
     .pub .pub-status{
       display:inline-block;
       font-size:11px;
@@ -386,7 +379,6 @@
     .contact{ text-align:center; font-size:16px; }
     .contact a{ font-weight:800; }
     section[id]{ scroll-margin-top:68px; }
-
     /* ── Back-to-top button ───────────────────────────────────── */
     #backToTop{
       position:fixed;
@@ -408,7 +400,6 @@
       transition:opacity 0.2s;
     }
     #backToTop:hover{ background:var(--accent); }
-
     /* ── Footer ───────────────────────────────────────────────── */
     footer{
       text-align:center;
@@ -416,7 +407,6 @@
       color:#777;
       font-size:13px;
     }
-
     /* ── Print styles ─────────────────────────────────────────── */
     @media print{
       body{ background:white; font-size:12pt; }
@@ -461,20 +451,21 @@
   </style>
 </head>
 <body>
-
-<!-- Accessibility: skip to main content -->
-<a class="skip-link" href="#personal">Skip to main content</a>
+<!-- FIX: skip link now points to #main-content for proper accessibility -->
+<a class="skip-link" href="#main-content">Skip to main content</a>
 
 <header>
   <div class="header-inner">
     <!--
       PROFILE PHOTO: save your photo as "profile.jpg" in the same folder as index.html.
-      The image will appear here automatically once the file is present.
+      FIX: explicit width/height attributes added to prevent layout shift (CLS).
     -->
     <img
       src="./profile.jpg"
       alt="Dr. Hugo Leonid Gallardo-Blanco"
       class="profile-photo"
+      width="120"
+      height="120"
       onerror="this.style.display='none'"
     />
     <div class="header-text">
@@ -500,7 +491,6 @@
       </div>
     </div>
   </div>
-
   <!-- Research metrics — update these values periodically from Google Scholar -->
   <div class="metrics-row">
     <div class="metric-chip" data-lang="en"><b>312</b> Citations</div>
@@ -518,40 +508,16 @@
   </div>
 </header>
 
-<!-- Official Academic Links -->
-<section id="links" class="section">
-  <h2>
-    <span data-lang="en">Official Academic Links</span>
-    <span data-lang="es" style="display:none;">Enlaces académicos oficiales</span>
-  </h2>
-  <div data-lang="en">
-    <p>Primary academic profile of Dr. Hugo Leonid Gallardo Blanco. For identity verification and research records:</p>
-    <ul>
-      <li><a href="https://orcid.org/0000-0002-7816-4967" target="_blank" rel="noopener noreferrer">ORCID record</a></li>
-      <li><a href="https://scholar.google.com/citations?user=ehqLAwcAAAAJ" target="_blank" rel="noopener noreferrer">Google Scholar profile</a></li>
-      <li><a href="https://www.researchgate.net/profile/Hugo_Leonid_Gallardo-Blanco" target="_blank" rel="noopener noreferrer">ResearchGate profile</a></li>
-      <li><a href="https://www.uanl.mx/investigadores/hugo-leonid-gallardo-blanco/" target="_blank" rel="noopener noreferrer">Official institutional profile – UANL</a></li>
-      <li><a href="https://snii.org/biologia-y-quimica/gallardo-blanco-hugo-leonid/" target="_blank" rel="noopener noreferrer">SNII researcher directory</a></li>
-      <li><a href="https://www.linkedin.com/in/hugo-gallardo-blanco-498671233/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-    </ul>
-  </div>
-  <div data-lang="es" style="display:none;">
-    <p>Perfil académico principal del Dr. Hugo Leonid Gallardo Blanco. Para verificación de identidad y registros de investigación:</p>
-    <ul>
-      <li><a href="https://orcid.org/0000-0002-7816-4967" target="_blank" rel="noopener noreferrer">Registro ORCID</a></li>
-      <li><a href="https://scholar.google.com/citations?user=ehqLAwcAAAAJ" target="_blank" rel="noopener noreferrer">Perfil en Google Scholar</a></li>
-      <li><a href="https://www.researchgate.net/profile/Hugo_Leonid_Gallardo-Blanco" target="_blank" rel="noopener noreferrer">Perfil en ResearchGate</a></li>
-      <li><a href="https://www.uanl.mx/investigadores/hugo-leonid-gallardo-blanco/" target="_blank" rel="noopener noreferrer">Perfil institucional oficial – UANL</a></li>
-      <li><a href="https://snii.org/biologia-y-quimica/gallardo-blanco-hugo-leonid/" target="_blank" rel="noopener noreferrer">Directorio SNII</a></li>
-      <li><a href="https://www.linkedin.com/in/hugo-gallardo-blanco-498671233/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-    </ul>
-  </div>
-</section>
-
-<!-- Sticky navigation + language toggle -->
+<!-- FIX: Sticky nav moved immediately after header (before #links).
+     This is standard UX: nav sticks to top right away, not after a section.
+     #links and #citation added to the nav menu. -->
 <div class="topnav-wrap">
   <div class="topnav">
     <div class="navlinks">
+      <a href="#links">
+        <span data-lang="en">Links</span>
+        <span data-lang="es" style="display:none;">Enlaces</span>
+      </a>
       <a href="#personal">
         <span data-lang="en">Personal Statement</span>
         <span data-lang="es" style="display:none;">Declaración</span>
@@ -600,6 +566,10 @@
         <span data-lang="en">PDF</span>
         <span data-lang="es" style="display:none;">PDF</span>
       </a>
+      <a href="#citation">
+        <span data-lang="en">Cite</span>
+        <span data-lang="es" style="display:none;">Citar</span>
+      </a>
       <a href="#contact">
         <span data-lang="en">Contact</span>
         <span data-lang="es" style="display:none;">Contacto</span>
@@ -629,12 +599,45 @@
     document.documentElement.lang = lang;
   }
   (function(){
-    // NEW: detect browser language as fallback if no preference saved
     const saved = localStorage.getItem('biosketch_lang')
       || (navigator.language && navigator.language.startsWith('es') ? 'es' : 'en');
     setLang(saved);
   })();
 </script>
+
+<!-- FIX: <main> wrapper added for accessibility (WCAG, screen readers).
+     id="main-content" matches the updated skip link. -->
+<main id="main-content">
+
+<!-- Official Academic Links -->
+<section id="links" class="section">
+  <h2>
+    <span data-lang="en">Official Academic Links</span>
+    <span data-lang="es" style="display:none;">Enlaces académicos oficiales</span>
+  </h2>
+  <div data-lang="en">
+    <p>Primary academic profile of Dr. Hugo Leonid Gallardo Blanco. For identity verification and research records:</p>
+    <ul>
+      <li><a href="https://orcid.org/0000-0002-7816-4967" target="_blank" rel="noopener noreferrer">ORCID record</a></li>
+      <li><a href="https://scholar.google.com/citations?user=ehqLAwcAAAAJ" target="_blank" rel="noopener noreferrer">Google Scholar profile</a></li>
+      <li><a href="https://www.researchgate.net/profile/Hugo_Leonid_Gallardo-Blanco" target="_blank" rel="noopener noreferrer">ResearchGate profile</a></li>
+      <li><a href="https://www.uanl.mx/investigadores/hugo-leonid-gallardo-blanco/" target="_blank" rel="noopener noreferrer">Official institutional profile – UANL</a></li>
+      <li><a href="https://snii.org/biologia-y-quimica/gallardo-blanco-hugo-leonid/" target="_blank" rel="noopener noreferrer">SNII researcher directory</a></li>
+      <li><a href="https://www.linkedin.com/in/hugo-gallardo-blanco-498671233/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+    </ul>
+  </div>
+  <div data-lang="es" style="display:none;">
+    <p>Perfil académico principal del Dr. Hugo Leonid Gallardo Blanco. Para verificación de identidad y registros de investigación:</p>
+    <ul>
+      <li><a href="https://orcid.org/0000-0002-7816-4967" target="_blank" rel="noopener noreferrer">Registro ORCID</a></li>
+      <li><a href="https://scholar.google.com/citations?user=ehqLAwcAAAAJ" target="_blank" rel="noopener noreferrer">Perfil en Google Scholar</a></li>
+      <li><a href="https://www.researchgate.net/profile/Hugo_Leonid_Gallardo-Blanco" target="_blank" rel="noopener noreferrer">Perfil en ResearchGate</a></li>
+      <li><a href="https://www.uanl.mx/investigadores/hugo-leonid-gallardo-blanco/" target="_blank" rel="noopener noreferrer">Perfil institucional oficial – UANL</a></li>
+      <li><a href="https://snii.org/biologia-y-quimica/gallardo-blanco-hugo-leonid/" target="_blank" rel="noopener noreferrer">Directorio SNII</a></li>
+      <li><a href="https://www.linkedin.com/in/hugo-gallardo-blanco-498671233/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+    </ul>
+  </div>
+</section>
 
 <!-- PERSONAL STATEMENT -->
 <section id="personal" class="section">
@@ -711,9 +714,7 @@
   </h2>
   <p class="smallnote" data-lang="en">Primary academic collaborators — shared research lines and co-authored work.</p>
   <p class="smallnote" data-lang="es" style="display:none;">Colaboradores académicos principales — líneas de investigación compartidas y trabajo en co-autoría.</p>
-
   <div class="collab-grid">
-
     <div class="collab-card">
       <p class="collab-name">Dr. Oscar Vidal Gutiérrez</p>
       <p class="collab-inst">
@@ -727,7 +728,6 @@
         </a>
       </div>
     </div>
-
     <div class="collab-card">
       <p class="collab-name">Dra. Celia N. Sánchez Domínguez</p>
       <p class="collab-inst">
@@ -743,7 +743,6 @@
         <a href="mailto:celia.sanchezdm@uanl.edu.mx">Email</a>
       </div>
     </div>
-
     <div class="collab-card">
       <p class="collab-name">Dra. Margarita Sánchez Domínguez</p>
       <p class="collab-inst">
@@ -758,7 +757,6 @@
         <a href="https://orcid.org/0000-0003-4755-4441" target="_blank" rel="noopener noreferrer">ORCID</a>
       </div>
     </div>
-
   </div>
 </section>
 
@@ -906,7 +904,7 @@
   </div>
 </section>
 
-<!-- NEW: PIPELINE / WORK IN PROGRESS -->
+<!-- PIPELINE / WORK IN PROGRESS -->
 <section id="pipeline" class="section">
   <h2>
     <span data-lang="en">Research Pipeline</span>
@@ -924,10 +922,6 @@
       <span class="pub-status status-inprep">In preparation</span><br>
       Receptor-guided construct with endosomal routing characterization in HER2+ cell lines.
     </div>
-    <!--
-      ADD MORE ITEMS HERE as manuscripts progress.
-      Change status-inprep → status-review when submitted.
-    -->
   </div>
   <div data-lang="es" style="display:none;">
     <p class="smallnote">Manuscritos activos y trabajo experimental en curso. Se invita a colaboradores — <a href="mailto:hugo.gallardobl@uanl.edu.mx?subject=Inter%C3%A9s%20en%20colaboraci%C3%B3n">escríbenos para discutir</a>.</p>
@@ -1149,7 +1143,6 @@
     </p>
   </div>
 </section>
-
 <script>
   (function(){
     const d = new Date();
@@ -1198,30 +1191,6 @@
   </div>
 </section>
 
-<!-- FOOTER with last-updated -->
-<footer>
-  <span data-lang="en">
-    Biosketch-like web profile ·
-    <span id="lastUpdatedEN"></span>
-  </span>
-  <span data-lang="es" style="display:none;">
-    Perfil web tipo Biosketch ·
-    <span id="lastUpdatedES"></span>
-  </span>
-</footer>
-<script>
-  (function(){
-    // Update this date whenever you make significant content changes
-    const updated = new Date('2026-03-05');
-    const enStr = updated.toLocaleDateString('en-US', {year:'numeric', month:'long'});
-    const esStr = updated.toLocaleDateString('es-MX', {year:'numeric', month:'long'});
-    const elEN = document.getElementById('lastUpdatedEN');
-    const elES = document.getElementById('lastUpdatedES');
-    if(elEN) elEN.textContent = 'Last updated: ' + enStr;
-    if(elES) elES.textContent = 'Última actualización: ' + esStr;
-  })();
-</script>
-
 <!-- Additional resources -->
 <section class="section smallnote" style="margin-bottom:40px;">
   <p>
@@ -1250,6 +1219,32 @@
   </p>
 </section>
 
+</main><!-- end #main-content -->
+
+<!-- FOOTER with last-updated -->
+<footer>
+  <span data-lang="en">
+    Biosketch-like web profile ·
+    <span id="lastUpdatedEN"></span>
+  </span>
+  <span data-lang="es" style="display:none;">
+    Perfil web tipo Biosketch ·
+    <span id="lastUpdatedES"></span>
+  </span>
+</footer>
+<script>
+  (function(){
+    // Update this date whenever you make significant content changes
+    const updated = new Date('2026-03-05');
+    const enStr = updated.toLocaleDateString('en-US', {year:'numeric', month:'long'});
+    const esStr = updated.toLocaleDateString('es-MX', {year:'numeric', month:'long'});
+    const elEN = document.getElementById('lastUpdatedEN');
+    const elES = document.getElementById('lastUpdatedES');
+    if(elEN) elEN.textContent = 'Last updated: ' + enStr;
+    if(elES) elES.textContent = 'Última actualización: ' + esStr;
+  })();
+</script>
+
 <!-- Back to top button -->
 <button id="backToTop" aria-label="Back to top" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <script>
@@ -1264,6 +1259,5 @@
     }, {passive: true});
   })();
 </script>
-
 </body>
 </html>
