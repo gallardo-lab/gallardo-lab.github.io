@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <title>Cit&oacute;polis — Campa&ntilde;as de Oncolog&iacute;a de Precisi&oacute;n</title>
+    <meta name="description" content="Plataforma de juegos interactivos sobre estrategias de oncología de precisión: letalidad sintética, inmunoterapia, p53 y más.">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X5BT5RP5WF"></script>
+    <script>
+        window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+        gtag('js',new Date());gtag('config','G-X5BT5RP5WF');
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#0a0e1a 0%,#1a0a2e 50%,#0a1628 100%);color:#e2e8f0;min-height:100vh}
+        body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(139,92,246,0.08) 0%,transparent 60%),radial-gradient(ellipse at 70% 60%,rgba(59,130,246,0.06) 0%,transparent 50%);z-index:0;pointer-events:none}
+        .container{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:2rem 1rem}
+        .hero{text-align:center;margin-bottom:2.5rem}
+        .logo{font-family:'Orbitron',monospace;font-weight:900;font-size:2.5rem;background:linear-gradient(135deg,#a78bfa,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .subtitle{font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:#94a3b8;margin-top:0.25rem}
+        .tagline{font-size:0.75rem;color:#64748b;margin-top:0.75rem;line-height:1.6;max-width:500px;margin-left:auto;margin-right:auto}
+
+        .campaigns{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem}
+        @media(max-width:600px){.campaigns{grid-template-columns:1fr}}
+
+        .camp-card{display:block;text-decoration:none;color:#e2e8f0;border-radius:16px;overflow:hidden;border:1px solid rgba(139,92,246,0.15);background:rgba(15,23,42,0.6);backdrop-filter:blur(8px);transition:all 0.3s ease;position:relative}
+        .camp-card:hover{border-color:rgba(139,92,246,0.5);transform:translateY(-4px);box-shadow:0 8px 30px rgba(139,92,246,0.15)}
+        .camp-card.locked{opacity:0.55;pointer-events:none}
+        .camp-card.locked::after{content:'Pr\00f3ximamente';position:absolute;top:12px;right:12px;background:rgba(100,116,139,0.8);color:#cbd5e1;font-size:0.55rem;padding:3px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:0.1em;font-weight:600}
+        .camp-card.live::after{content:'\26A1 Disponible';position:absolute;top:12px;right:12px;background:rgba(16,185,129,0.8);color:#fff;font-size:0.55rem;padding:3px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:0.1em;font-weight:600}
+
+        .level-badge{display:inline-block;font-size:0.5rem;padding:2px 6px;border-radius:4px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-left:0.5rem;vertical-align:middle}
+        .level-basico{background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(16,185,129,0.25)}
+        .level-intermedio{background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.25)}
+        .level-avanzado{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.25)}
+
+        .level-filter{display:flex;gap:0.5rem;justify-content:center;margin-bottom:1.5rem;flex-wrap:wrap}
+        .level-btn{font-family:'Orbitron',monospace;font-size:0.6rem;padding:6px 14px;border-radius:8px;border:1px solid rgba(139,92,246,0.2);background:rgba(15,23,42,0.4);color:#94a3b8;cursor:pointer;transition:all 0.2s}
+        .level-btn:hover,.level-btn.active{border-color:rgba(139,92,246,0.5);color:#c4b5fd;background:rgba(139,92,246,0.1)}
+        .camp-card.hidden-level{display:none}
+
+        .camp-header{padding:1.25rem 1.25rem 0.75rem;display:flex;align-items:center;gap:0.75rem}
+        .camp-icon{font-size:2rem;width:50px;height:50px;display:flex;align-items:center;justify-content:center;border-radius:12px;flex-shrink:0}
+        .camp-num{font-family:'Orbitron',monospace;font-size:0.55rem;color:#64748b;text-transform:uppercase;letter-spacing:0.15em}
+        .camp-title{font-family:'Orbitron',monospace;font-weight:700;font-size:0.95rem;color:#fff;margin-top:2px}
+
+        .camp-body{padding:0 1.25rem 1.25rem}
+        .camp-desc{font-size:0.75rem;color:#94a3b8;line-height:1.5;margin-bottom:0.75rem}
+        .camp-tags{display:flex;flex-wrap:wrap;gap:4px}
+        .tag{font-size:0.55rem;padding:2px 8px;border-radius:4px;background:rgba(139,92,246,0.1);color:#a78bfa;border:1px solid rgba(139,92,246,0.15)}
+        .tag-green{background:rgba(16,185,129,0.1);color:#34d399;border-color:rgba(16,185,129,0.15)}
+        .tag-amber{background:rgba(245,158,11,0.1);color:#fbbf24;border-color:rgba(245,158,11,0.15)}
+        .tag-pink{background:rgba(236,72,153,0.1);color:#f472b6;border-color:rgba(236,72,153,0.15)}
+        .tag-cyan{background:rgba(34,211,238,0.1);color:#22d3ee;border-color:rgba(34,211,238,0.15)}
+
+        .progress-section{background:rgba(15,23,42,0.4);border:1px solid rgba(139,92,246,0.1);border-radius:12px;padding:1rem 1.25rem;margin-bottom:2rem}
+        .progress-title{font-family:'Orbitron',monospace;font-size:0.65rem;color:#64748b;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem}
+        .progress-bar-bg{height:8px;background:rgba(100,116,139,0.15);border-radius:4px;overflow:hidden}
+        .progress-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#a78bfa,#60a5fa);transition:width 0.5s}
+        .progress-stats{display:flex;justify-content:space-between;margin-top:0.5rem;font-size:0.65rem;color:#94a3b8}
+
+        .back-link{display:inline-flex;align-items:center;gap:0.5rem;color:#64748b;text-decoration:none;font-size:0.75rem;margin-bottom:1.5rem;transition:color 0.2s}
+        .back-link:hover{color:#a78bfa}
+
+        footer{text-align:center;padding:1.5rem 1rem;position:relative;z-index:1}
+        footer p{font-size:0.6rem;color:#475569;line-height:1.6}
+        footer a{color:#64748b;text-decoration:none}
+        footer a:hover{color:#a78bfa}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="biolab.html" class="back-link">&larr; BioLab Interactivo</a>
+
+        <div class="hero">
+            <div class="logo">Cit&oacute;polis</div>
+            <p class="subtitle">Campa&ntilde;as de Oncolog&iacute;a de Precisi&oacute;n</p>
+            <p class="tagline">Cada campa&ntilde;a te pone en el rol de un cient&iacute;fico que debe elegir la estrategia correcta para destruir un tumor sin da&ntilde;ar las c&eacute;lulas sanas. Cuatro mecanismos diferentes, cuatro historias, un objetivo com&uacute;n.</p>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-title">Progreso general</div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:25%"></div></div>
+            <div class="progress-stats">
+                <span id="campaignsDone">1 de 4 campa&ntilde;as</span>
+                <span id="totalScore"></span>
+            </div>
+        </div>
+
+        <div class="level-filter">
+            <button class="level-btn active" onclick="filterLevel('all')">Todas</button>
+            <button class="level-btn" onclick="filterLevel('basico')">B&aacute;sico (12-15)</button>
+            <button class="level-btn" onclick="filterLevel('intermedio')">Intermedio (15-18)</button>
+            <button class="level-btn" onclick="filterLevel('avanzado')">Avanzado (Universidad)</button>
+        </div>
+
+        <div class="campaigns">
+            <!-- Campaign 1: ATR/WEE1 (existing) -->
+            <a class="camp-card live" href="Citopolis_Interactivo_v3.html" data-level="basico">
+                <div class="camp-header">
+                    <div class="camp-icon" style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);">&#9889;</div>
+                    <div>
+                        <div class="camp-num">Campa&ntilde;a 01 <span class="level-badge level-basico">B&aacute;sico</span></div>
+                        <div class="camp-title">Letalidad Sint&eacute;tica</div>
+                    </div>
+                </div>
+                <div class="camp-body">
+                    <p class="camp-desc">Inhibe ATR y WEE1 para provocar cat&aacute;strofe mit&oacute;tica en c&eacute;lulas con estr&eacute;s replicativo. Explota la vulnerabilidad gen&eacute;tica del tumor sin da&ntilde;ar el tejido sano.</p>
+                    <div class="camp-tags">
+                        <span class="tag tag-amber">ATR</span>
+                        <span class="tag tag-amber">WEE1</span>
+                        <span class="tag">R-loops</span>
+                        <span class="tag">Cat&aacute;strofe mit&oacute;tica</span>
+                        <span class="tag tag-green">5 pasos</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Campaign 2: PARP/BRCA -->
+            <a class="camp-card live" href="citopolis_parp.html" id="cardParp" data-level="intermedio">
+                <div class="camp-header">
+                    <div class="camp-icon" style="background:rgba(236,72,153,0.12);border:1px solid rgba(236,72,153,0.25);">&#128295;</div>
+                    <div>
+                        <div class="camp-num">Campa&ntilde;a 02 <span class="level-badge level-intermedio">Intermedio</span></div>
+                        <div class="camp-title">PARP y BRCA</div>
+                    </div>
+                </div>
+                <div class="camp-body">
+                    <p class="camp-desc">Ataca tumores con deficiencia en reparaci&oacute;n por recombinaci&oacute;n hom&oacute;loga. Usa inhibidores de PARP para atrapar la enzima en el ADN y colapsar las horquillas de replicaci&oacute;n.</p>
+                    <div class="camp-tags">
+                        <span class="tag tag-pink">PARP</span>
+                        <span class="tag tag-pink">BRCA1/2</span>
+                        <span class="tag">HRD</span>
+                        <span class="tag">Olaparib</span>
+                        <span class="tag tag-green">5 pasos</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Campaign 3: Immunotherapy -->
+            <a class="camp-card live" href="citopolis_inmuno.html" id="cardInmuno" data-level="avanzado">
+                <div class="camp-header">
+                    <div class="camp-icon" style="background:rgba(34,211,238,0.12);border:1px solid rgba(34,211,238,0.25);">&#128737;</div>
+                    <div>
+                        <div class="camp-num">Campa&ntilde;a 03 <span class="level-badge level-avanzado">Avanzado</span></div>
+                        <div class="camp-title">El Asedio Inmune</div>
+                    </div>
+                </div>
+                <div class="camp-body">
+                    <p class="camp-desc">Desenmascara al tumor para que el sistema inmune lo reconozca y lo destruya. Usa checkpoint inhibitors para liberar a los linfocitos T de su par&aacute;lisis inducida por el c&aacute;ncer.</p>
+                    <div class="camp-tags">
+                        <span class="tag tag-cyan">PD-1/PD-L1</span>
+                        <span class="tag tag-cyan">CTLA-4</span>
+                        <span class="tag">TMB</span>
+                        <span class="tag">Linfocitos T</span>
+                        <span class="tag tag-green">5 pasos</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Campaign 4: p53 -->
+            <a class="camp-card live" href="citopolis_p53.html" id="cardP53" data-level="avanzado">
+                <div class="camp-header">
+                    <div class="camp-icon" style="background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.25);">&#128302;</div>
+                    <div>
+                        <div class="camp-num">Campa&ntilde;a 04 <span class="level-badge level-avanzado">Avanzado</span></div>
+                        <div class="camp-title">La Guardia p53</div>
+                    </div>
+                </div>
+                <div class="camp-body">
+                    <p class="camp-desc">Restaura al &ldquo;guardi&aacute;n del genoma&rdquo;. Cuando p53 est&aacute; mutado, la c&eacute;lula pierde su principal freno antitumoral. Elige la estrategia correcta para reactivarlo o eliminar la prote&iacute;na mutante.</p>
+                    <div class="camp-tags">
+                        <span class="tag">TP53</span>
+                        <span class="tag">GOF vs LOF</span>
+                        <span class="tag">APR-246</span>
+                        <span class="tag">MDM2</span>
+                        <span class="tag tag-green">5 pasos</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <p style="margin-bottom:0.5rem;">
+            Hugo L. Gallardo-Blanco &middot;
+            <a href="https://orcid.org/0000-0002-7816-4967" target="_blank">ORCID</a> &middot;
+            Posgrado en Ciencias B&aacute;sicas, Facultad de Medicina, UANL
+        </p>
+        <p style="font-size:0.55rem;color:#475569;font-style:italic;">
+            Herramientas de producci&oacute;n: NotebookLM, Gemini y Visual Storyteller (Google), Claude Cowork (Anthropic).<br>
+            Contenido cient&iacute;fico, dise&ntilde;o pedag&oacute;gico y direcci&oacute;n editorial: Hugo L. Gallardo-Blanco.
+        </p>
+    </footer>
+
+    <script>
+        // Level filter
+        function filterLevel(level) {
+            document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            document.querySelectorAll('.camp-card').forEach(card => {
+                if (level === 'all' || card.dataset.level === level) {
+                    card.classList.remove('hidden-level');
+                } else {
+                    card.classList.add('hidden-level');
+                }
+            });
+        }
+
+        // Unlock campaigns based on localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            const campaigns = [
+                { key: 'citopolis_plays', id: null },
+                { key: 'citopolis_parp_plays', id: 'cardParp' },
+                { key: 'citopolis_inmuno_plays', id: 'cardInmuno' },
+                { key: 'citopolis_p53_plays', id: 'cardP53' }
+            ];
+            let done = 0;
+            campaigns.forEach(c => {
+                const plays = parseInt(localStorage.getItem(c.key) || '0');
+                if (plays > 0 || !c.id) {
+                    if (c.id) {
+                        const el = document.getElementById(c.id);
+                        if (el) { el.classList.remove('locked'); el.classList.add('live'); }
+                    }
+                    if (plays > 0) done++;
+                }
+            });
+            // Campaign 1 always counts as available
+            done = Math.max(done, 0);
+            const total = 4;
+            // Update progress - count campaign 1 as done if played
+            const c1plays = parseInt(localStorage.getItem('citopolis_plays') || '0');
+            if (c1plays > 0) done = Math.max(done, 1);
+            
+            document.getElementById('progressFill').style.width = ((done/total)*100) + '%';
+            document.getElementById('campaignsDone').textContent = done + ' de ' + total + ' completadas';
+        });
+    </script>
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>

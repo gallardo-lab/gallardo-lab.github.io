@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <title>BioLab Interactive &mdash; Competencia en Grupo</title>
+    <meta name="description" content="Tabla de ranking y radar de habilidades para competencias grupales en BioLab Interactive. Compara resultados en oncolog&iacute;a molecular y nanomedicina.">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X5BT5RP5WF"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-X5BT5RP5WF');
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+        body{
+            font-family:'Inter',sans-serif;
+            background:#080b14;
+            color:#e2e8f0;
+            min-height:100vh;
+            overflow-x:hidden;
+        }
+        body::before{
+            content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+            background:
+                radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.4), transparent),
+                radial-gradient(1px 1px at 25% 35%, rgba(255,255,255,0.3), transparent),
+                radial-gradient(1px 1px at 40% 10%, rgba(255,255,255,0.2), transparent),
+                radial-gradient(1px 1px at 55% 45%, rgba(255,255,255,0.35), transparent),
+                radial-gradient(1px 1px at 70% 20%, rgba(255,255,255,0.25), transparent),
+                radial-gradient(1px 1px at 85% 50%, rgba(255,255,255,0.3), transparent),
+                radial-gradient(1.5px 1.5px at 20% 50%, rgba(139,92,246,0.5), transparent),
+                radial-gradient(1.5px 1.5px at 65% 35%, rgba(245,158,11,0.4), transparent),
+                radial-gradient(1.5px 1.5px at 45% 80%, rgba(236,72,153,0.4), transparent);
+        }
+        body::after{
+            content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+            background:
+                radial-gradient(ellipse at 20% 30%, rgba(139,92,246,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 75% 60%, rgba(245,158,11,0.05) 0%, transparent 45%);
+        }
+
+        /* Header */
+        .page-header{
+            position:sticky;top:0;z-index:100;
+            background:rgba(8,11,20,0.92);backdrop-filter:blur(16px);
+            border-bottom:1px solid rgba(139,92,246,0.15);
+            padding:0.75rem 1rem;
+        }
+        .page-header-inner{
+            max-width:960px;margin:0 auto;
+            display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;
+        }
+        .page-title{
+            font-family:'Orbitron',monospace;font-weight:900;font-size:1rem;
+            background:linear-gradient(135deg,#a78bfa,#ec4899,#f59e0b);
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+        }
+        .header-pills{display:flex;gap:0.75rem;align-items:center;}
+        .pill{
+            font-family:'Orbitron',monospace;font-size:0.55rem;
+            padding:3px 10px;border-radius:12px;
+            border:1px solid rgba(139,92,246,0.3);
+            color:#c4b5fd;background:rgba(139,92,246,0.08);
+        }
+        .pill .v{font-weight:700;color:#e9d5ff;}
+
+        main{max-width:960px;margin:0 auto;padding:1.5rem 1rem 3rem;position:relative;z-index:1;}
+        .back-link{display:inline-block;font-size:0.7rem;color:#a78bfa;text-decoration:none;margin-bottom:1.5rem;transition:color 0.2s;}
+        .back-link:hover{color:#c4b5fd;}
+
+        /* Sections */
+        .section{
+            background:rgba(15,23,42,0.7);border:1px solid rgba(139,92,246,0.15);
+            border-radius:16px;padding:1.25rem;margin-bottom:1.5rem;
+            backdrop-filter:blur(8px);
+        }
+        .section-title{
+            font-family:'Orbitron',monospace;font-size:0.75rem;font-weight:700;
+            color:#c4b5fd;margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.08em;
+        }
+
+        /* Input area */
+        .input-row{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.75rem;}
+        .input-field{
+            flex:1;min-width:120px;
+            background:rgba(30,41,59,0.6);border:1px solid rgba(100,116,139,0.3);
+            border-radius:8px;padding:7px 12px;
+            font-size:0.78rem;color:#e2e8f0;font-family:'Inter',sans-serif;
+            outline:none;transition:border-color 0.2s;
+        }
+        .input-field:focus{border-color:rgba(139,92,246,0.5);}
+        .input-field::placeholder{color:#64748b;}
+        textarea.input-field{min-height:60px;resize:vertical;}
+
+        .btn{
+            font-family:'Orbitron',monospace;font-size:0.6rem;font-weight:600;
+            padding:7px 16px;border-radius:8px;cursor:pointer;
+            transition:all 0.2s;white-space:nowrap;
+        }
+        .btn-primary{
+            background:linear-gradient(135deg,#8b5cf6,#a78bfa);color:#fff;border:none;
+        }
+        .btn-primary:hover{transform:scale(1.03);box-shadow:0 4px 12px rgba(139,92,246,0.3);}
+        .btn-secondary{
+            background:rgba(30,41,59,0.6);border:1px solid rgba(100,116,139,0.3);color:#94a3b8;
+        }
+        .btn-secondary:hover{border-color:rgba(139,92,246,0.4);color:#c4b5fd;}
+        .btn-danger{
+            background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171;
+        }
+        .btn-danger:hover{background:rgba(239,68,68,0.2);}
+
+        /* Tabs */
+        .tabs{display:flex;gap:0;margin-bottom:1rem;border-bottom:1px solid rgba(71,85,105,0.2);}
+        .tab{
+            font-family:'Orbitron',monospace;font-size:0.6rem;
+            padding:8px 16px;cursor:pointer;color:#64748b;
+            border-bottom:2px solid transparent;transition:all 0.2s;
+            background:none;border-top:none;border-left:none;border-right:none;
+        }
+        .tab.active{color:#c4b5fd;border-bottom-color:#8b5cf6;}
+        .tab:hover{color:#a78bfa;}
+        .tab-panel{display:none;}
+        .tab-panel.active{display:block;}
+
+        /* Participant chips */
+        .participants-list{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.75rem;}
+        .p-chip{
+            display:flex;align-items:center;gap:0.5rem;
+            background:rgba(30,41,59,0.6);border:1px solid rgba(71,85,105,0.3);
+            border-radius:8px;padding:4px 10px;font-size:0.7rem;
+        }
+        .p-chip .p-name{color:#e2e8f0;font-weight:600;}
+        .p-chip .p-score{font-family:'Orbitron',monospace;color:#a78bfa;font-size:0.6rem;}
+        .p-chip .p-remove{
+            cursor:pointer;color:#64748b;font-size:0.8rem;margin-left:0.25rem;
+            transition:color 0.2s;
+        }
+        .p-chip .p-remove:hover{color:#f87171;}
+
+        /* Ranking table */
+        .ranking-wrap{overflow-x:auto;margin-top:0.5rem;}
+        .ranking-table{width:100%;border-collapse:collapse;font-size:0.7rem;min-width:600px;}
+        .ranking-table th{
+            text-align:left;padding:8px 6px;color:#94a3b8;font-weight:600;
+            border-bottom:1px solid rgba(139,92,246,0.2);
+            font-size:0.58rem;text-transform:uppercase;letter-spacing:0.08em;
+            cursor:pointer;user-select:none;white-space:nowrap;
+        }
+        .ranking-table th:hover{color:#c4b5fd;}
+        .ranking-table th .sort-arrow{font-size:0.5rem;margin-left:2px;color:#8b5cf6;}
+        .ranking-table td{padding:8px 6px;border-bottom:1px solid rgba(71,85,105,0.12);}
+        .ranking-table tr:hover td{background:rgba(139,92,246,0.04);}
+
+        .rank-num{
+            font-family:'Orbitron',monospace;font-weight:700;font-size:0.75rem;
+            width:28px;height:28px;border-radius:50%;
+            display:inline-flex;align-items:center;justify-content:center;
+        }
+        .rank-1{background:rgba(245,158,11,0.2);color:#fbbf24;border:1px solid rgba(245,158,11,0.4);}
+        .rank-2{background:rgba(148,163,184,0.15);color:#cbd5e1;border:1px solid rgba(148,163,184,0.3);}
+        .rank-3{background:rgba(180,83,9,0.15);color:#d97706;border:1px solid rgba(180,83,9,0.3);}
+        .rank-other{background:rgba(30,41,59,0.5);color:#94a3b8;border:1px solid rgba(71,85,105,0.2);}
+
+        .skill-badge{
+            font-family:'Orbitron',monospace;font-size:0.5rem;
+            padding:2px 6px;border-radius:6px;white-space:nowrap;
+        }
+        .skill-badge.experto{background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#34d399;}
+        .skill-badge.competente{background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.3);color:#c4b5fd;}
+        .skill-badge.basico{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.25);color:#fbbf24;}
+        .skill-badge.none{background:rgba(30,41,59,0.4);border:1px solid rgba(71,85,105,0.2);color:#475569;}
+
+        .score-cell{font-family:'Orbitron',monospace;text-align:center;}
+        .score-cell.perfect{color:#10b981;}
+        .score-cell.good{color:#a78bfa;}
+        .score-cell.low{color:#f87171;}
+        .score-cell.na{color:#475569;font-style:italic;}
+
+        .total-score{
+            font-family:'Orbitron',monospace;font-weight:700;font-size:0.8rem;
+        }
+        .macro-cell{font-family:'Orbitron',monospace;font-size:0.65rem;}
+        .macro-cell.onco{color:#f472b6;}
+        .macro-cell.nano{color:#fbbf24;}
+
+        /* Radar charts grid */
+        .radar-grid{
+            display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+            gap:1rem;margin-top:0.75rem;
+        }
+        .radar-card{
+            background:rgba(15,23,42,0.6);border:1px solid rgba(71,85,105,0.2);
+            border-radius:12px;padding:1rem;text-align:center;
+        }
+        .radar-name{
+            font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;
+            color:#e9d5ff;margin-bottom:0.5rem;
+        }
+        .radar-svg{display:block;margin:0 auto;}
+        .radar-legend{font-size:0.55rem;color:#94a3b8;margin-top:0.4rem;}
+
+        /* Export section */
+        .export-row{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:1rem;}
+
+        /* Skills reference */
+        .skills-ref{
+            display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+            gap:0.5rem;margin-top:0.5rem;
+        }
+        .skill-ref-card{
+            background:rgba(30,41,59,0.4);border:1px solid rgba(71,85,105,0.15);
+            border-radius:8px;padding:0.6rem 0.75rem;
+        }
+        .skill-ref-name{font-weight:600;font-size:0.72rem;margin-bottom:0.15rem;}
+        .skill-ref-name.onco{color:#f472b6;}
+        .skill-ref-name.nano{color:#fbbf24;}
+        .skill-ref-game{font-size:0.6rem;color:#94a3b8;}
+        .skill-ref-levels{font-size:0.55rem;color:#64748b;margin-top:0.25rem;}
+
+        /* Notification toast */
+        .toast{
+            position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);
+            background:rgba(16,185,129,0.9);color:#fff;
+            padding:8px 20px;border-radius:10px;
+            font-family:'Orbitron',monospace;font-size:0.65rem;
+            transition:transform 0.3s ease;z-index:200;pointer-events:none;
+        }
+        .toast.show{transform:translateX(-50%) translateY(0);}
+
+        /* Footer */
+        .page-footer{
+            text-align:center;margin-top:2rem;padding-top:1.5rem;
+            border-top:1px solid rgba(71,85,105,0.15);
+        }
+        .page-footer p{font-size:0.7rem;color:#475569;line-height:1.6;}
+        .page-footer a{color:#a78bfa;text-decoration:none;}
+
+        /* Responsive */
+        @media(max-width:600px){
+            .ranking-table{font-size:0.6rem;}
+            .radar-grid{grid-template-columns:1fr 1fr;}
+        }
+        @media(max-width:400px){
+            .radar-grid{grid-template-columns:1fr;}
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-header">
+    <div class="page-header-inner">
+        <span class="page-title">Competencia en Grupo</span>
+        <div class="header-pills">
+            <span class="pill">Participantes: <span class="v" id="pillCount">0</span></span>
+        </div>
+    </div>
+</div>
+
+<main>
+    <a href="mapa_misiones.html" class="back-link">&larr; Volver al Mapa de Misiones</a>
+
+    <!-- SKILLS REFERENCE -->
+    <div class="section">
+        <div class="section-title">Habilidades Evaluadas</div>
+        <div class="skills-ref" id="skillsRef"></div>
+        <div style="margin-top:0.75rem;font-size:0.6rem;color:#64748b;">
+            Niveles: <span style="color:#475569;">No evaluada (0)</span> &middot;
+            <span style="color:#fbbf24;">B&aacute;sico (1-2/5)</span> &middot;
+            <span style="color:#c4b5fd;">Competente (3-4/5)</span> &middot;
+            <span style="color:#34d399;">Experto (5/5)</span>
+        </div>
+    </div>
+
+    <!-- ADD PARTICIPANTS -->
+    <div class="section">
+        <div class="section-title">Agregar Participantes</div>
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('tabCode')">Pegar C&oacute;digo</button>
+            <button class="tab" onclick="switchTab('tabManual')">Entrada Manual</button>
+            <button class="tab" onclick="switchTab('tabLocal')">Mi Resultado</button>
+        </div>
+
+        <!-- Tab: Paste share code -->
+        <div class="tab-panel active" id="tabCode">
+            <textarea class="input-field" id="codeInput" placeholder="Pega uno o m&aacute;s c&oacute;digos de resultado (uno por l&iacute;nea). Los participantes los generan desde el mapa de misiones con el bot&oacute;n &laquo;Compartir Resultado&raquo;."></textarea>
+            <div style="margin-top:0.5rem;">
+                <button class="btn btn-primary" onclick="addFromCodes()">Agregar</button>
+            </div>
+        </div>
+
+        <!-- Tab: Manual entry -->
+        <div class="tab-panel" id="tabManual">
+            <div class="input-row">
+                <input class="input-field" id="manualName" placeholder="Nombre del participante" maxlength="60">
+            </div>
+            <div class="input-row" id="manualScores"></div>
+            <div style="margin-top:0.5rem;">
+                <button class="btn btn-primary" onclick="addManual()">Agregar</button>
+            </div>
+        </div>
+
+        <!-- Tab: Load from localStorage -->
+        <div class="tab-panel" id="tabLocal">
+            <p style="font-size:0.75rem;color:#94a3b8;margin-bottom:0.75rem;">
+                Carga tu propio resultado guardado en este navegador (requiere haber jugado al menos 1 misi&oacute;n y tener nombre registrado).
+            </p>
+            <button class="btn btn-primary" onclick="addLocalPlayer()">Cargar Mi Resultado</button>
+        </div>
+
+        <!-- Participants list -->
+        <div class="participants-list" id="participantsList"></div>
+    </div>
+
+    <!-- RANKING TABLE -->
+    <div class="section" id="rankingSection" style="display:none;">
+        <div class="section-title">Ranking</div>
+        <div class="ranking-wrap">
+            <table class="ranking-table" id="rankingTable">
+                <thead id="rankingHead"></thead>
+                <tbody id="rankingBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- RADAR CHARTS -->
+    <div class="section" id="radarSection" style="display:none;">
+        <div class="section-title">Radares de Habilidades</div>
+        <div class="radar-grid" id="radarGrid"></div>
+    </div>
+
+    <!-- EXPORT -->
+    <div class="section" id="exportSection" style="display:none;">
+        <div class="section-title">Exportar</div>
+        <div class="export-row">
+            <button class="btn btn-secondary" onclick="exportCSV()">Descargar CSV</button>
+            <button class="btn btn-secondary" onclick="exportJSON()">Descargar JSON</button>
+            <button class="btn btn-danger" onclick="clearAll()">Limpiar Todo</button>
+        </div>
+    </div>
+
+    <div class="page-footer">
+        <p>
+            BioLab Interactive &mdash; Laboratorio de Biomedicina Molecular &mdash; UANL
+            <br><a href="https://orcid.org/0000-0002-7816-4967" target="_blank">ORCID</a> &middot; <a href="https://hugoleonid2008-ops.github.io/hugo-gallardo/" target="_blank">GitHub</a>
+        </p>
+    </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// === SKILLS MATRIX ===
+const SKILLS = [
+    {id:'citopolis_main', skill:'Estr\u00e9s Replicativo', category:'onco', game:'Cit\u00f3polis: Letalidad Sint\u00e9tica', scoreKey:'citopolis_main_best', playsKey:'citopolis_plays', total:5},
+    {id:'citopolis_parp', skill:'Reparaci\u00f3n del ADN', category:'onco', game:'PARP y BRCA', scoreKey:'citopolis_parp_best', playsKey:'citopolis_parp_plays', total:5},
+    {id:'citopolis_inmuno', skill:'Inmuno-oncolog\u00eda', category:'onco', game:'Inmunoterapia', scoreKey:'citopolis_inmuno_best', playsKey:'citopolis_inmuno_plays', total:5},
+    {id:'citopolis_p53', skill:'Supresi\u00f3n Tumoral', category:'onco', game:'p53: Guardi\u00e1n del Genoma', scoreKey:'citopolis_p53_best', playsKey:'citopolis_p53_plays', total:5},
+    {id:'nanomision', skill:'Nanodise\u00f1o Dirigido', category:'nano', game:'NanoMisi\u00f3n: HER2+', scoreKey:'nanomision_best', playsKey:'nanomision_plays', total:5},
+    {id:'oro_troya', skill:'Disrupci\u00f3n de Condensados', category:'nano', game:'El Oro como Caballo de Troya', scoreKey:'oro_troya_best', playsKey:'oro_troya_plays', total:5}
+];
+
+// Participants array: [{name, scores:{id:score,...}}]
+let participants = [];
+let sortCol = 'total';
+let sortAsc = false;
+
+// === INIT ===
+document.addEventListener('DOMContentLoaded', () => {
+    renderSkillsRef();
+    renderManualInputs();
+    // Restore from sessionStorage
+    const saved = sessionStorage.getItem('biolab_competition');
+    if (saved) {
+        try {
+            participants = JSON.parse(saved);
+            refresh();
+        } catch(e){}
+    }
+});
+
+function renderSkillsRef() {
+    const el = document.getElementById('skillsRef');
+    el.innerHTML = SKILLS.map(s => `
+        <div class="skill-ref-card">
+            <div class="skill-ref-name ${s.category}">${s.skill}</div>
+            <div class="skill-ref-game">${s.game}</div>
+            <div class="skill-ref-levels">M\u00e1x: ${s.total} pts &rarr; Experto</div>
+        </div>
+    `).join('');
+}
+
+function renderManualInputs() {
+    const el = document.getElementById('manualScores');
+    el.innerHTML = SKILLS.map(s => `
+        <input class="input-field" style="flex:0 0 auto;width:100px;" type="number" min="0" max="${s.total}"
+            id="manual_${s.id}" placeholder="${s.skill.substring(0,12)}... (0-${s.total})">
+    `).join('');
+}
+
+// === TABS ===
+function switchTab(panelId) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(panelId).classList.add('active');
+    // Activate the correct tab button
+    const idx = panelId === 'tabCode' ? 0 : panelId === 'tabManual' ? 1 : 2;
+    document.querySelectorAll('.tab')[idx].classList.add('active');
+}
+
+// === DECODE SHARE CODE ===
+function decodeShareCode(code) {
+    try {
+        const raw = decodeURIComponent(escape(atob(code.trim())));
+        if (!raw.startsWith('BL1|')) return null;
+        const parts = raw.split('|');
+        if (parts.length < 3) return null;
+        const name = parts[1];
+        const scoresPart = parts[2];
+        const scores = {};
+        scoresPart.split(',').forEach(s => {
+            const [id, val] = s.split(':');
+            if (id && val) {
+                const [sc] = val.split('/');
+                scores[id] = parseInt(sc);
+            }
+        });
+        return {name, scores};
+    } catch(e) {
+        return null;
+    }
+}
+
+// === ADD PARTICIPANTS ===
+function addFromCodes() {
+    const raw = document.getElementById('codeInput').value.trim();
+    if (!raw) return;
+    const lines = raw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    let added = 0;
+    lines.forEach(line => {
+        const decoded = decodeShareCode(line);
+        if (decoded) {
+            // Check duplicate name
+            const existing = participants.findIndex(p => p.name.toLowerCase() === decoded.name.toLowerCase());
+            if (existing >= 0) {
+                // Merge: keep best score per skill
+                const ex = participants[existing];
+                for (const [k,v] of Object.entries(decoded.scores)) {
+                    if (!ex.scores[k] || v > ex.scores[k]) ex.scores[k] = v;
+                }
+            } else {
+                participants.push(decoded);
+            }
+            added++;
+        }
+    });
+    if (added > 0) {
+        document.getElementById('codeInput').value = '';
+        refresh();
+        showToast(added + ' participante(s) agregado(s)');
+    } else {
+        showToast('No se pudo decodificar ning\u00fan c\u00f3digo');
+    }
+}
+
+function addManual() {
+    const name = document.getElementById('manualName').value.trim();
+    if (!name) { showToast('Ingresa un nombre'); return; }
+    const scores = {};
+    let any = false;
+    SKILLS.forEach(s => {
+        const val = parseInt(document.getElementById('manual_' + s.id).value);
+        if (!isNaN(val) && val >= 0) {
+            scores[s.id] = Math.min(val, s.total);
+            any = true;
+        }
+    });
+    if (!any) { showToast('Ingresa al menos 1 puntuaci\u00f3n'); return; }
+    // Duplicate check
+    const existing = participants.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
+    if (existing >= 0) {
+        for (const [k,v] of Object.entries(scores)) {
+            if (!participants[existing].scores[k] || v > participants[existing].scores[k]) {
+                participants[existing].scores[k] = v;
+            }
+        }
+    } else {
+        participants.push({name, scores});
+    }
+    // Clear
+    document.getElementById('manualName').value = '';
+    SKILLS.forEach(s => { document.getElementById('manual_' + s.id).value = ''; });
+    refresh();
+    showToast(name + ' agregado');
+}
+
+function addLocalPlayer() {
+    const name = localStorage.getItem('biolab_player_name');
+    if (!name) { showToast('No hay nombre registrado en este navegador'); return; }
+    const scores = {};
+    let any = false;
+    SKILLS.forEach(s => {
+        const stored = localStorage.getItem(s.scoreKey);
+        if (stored) {
+            try {
+                const d = JSON.parse(stored);
+                scores[s.id] = d.score;
+                any = true;
+            } catch(e) {}
+        }
+    });
+    if (!any) { showToast('No hay misiones completadas'); return; }
+    const existing = participants.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
+    if (existing >= 0) {
+        for (const [k,v] of Object.entries(scores)) {
+            if (!participants[existing].scores[k] || v > participants[existing].scores[k]) {
+                participants[existing].scores[k] = v;
+            }
+        }
+    } else {
+        participants.push({name, scores});
+    }
+    refresh();
+    showToast(name + ' agregado');
+}
+
+function removeParticipant(idx) {
+    participants.splice(idx, 1);
+    refresh();
+}
+
+// === COMPUTE ===
+function computeRow(p) {
+    let total = 0, oncoSum = 0, oncoN = 0, nanoSum = 0, nanoN = 0;
+    const skillScores = [];
+    SKILLS.forEach(s => {
+        const sc = p.scores[s.id] !== undefined ? p.scores[s.id] : null;
+        skillScores.push(sc);
+        if (sc !== null) {
+            total += sc;
+            if (s.category === 'onco') { oncoSum += sc; oncoN++; }
+            else { nanoSum += sc; nanoN++; }
+        }
+    });
+    const oncoAvg = oncoN > 0 ? (oncoSum / (oncoN * 5) * 100) : 0;
+    const nanoAvg = nanoN > 0 ? (nanoSum / (nanoN * 5) * 100) : 0;
+    return {name: p.name, skillScores, total, oncoAvg, nanoAvg, scores: p.scores};
+}
+
+function getLevel(score) {
+    if (score === null || score === undefined) return {label:'N/E', cls:'none'};
+    if (score === 5) return {label:'Experto', cls:'experto'};
+    if (score >= 3) return {label:'Competente', cls:'competente'};
+    if (score >= 1) return {label:'B\u00e1sico', cls:'basico'};
+    return {label:'N/E', cls:'none'};
+}
+
+// === REFRESH ALL ===
+function refresh() {
+    sessionStorage.setItem('biolab_competition', JSON.stringify(participants));
+    document.getElementById('pillCount').textContent = participants.length;
+    renderChips();
+    if (participants.length > 0) {
+        renderRanking();
+        renderRadars();
+        document.getElementById('rankingSection').style.display = '';
+        document.getElementById('radarSection').style.display = '';
+        document.getElementById('exportSection').style.display = '';
+    } else {
+        document.getElementById('rankingSection').style.display = 'none';
+        document.getElementById('radarSection').style.display = 'none';
+        document.getElementById('exportSection').style.display = 'none';
+    }
+}
+
+function renderChips() {
+    const el = document.getElementById('participantsList');
+    if (participants.length === 0) { el.innerHTML = ''; return; }
+    el.innerHTML = participants.map((p, i) => {
+        const total = Object.values(p.scores).reduce((a,b) => a+b, 0);
+        return `<div class="p-chip">
+            <span class="p-name">${esc(p.name)}</span>
+            <span class="p-score">${total}/30</span>
+            <span class="p-remove" onclick="removeParticipant(${i})">&times;</span>
+        </div>`;
+    }).join('');
+}
+
+// === RANKING TABLE ===
+function renderRanking() {
+    let rows = participants.map(computeRow);
+    // Sort
+    rows.sort((a,b) => {
+        let va, vb;
+        if (sortCol === 'total') { va = a.total; vb = b.total; }
+        else if (sortCol === 'name') { va = a.name.toLowerCase(); vb = b.name.toLowerCase(); }
+        else if (sortCol === 'onco') { va = a.oncoAvg; vb = b.oncoAvg; }
+        else if (sortCol === 'nano') { va = a.nanoAvg; vb = b.nanoAvg; }
+        else {
+            const idx = SKILLS.findIndex(s => s.id === sortCol);
+            va = a.skillScores[idx] !== null ? a.skillScores[idx] : -1;
+            vb = b.skillScores[idx] !== null ? b.skillScores[idx] : -1;
+        }
+        if (typeof va === 'string') return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+        return sortAsc ? va - vb : vb - va;
+    });
+
+    // Header
+    const arrow = col => sortCol === col ? (sortAsc ? ' \u25B2' : ' \u25BC') : '';
+    let hHTML = `<tr>
+        <th onclick="sortBy('name')">#</th>
+        <th onclick="sortBy('name')">Nombre${arrow('name')}</th>`;
+    SKILLS.forEach(s => {
+        const short = s.skill.length > 10 ? s.skill.substring(0,10)+'\u2026' : s.skill;
+        hHTML += `<th onclick="sortBy('${s.id}')" title="${s.skill} (${s.game})">${short}${arrow(s.id)}</th>`;
+    });
+    hHTML += `<th onclick="sortBy('total')">Total${arrow('total')}</th>`;
+    hHTML += `<th onclick="sortBy('onco')">Onco%${arrow('onco')}</th>`;
+    hHTML += `<th onclick="sortBy('nano')">Nano%${arrow('nano')}</th>`;
+    hHTML += `</tr>`;
+    document.getElementById('rankingHead').innerHTML = hHTML;
+
+    // Body
+    let bHTML = '';
+    rows.forEach((r, i) => {
+        const rankCls = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-other';
+        bHTML += `<tr>
+            <td><span class="rank-num ${rankCls}">${i+1}</span></td>
+            <td style="font-weight:600;">${esc(r.name)}</td>`;
+        r.skillScores.forEach((sc, j) => {
+            if (sc === null) {
+                bHTML += `<td class="score-cell na">\u2014</td>`;
+            } else {
+                const lvl = getLevel(sc);
+                const cls = sc === 5 ? 'perfect' : sc >= 3 ? 'good' : 'low';
+                bHTML += `<td class="score-cell ${cls}" title="${lvl.label}">${sc}/5</td>`;
+            }
+        });
+        bHTML += `<td class="total-score" style="color:${r.total >= 25 ? '#10b981' : r.total >= 15 ? '#a78bfa' : '#f87171'}">${r.total}/30</td>`;
+        bHTML += `<td class="macro-cell onco">${Math.round(r.oncoAvg)}%</td>`;
+        bHTML += `<td class="macro-cell nano">${Math.round(r.nanoAvg)}%</td>`;
+        bHTML += `</tr>`;
+    });
+    document.getElementById('rankingBody').innerHTML = bHTML;
+}
+
+function sortBy(col) {
+    if (sortCol === col) sortAsc = !sortAsc;
+    else { sortCol = col; sortAsc = false; }
+    renderRanking();
+}
+
+// === RADAR CHARTS ===
+function renderRadars() {
+    const grid = document.getElementById('radarGrid');
+    grid.innerHTML = '';
+    participants.forEach((p, idx) => {
+        const row = computeRow(p);
+        const card = document.createElement('div');
+        card.className = 'radar-card';
+        card.innerHTML = `
+            <div class="radar-name">${esc(p.name)}</div>
+            ${createRadarSVG(row, idx)}
+            <div class="radar-legend">Total: ${row.total}/30 | Onco: ${Math.round(row.oncoAvg)}% | Nano: ${Math.round(row.nanoAvg)}%</div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function createRadarSVG(row, idx) {
+    const W = 200, H = 200, cx = 100, cy = 105, R = 70;
+    const n = SKILLS.length;
+    const colors = ['#f472b6','#f472b6','#f472b6','#f472b6','#fbbf24','#fbbf24'];
+    const fillColor = idx % 3 === 0 ? 'rgba(139,92,246,0.25)' : idx % 3 === 1 ? 'rgba(236,72,153,0.2)' : 'rgba(245,158,11,0.2)';
+    const strokeColor = idx % 3 === 0 ? '#8b5cf6' : idx % 3 === 1 ? '#ec4899' : '#f59e0b';
+
+    let svg = `<svg class="radar-svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+
+    // Grid circles
+    for (let r = 1; r <= 5; r++) {
+        const rr = R * (r/5);
+        svg += `<circle cx="${cx}" cy="${cy}" r="${rr}" fill="none" stroke="rgba(100,116,139,${r===5?0.25:0.1})" stroke-width="0.5"/>`;
+    }
+
+    // Axes + labels
+    const pts = [];
+    for (let i = 0; i < n; i++) {
+        const angle = -Math.PI/2 + (2*Math.PI/n)*i;
+        const x = cx + R * Math.cos(angle);
+        const y = cy + R * Math.sin(angle);
+        pts.push({x, y, angle});
+        svg += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="rgba(100,116,139,0.15)" stroke-width="0.5"/>`;
+        // Label
+        const lx = cx + (R+16) * Math.cos(angle);
+        const ly = cy + (R+16) * Math.sin(angle);
+        const short = SKILLS[i].skill.length > 8 ? SKILLS[i].skill.substring(0,8)+'\u2026' : SKILLS[i].skill;
+        svg += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="5.5" fill="${colors[i]}" font-family="Inter">${short}</text>`;
+    }
+
+    // Data polygon
+    let polyPts = [];
+    for (let i = 0; i < n; i++) {
+        const val = row.skillScores[i] !== null ? row.skillScores[i] : 0;
+        const r = R * (val / 5);
+        const angle = -Math.PI/2 + (2*Math.PI/n)*i;
+        polyPts.push((cx + r*Math.cos(angle)).toFixed(1) + ',' + (cy + r*Math.sin(angle)).toFixed(1));
+    }
+    svg += `<polygon points="${polyPts.join(' ')}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="1.5"/>`;
+
+    // Data dots
+    for (let i = 0; i < n; i++) {
+        const val = row.skillScores[i] !== null ? row.skillScores[i] : 0;
+        const r = R * (val / 5);
+        const angle = -Math.PI/2 + (2*Math.PI/n)*i;
+        const dx = cx + r*Math.cos(angle);
+        const dy = cy + r*Math.sin(angle);
+        svg += `<circle cx="${dx}" cy="${dy}" r="2.5" fill="${strokeColor}" stroke="#080b14" stroke-width="0.5"/>`;
+    }
+
+    svg += `</svg>`;
+    return svg;
+}
+
+// === EXPORT ===
+function exportCSV() {
+    let csv = 'Nombre,' + SKILLS.map(s => '"'+s.skill+'"').join(',') + ',Total,Onco%,Nano%\n';
+    participants.forEach(p => {
+        const r = computeRow(p);
+        csv += '"' + r.name + '",' + r.skillScores.map(s => s !== null ? s : '').join(',');
+        csv += ',' + r.total + ',' + Math.round(r.oncoAvg) + ',' + Math.round(r.nanoAvg) + '\n';
+    });
+    downloadFile('biolab_competencia.csv', csv, 'text/csv');
+}
+
+function exportJSON() {
+    const data = {
+        fecha: new Date().toISOString(),
+        skills: SKILLS.map(s => ({id:s.id, skill:s.skill, category:s.category, game:s.game})),
+        participantes: participants.map(p => {
+            const r = computeRow(p);
+            return {nombre:r.name, scores:p.scores, total:r.total, oncoAvg:Math.round(r.oncoAvg), nanoAvg:Math.round(r.nanoAvg)};
+        })
+    };
+    downloadFile('biolab_competencia.json', JSON.stringify(data, null, 2), 'application/json');
+}
+
+function downloadFile(name, content, type) {
+    const blob = new Blob([content], {type});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    URL.revokeObjectURL(a.href);
+}
+
+function clearAll() {
+    if (!confirm('\u00bfLimpiar todos los participantes?')) return;
+    participants = [];
+    sessionStorage.removeItem('biolab_competition');
+    refresh();
+    showToast('Lista limpiada');
+}
+
+// === UTILS ===
+function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+}
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
