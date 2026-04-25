@@ -1,5 +1,5 @@
 // BioLab Interactive — Service Worker v1
-const CACHE_NAME = 'biolab-v1';
+const CACHE_NAME = 'biolab-v2';
 
 const ASSETS = [
   './',
@@ -16,6 +16,12 @@ const ASSETS = [
   './nanomision.html',
   './nanomision_en.html',
   './oro_caballo_troya.html',
+  './DNA_Double_Helix_Interactive.html',
+  './biomol_estructura.html',
+  './biomol_replicacion.html',
+  './biomol_transcripcion.html',
+  './biomol_traduccion.html',
+  './biomol_mutaciones.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png'

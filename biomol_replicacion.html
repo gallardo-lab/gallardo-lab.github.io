@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioLab &mdash; Replicación del ADN</title>
+    <meta name="description" content="Domina los mecanismos de replicación semiconservativa del ADN, incluyendo helicasa, topoisomerasa, polimerasas y la síntesis de cadenas conductora y retrasada.">
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X5BT5RP5WF"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-X5BT5RP5WF');
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Inter',sans-serif;background:#060a18;color:#e2e8f0;min-height:100vh;overflow-x:hidden;}
+        body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+            background:radial-gradient(ellipse at 30% 20%,rgba(59,130,246,0.08) 0%,transparent 55%),
+                        radial-gradient(ellipse at 70% 70%,rgba(16,185,129,0.06) 0%,transparent 50%);}
+
+        .game-header{position:sticky;top:0;z-index:100;background:rgba(6,10,24,0.92);backdrop-filter:blur(16px);
+            border-bottom:1px solid rgba(59,130,246,0.2);padding:0.6rem 1rem;}
+        .game-header-inner{max-width:700px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;}
+        .game-title{font-family:'Orbitron',monospace;font-weight:900;font-size:0.85rem;
+            background:linear-gradient(135deg,#60a5fa,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+        .hud{display:flex;gap:0.75rem;align-items:center;}
+        .hud-item{font-family:'Orbitron',monospace;font-size:0.6rem;padding:3px 10px;border-radius:12px;
+            border:1px solid rgba(59,130,246,0.3);color:#93c5fd;background:rgba(59,130,246,0.08);}
+        .hud-item .v{font-weight:700;color:#bfdbfe;}
+
+        main{max-width:700px;margin:0 auto;padding:1rem 1rem 3rem;position:relative;z-index:1;}
+        .back-link{display:inline-block;font-size:0.7rem;color:#60a5fa;text-decoration:none;margin-bottom:1rem;transition:color 0.2s;}
+        .back-link:hover{color:#93c5fd;}
+
+        /* Quiz area */
+        .quiz-container{background:rgba(15,23,42,0.7);border:1px solid rgba(59,130,246,0.15);
+            border-radius:16px;padding:1.5rem;backdrop-filter:blur(8px);}
+        .step-indicator{font-family:'Orbitron',monospace;font-size:0.55rem;color:#64748b;margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.1em;}
+
+        .question{font-size:1rem;font-weight:600;color:#e2e8f0;line-height:1.5;margin-bottom:1.25rem;}
+
+        .options{display:flex;flex-direction:column;gap:0.6rem;}
+        .option-btn{
+            width:100%;text-align:left;padding:0.9rem 1.1rem;border-radius:12px;
+            background:rgba(30,41,59,0.6);border:1px solid rgba(71,85,105,0.3);
+            color:#cbd5e1;font-size:0.82rem;line-height:1.5;cursor:pointer;
+            transition:all 0.25s;font-family:'Inter',sans-serif;
+        }
+        .option-btn:hover:not(:disabled){border-color:rgba(59,130,246,0.5);background:rgba(59,130,246,0.08);color:#e2e8f0;transform:translateX(4px);}
+        .option-btn.correct{border-color:rgba(16,185,129,0.6);background:rgba(16,185,129,0.12);color:#6ee7b7;}
+        .option-btn.wrong{border-color:rgba(239,68,68,0.5);background:rgba(239,68,68,0.08);color:#fca5a5;}
+        .option-btn:disabled{cursor:default;opacity:0.7;}
+
+        .feedback{margin-top:1rem;padding:1rem;border-radius:12px;font-size:0.8rem;line-height:1.6;display:none;}
+        .feedback.correct{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);color:#a7f3d0;}
+        .feedback.wrong{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);color:#fecaca;}
+        .feedback.show{display:block;animation:fadeIn 0.3s ease;}
+
+        .science-box{margin-top:0.75rem;padding:0.75rem;border-radius:8px;
+            background:rgba(59,130,246,0.06);border-left:3px solid rgba(59,130,246,0.4);
+            font-size:0.72rem;color:#93c5fd;line-height:1.6;}
+        .science-box strong{color:#bfdbfe;}
+
+        .continue-btn{
+            margin-top:1rem;padding:10px 24px;border-radius:10px;border:none;
+            background:linear-gradient(135deg,#3b82f6,#60a5fa);color:#fff;
+            font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:600;
+            cursor:pointer;transition:all 0.2s;display:none;
+        }
+        .continue-btn:hover{transform:scale(1.03);box-shadow:0 4px 12px rgba(59,130,246,0.3);}
+        .continue-btn.show{display:inline-block;animation:fadeIn 0.3s ease;}
+
+        /* Finale */
+        .finale{display:none;text-align:center;padding:2rem 1rem;}
+        .finale.show{display:block;animation:fadeIn 0.5s ease;}
+        .finale-title{font-family:'Orbitron',monospace;font-size:1.4rem;font-weight:900;margin-bottom:0.5rem;}
+        .finale-score{font-family:'Orbitron',monospace;font-size:2rem;margin:1rem 0;}
+        .finale-msg{font-size:0.85rem;color:#94a3b8;line-height:1.6;max-width:500px;margin:0 auto 1.5rem;}
+        .finale-actions{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;}
+        .finale-btn{font-family:'Orbitron',monospace;font-size:0.65rem;padding:10px 20px;border-radius:10px;cursor:pointer;transition:all 0.2s;text-decoration:none;}
+        .finale-btn.primary{background:linear-gradient(135deg,#3b82f6,#60a5fa);color:#fff;border:none;}
+        .finale-btn.secondary{background:rgba(30,41,59,0.6);border:1px solid rgba(100,116,139,0.3);color:#94a3b8;}
+        .finale-btn:hover{transform:scale(1.03);}
+
+        /* Lives */
+        .lives{display:flex;gap:3px;align-items:center;}
+        .life{width:12px;height:12px;border-radius:50%;transition:all 0.3s;}
+        .life.active{background:#3b82f6;box-shadow:0 0 6px rgba(59,130,246,0.5);}
+        .life.lost{background:#1e293b;border:1px solid rgba(71,85,105,0.3);}
+
+        @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+        .ref-section{margin-top:2rem;padding-top:1rem;border-top:1px solid rgba(71,85,105,0.15);}
+        .ref-section h3{font-family:'Orbitron',monospace;font-size:0.65rem;color:#64748b;margin-bottom:0.5rem;}
+        .ref-section p{font-size:0.6rem;color:#475569;line-height:1.6;margin-bottom:0.3rem;}
+        .ref-section a{color:#60a5fa;text-decoration:none;}
+
+        .footer{text-align:center;margin-top:2rem;font-size:0.6rem;color:#334155;}
+        .footer a{color:#60a5fa;text-decoration:none;}
+    </style>
+</head>
+<body>
+
+<div class="game-header">
+    <div class="game-header-inner">
+        <span class="game-title">Replicación del ADN</span>
+        <div class="hud">
+            <span class="hud-item">Paso <span class="v" id="hudStep">1</span>/5</span>
+            <span class="hud-item">Puntos <span class="v" id="hudScore">0</span></span>
+            <div class="lives" id="hudLives"></div>
+        </div>
+    </div>
+</div>
+
+<main>
+    <a href="biolab.html" class="back-link">&larr; BioLab Interactive</a>
+
+    <!-- Quiz -->
+    <div class="quiz-container" id="quizContainer">
+        <div class="step-indicator" id="stepIndicator">Pregunta 1 de 5</div>
+        <div class="question" id="questionText"></div>
+        <div class="options" id="optionsContainer"></div>
+        <div class="feedback" id="feedback"></div>
+        <button class="continue-btn" id="continueBtn" onclick="game.nextStep()">Continuar &rarr;</button>
+    </div>
+
+    <!-- Finale -->
+    <div class="finale" id="finale">
+        <div class="finale-title" id="finaleTitle"></div>
+        <div class="finale-score" id="finaleScore"></div>
+        <div class="finale-msg" id="finaleMsg"></div>
+        <div class="finale-actions">
+            <button class="finale-btn primary" onclick="location.reload()">Jugar de nuevo</button>
+            <a href="mapa_misiones.html" class="finale-btn secondary">Mapa de Misiones</a>
+            <a href="biolab.html" class="finale-btn secondary">BioLab</a>
+        </div>
+    </div>
+
+    <!-- References -->
+    <div class="ref-section" id="refSection" style="display:none;">
+        <h3>Referencias científicas</h3>
+        <p>1. Meselson M, Stahl FW. The replication of DNA in Escherichia coli. <em>Proc Natl Acad Sci USA</em>. 1958;44(7):671-682. <a href="https://pubmed.ncbi.nlm.nih.gov/16590258/" target="_blank">PMID 13561483</a></p>
+        <p>2. Kornberg A, Baker TA. <em>DNA Replication</em>. 2nd ed. W.H. Freeman; 1992.</p>
+        <p>3. Alberts B, et al. <em>Molecular Biology of the Cell</em>. 7th ed. W.W. Norton; 2022. Capítulos 5-6.</p>
+    </div>
+
+    <div class="footer">
+        <p>BioLab Interactive &mdash; UANL Facultad de Medicina &middot; <a href="https://orcid.org/0000-0002-7816-4967" target="_blank">ORCID</a></p>
+    </div>
+</main>
+
+<script>
+const STEPS = [
+    {
+        question: "¿Qué significa que la replicación del ADN sea semiconservativa, según el experimento clásico de Meselson-Stahl (1958)?",
+        options: [
+            {text:"Cada cadena parental sirve como molde para sintetizar una cadena complementaria nueva; resultando dos moléculas de ADN, cada una con una cadena vieja y una nueva", correct:true},
+            {text:"La mitad del ADN original se conserva intacta y la otra mitad se descarta completamente", correct:false},
+            {text:"Ambas cadenas parentales se conservan y solo se sintetiza una nueva cadena bicatenaria", correct:false}
+        ],
+        feedback_ok: "Exacto. Meselson y Stahl marcaron el ADN parental con N15 y siguieron su distribución: tras una ronda de replicación en N14, obtuvieron dos moléculas híbridas (una cadena N15 + una cadena N14), confirmando la replicación semiconservativa.",
+        feedback_fail: "Incorrecto. La replicación semiconservativa significa que cada nueva molécula contiene exactamente una cadena parental y una cadena sintetizada de novo.",
+        science: "<strong>Importancia histórica:</strong> Este experimento de 1958 fue decisivo para validar el modelo propuesto por Watson, Crick y Franklin. Descartó otros mecanismos de replicación y estableció el paradigma que aún se mantiene."
+    },
+    {
+        question: "¿Cuál es el papel de la helicasa y la topoisomerasa en la replicación del ADN?",
+        options: [
+            {text:"Helicasa desenvuelve la doble hélice rompiendo puentes H; topoisomerasa alivia la tensión de superenrollamiento creada por el desenrollamiento", correct:true},
+            {text:"Helicasa sintetiza la cadena nueva; topoisomerasa une los fragmentos de Okazaki", correct:false},
+            {text:"Ambas corrigen errores de apareamiento mediante exonucleasa 3'→5'", correct:false}
+        ],
+        feedback_ok: "Correcto. La helicasa (DnaB en prokariotas, MCM2-7 en eukariotas) abre la doble hélice. El desenrollamiento crea tensión positiva aguas arriba del punto de replicación. La topoisomerasa (Topo I, II) corta transitoriamente el ADN y lo religa, permitiendo la rotación de las cadenas y disipando la tensión.",
+        feedback_fail: "No. Helicasa abre, topoisomerasa relaja la tensión. Estas son funciones catalíticamente distintas.",
+        science: "<strong>En la práctica:</strong> La inhibición de topoisomerasa es la base de varios antibióticos (fluoroquinolonas) y agentes anticancerígenos (etopósidos, camptotecinas). Sin topoisomerasa, la replicación se paraliza."
+    },
+    {
+        question: "¿Por qué la ADN polimerasa III no puede iniciar la síntesis de ADN de novo (sin cebador/primer)?",
+        options: [
+            {text:"Pol III requiere un grupo 3'-OH preexistente para adicionar nucleótidos (síntesis 5'→3'); no puede iniciar sin un extremo 3'-OH disponible", correct:true},
+            {text:"Pol III solo sintetiza la cadena retrasada y carece de la capacidad de iniciar cadenas", correct:false},
+            {text:"El ADN es demasiado estable para permitir que Pol III acceda a la hebra parental sin un inhibidor previo", correct:false}
+        ],
+        feedback_ok: "Exacto. La ADN Pol III (como todas las polimerasas) requiere un grupo 3'-OH libre sobre el que agregar el nucleótido entrante. Sin este grupo, no hay punto de ataque para la catalisis. Por eso la primasa sintetiza un cebador de ARN (~11 nucleótidos) que proporciona ese 3'-OH inicial.",
+        feedback_fail: "Incorrecto. La limitación es mecánica: Pol III necesita un 3'-OH. Por eso el proceso requiere primasa.",
+        science: "<strong>Mecanismo de síntesis:</strong> El nucleótido entrante (dNTP) ataca el 3'-OH preexistente, liberando pirofosfato (PPi). Sin un 3'-OH inicial, no hay sustrato para la reacción catalítica."
+    },
+    {
+        question: "¿Cuál es la diferencia funcional entre la cadena conductora (leading strand) y la cadena retrasada (lagging strand)?",
+        options: [
+            {text:"Cadena conductora: síntesis continua 5'→3' en dirección 3'→5' del molde. Cadena retrasada: síntesis discontinua en fragmentos de Okazaki (~1000-2000 nt en prokariotas; ~100-200 nt en eukariotas)", correct:true},
+            {text:"La cadena conductora se sintetiza rápidamente; la cadena retrasada se sintetiza lentamente pero de forma continua", correct:false},
+            {text:"La cadena conductora es la plantilla; la cadena retrasada es la sintetizada", correct:false}
+        ],
+        feedback_ok: "Correcto. Debido al antiparalelismo: en la horquilla de replicación, una cadena parental va 3'→5' (conductora, síntesis continua), la otra va 5'→3' (retrasada, síntesis en fragmentos Okazaki). Cada fragmento requiere un nuevo cebador de primasa.",
+        feedback_fail: "No. Ambas cadenas se sintetizan 5'→3', pero una lo hace de forma continua y la otra discontinua.",
+        science: "<strong>Primasa y Okazaki:</strong> La primasa sintetiza cebadores repetidamente en la cadena retrasada. Después, la Pol I (en prokariotas) reemplaza el ARN con ADN. La ligasa sella los nicks entre fragmentos."
+    },
+    {
+        question: "¿Cómo contribuye la exonucleasa 3'→5' de la ADN Pol III a la fidelidad de la replicación y cuál es la precisión total del proceso?",
+        options: [
+            {text:"Pol III contiene actividad 3'→5' exonucleasa (proofreading) que remueve nucleótidos mal apareados; la precisión combinada (Pol III + mismatch repair) es ~10⁻⁹ a 10⁻¹⁰ errores/base", correct:true},
+            {text:"La exonucleasa 3'→5' sintetiza la cadena complementaria sin errores; la fidelidad es ~10⁻⁶", correct:false},
+            {text:"Pol III no realiza proofreading; solo la mismatch repair (MMR) garantiza la fidelidad ~10⁻³", correct:false}
+        ],
+        feedback_ok: "Exacto. Pol III tiene un sitio de exonucleasa 3'→5' que detecta y remueve dinucleótidos o nucleótidos mal apareados (tasa de error ~1 en 10⁴-10⁵). Luego MMR reduce esto a ~10⁻⁹. Esta es una de las reacciones químicas más precisas de la naturaleza.",
+        feedback_fail: "Incorrecto. Pol III sí tiene proofreading 3'→5'. La precisión final de ~10⁻⁹ requiere ambos: exonucleasa de Pol III y MMR.",
+        science: "<strong>Mutaciones espontáneas:</strong> Sin proofreading, la tasa sería ~10⁻⁵ (inaceptable para genomas grandes). Con ambos mecanismos, en el genoma humano (~3×10⁹ bp) solo hay ~0.1-1 mutaciones por generación debidas a replicación errónea."
+    }
+];
+
+// Fisher-Yates shuffle
+function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+const game = {
+    current: 0,
+    score: 0,
+    total: STEPS.length,
+    lives: 3,
+    answered: false,
+
+    init() {
+        this.renderLives();
+        this.showStep();
+        // Track
+        const plays = parseInt(localStorage.getItem('biomol_replicacion_plays') || '0') + 1;
+        localStorage.setItem('biomol_replicacion_plays', plays);
+        gtag('event', 'game_start', {game: 'biomol_replicacion', play_number: plays});
+    },
+
+    renderLives() {
+        const el = document.getElementById('hudLives');
+        let h = '';
+        for (let i = 0; i < 3; i++) {
+            h += '<div class="life ' + (i < this.lives ? 'active' : 'lost') + '"></div>';
+        }
+        el.innerHTML = h;
+    },
+
+    showStep() {
+        if (this.current >= this.total) { this.showFinale(); return; }
+        this.answered = false;
+        const step = STEPS[this.current];
+        document.getElementById('stepIndicator').textContent = 'Pregunta ' + (this.current + 1) + ' de ' + this.total;
+        document.getElementById('hudStep').textContent = this.current + 1;
+        document.getElementById('questionText').textContent = step.question;
+
+        const shuffled = shuffle(step.options);
+        const container = document.getElementById('optionsContainer');
+        container.innerHTML = '';
+        shuffled.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = opt.text;
+            btn.onclick = () => this.answer(opt.correct, btn, step);
+            container.appendChild(btn);
+        });
+
+        document.getElementById('feedback').className = 'feedback';
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('continueBtn').className = 'continue-btn';
+    },
+
+    answer(correct, btn, step) {
+        if (this.answered) return;
+        this.answered = true;
+
+        document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+        const fb = document.getElementById('feedback');
+
+        if (correct) {
+            this.score++;
+            btn.classList.add('correct');
+            fb.className = 'feedback correct show';
+            fb.innerHTML = step.feedback_ok + '<div class="science-box">' + step.science + '</div>';
+        } else {
+            this.lives = Math.max(0, this.lives - 1);
+            btn.classList.add('wrong');
+            // Highlight correct
+            document.querySelectorAll('.option-btn').forEach(b => {
+                const opt = STEPS[this.current].options.find(o => o.text === b.textContent);
+                if (opt && opt.correct) b.classList.add('correct');
+            });
+            fb.className = 'feedback wrong show';
+            fb.innerHTML = step.feedback_fail + '<div class="science-box">' + step.science + '</div>';
+        }
+
+        this.renderLives();
+        document.getElementById('hudScore').textContent = this.score;
+
+        gtag('event', 'decision', {game: 'biomol_replicacion', step: this.current + 1, correct: correct});
+
+        setTimeout(() => {
+            document.getElementById('continueBtn').className = 'continue-btn show';
+        }, 2000);
+    },
+
+    nextStep() {
+        this.current++;
+        if (this.lives <= 0) { this.showFinale(); return; }
+        this.showStep();
+    },
+
+    showFinale() {
+        document.getElementById('quizContainer').style.display = 'none';
+        const finale = document.getElementById('finale');
+        finale.className = 'finale show';
+        document.getElementById('refSection').style.display = 'block';
+
+        const pct = Math.round((this.score / this.total) * 100);
+        let title, msg;
+        if (this.score === this.total) {
+            title = 'Maestro de la Replicación';
+            msg = 'Dominas completamente la semiconservación, helicasas, topoisomerasas, y la síntesis continua vs discontinua. Eres un experto en el mecanismo más fundamental de la vida.';
+        } else if (this.score >= 3) {
+            title = 'Buen conocimiento de replicación';
+            msg = 'Tienes una base sólida sobre replicación. Repasa los detalles de proofreading y la función de topoisomerasa para alcanzar la maestría.';
+        } else {
+            title = 'Refuerza tus conocimientos';
+            msg = 'La replicación semiconservativa es el corazón de la biología molecular. Estudia Meselson-Stahl y los roles de cada enzima.';
+        }
+
+        document.getElementById('finaleTitle').textContent = title;
+        document.getElementById('finaleScore').innerHTML = '<span style="color:' + (pct >= 80 ? '#10b981' : pct >= 60 ? '#60a5fa' : '#f87171') + '">' + this.score + '/' + this.total + '</span>';
+        document.getElementById('finaleMsg').textContent = msg;
+
+        // Save best score
+        const prev = JSON.parse(localStorage.getItem('biomol_replicacion_best') || 'null');
+        if (!prev || this.score > prev.score) {
+            localStorage.setItem('biomol_replicacion_best', JSON.stringify({score:this.score, total:this.total, lives:this.lives}));
+        }
+
+        gtag('event', 'game_complete', {game: 'biomol_replicacion', score: this.score, total: this.total, lives: this.lives});
+    }
+};
+
+document.addEventListener('DOMContentLoaded', () => game.init());
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>

@@ -204,6 +204,7 @@
         .mc-title{font-weight:700;font-size:0.9rem;line-height:1.3;}
         .mc-title.onco{color:#f472b6;}
         .mc-title.nano{color:#fbbf24;}
+        .mc-title.biomol{color:#60a5fa;}
 
         .mc-badge{
             font-family:'Orbitron',monospace;font-size:0.5rem;
@@ -431,7 +432,7 @@
     <div class="map-header-inner">
         <span class="map-title">BioLab &mdash; Mapa de Misiones</span>
         <div class="global-stats">
-            <span class="stat-pill">Misiones: <span class="val" id="statCompleted">0</span>/<span id="statTotal">6</span></span>
+            <span class="stat-pill">Misiones: <span class="val" id="statCompleted">0</span>/<span id="statTotal">11</span></span>
             <span class="stat-pill">Partidas: <span class="val" id="statPlays">0</span></span>
         </div>
     </div>
@@ -499,6 +500,19 @@
             </div>
             <div class="mission-path nano" id="pathNano">
                 <!-- Nodes injected by JS -->
+            </div>
+        </div>
+        <!-- TRACK 3: Biología Molecular -->
+        <div class="track" id="trackBiomol" style="grid-column:1/-1;">
+            <div class="track-header">
+                <div class="track-icon" style="background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);">&#x1F9EA;</div>
+                <div>
+                    <div class="track-name" style="color:#60a5fa;">Biolog&iacute;a Molecular</div>
+                    <div class="track-sub">Dogma central &mdash; 5 misiones</div>
+                </div>
+            </div>
+            <div class="mission-path" id="pathBiomol" style="padding-left:28px;position:relative;">
+                <div style="content:'';position:absolute;left:13px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,rgba(59,130,246,0.4),rgba(59,130,246,0.1));"></div>
             </div>
         </div>
     </div>
@@ -634,6 +648,66 @@ const MISSIONS = [
         url:'oro_caballo_troya.html',
         playsKey:'oro_troya_plays',
         scoreKey:'oro_troya_best'
+    },
+    {
+        id:'biomol_estructura',
+        track:'biomol',
+        title:'Estructura del ADN',
+        desc:'Explora la doble h\u00e9lice B-DNA en 3D. Nucle\u00f3tidos, antiparalelismo, puentes de H, surcos y conformaciones A/B/Z.',
+        tags:['B-DNA','H\u00e9lice','Surcos','Watson-Crick'],
+        difficulty:1,
+        totalQ:5,
+        url:'biomol_estructura.html',
+        playsKey:'biomol_estructura_plays',
+        scoreKey:'biomol_estructura_best'
+    },
+    {
+        id:'biomol_replicacion',
+        track:'biomol',
+        title:'Replicaci\u00f3n del ADN',
+        desc:'Semiconservativa, helicasa, primasa, Pol III, fragmentos de Okazaki y correcci\u00f3n de errores.',
+        tags:['Pol III','Okazaki','Helicasa','Semiconservativa'],
+        difficulty:2,
+        totalQ:5,
+        url:'biomol_replicacion.html',
+        playsKey:'biomol_replicacion_plays',
+        scoreKey:'biomol_replicacion_best'
+    },
+    {
+        id:'biomol_transcripcion',
+        track:'biomol',
+        title:'Transcripci\u00f3n y ARN',
+        desc:'RNA Pol II, TATA box, tipos de ARN, 5\u2019 cap, splicing y espliceosoma.',
+        tags:['RNA Pol II','Splicing','snRNP','5\u2019cap'],
+        difficulty:2,
+        totalQ:5,
+        url:'biomol_transcripcion.html',
+        playsKey:'biomol_transcripcion_plays',
+        scoreKey:'biomol_transcripcion_best'
+    },
+    {
+        id:'biomol_traduccion',
+        track:'biomol',
+        title:'Traducci\u00f3n',
+        desc:'C\u00f3digo gen\u00e9tico, aminoacil-tRNA, ribosoma 80S, sitios A/P/E, Kozak y terminaci\u00f3n.',
+        tags:['Ribosoma','tRNA','Kozak','Cod\u00f3n'],
+        difficulty:2,
+        totalQ:5,
+        url:'biomol_traduccion.html',
+        playsKey:'biomol_traduccion_plays',
+        scoreKey:'biomol_traduccion_best'
+    },
+    {
+        id:'biomol_mutaciones',
+        track:'biomol',
+        title:'Mutaciones',
+        desc:'Transiciones, transversiones, missense, frameshift, mut\u00e1genos y reparaci\u00f3n del ADN (NER, BER, MMR).',
+        tags:['Frameshift','Missense','UV','NER','MMR'],
+        difficulty:2,
+        totalQ:5,
+        url:'biomol_mutaciones.html',
+        playsKey:'biomol_mutaciones_plays',
+        scoreKey:'biomol_mutaciones_best'
     }
 ];
 
@@ -652,6 +726,7 @@ function getProgress(mission) {
 function renderMissions() {
     const oncoPath = document.getElementById('pathOnco');
     const nanoPath = document.getElementById('pathNano');
+    const biomolPath = document.getElementById('pathBiomol');
     let totalPlays = 0;
     let completed = 0;
 
@@ -705,7 +780,7 @@ function renderMissions() {
         const tagsHTML = m.tags.map(t => '<span class="mc-tag">'+t+'</span>').join('');
 
         // Build node
-        const colorClass = m.track === 'onco' ? 'onco' : 'nano';
+        const colorClass = m.track === 'onco' ? 'onco' : m.track === 'nano' ? 'nano' : 'biomol';
         const node = document.createElement('div');
         node.className = 'mission-node ' + status;
         node.innerHTML = `
@@ -727,7 +802,8 @@ function renderMissions() {
         `;
 
         if (m.track === 'onco') oncoPath.appendChild(node);
-        else nanoPath.appendChild(node);
+        else if (m.track === 'nano') nanoPath.appendChild(node);
+        else if (m.track === 'biomol') biomolPath.appendChild(node);
     });
 
     // Global stats

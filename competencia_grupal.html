@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="icon-192.png">
     <title>BioLab Interactive &mdash; Competencia en Grupo</title>
-    <meta name="description" content="Tabla de ranking y radar de habilidades para competencias grupales en BioLab Interactive. Compara resultados en oncolog&iacute;a molecular y nanomedicina.">
+    <meta name="description" content="Tabla de ranking y radar de habilidades para competencias grupales en BioLab Interactive. Compara resultados en oncolog&iacute;a molecular, nanomedicina y biolog&iacute;a molecular.">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-X5BT5RP5WF"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -192,6 +192,7 @@
         .macro-cell{font-family:'Orbitron',monospace;font-size:0.65rem;}
         .macro-cell.onco{color:#f472b6;}
         .macro-cell.nano{color:#fbbf24;}
+        .macro-cell.biomol{color:#60a5fa;}
 
         /* Radar charts grid */
         .radar-grid{
@@ -224,6 +225,7 @@
         .skill-ref-name{font-weight:600;font-size:0.72rem;margin-bottom:0.15rem;}
         .skill-ref-name.onco{color:#f472b6;}
         .skill-ref-name.nano{color:#fbbf24;}
+        .skill-ref-name.biomol{color:#60a5fa;}
         .skill-ref-game{font-size:0.6rem;color:#94a3b8;}
         .skill-ref-levels{font-size:0.55rem;color:#64748b;margin-top:0.25rem;}
 
@@ -366,7 +368,12 @@ const SKILLS = [
     {id:'citopolis_inmuno', skill:'Inmuno-oncolog\u00eda', category:'onco', game:'Inmunoterapia', scoreKey:'citopolis_inmuno_best', playsKey:'citopolis_inmuno_plays', total:5},
     {id:'citopolis_p53', skill:'Supresi\u00f3n Tumoral', category:'onco', game:'p53: Guardi\u00e1n del Genoma', scoreKey:'citopolis_p53_best', playsKey:'citopolis_p53_plays', total:5},
     {id:'nanomision', skill:'Nanodise\u00f1o Dirigido', category:'nano', game:'NanoMisi\u00f3n: HER2+', scoreKey:'nanomision_best', playsKey:'nanomision_plays', total:5},
-    {id:'oro_troya', skill:'Disrupci\u00f3n de Condensados', category:'nano', game:'El Oro como Caballo de Troya', scoreKey:'oro_troya_best', playsKey:'oro_troya_plays', total:5}
+    {id:'oro_troya', skill:'Disrupci\u00f3n de Condensados', category:'nano', game:'El Oro como Caballo de Troya', scoreKey:'oro_troya_best', playsKey:'oro_troya_plays', total:5},
+    {id:'biomol_estructura', skill:'Estructura ADN', category:'biomol', game:'Estructura del ADN', scoreKey:'biomol_estructura_best', playsKey:'biomol_estructura_plays', total:5},
+    {id:'biomol_replicacion', skill:'Replicaci\u00f3n', category:'biomol', game:'Replicaci\u00f3n del ADN', scoreKey:'biomol_replicacion_best', playsKey:'biomol_replicacion_plays', total:5},
+    {id:'biomol_transcripcion', skill:'Transcripci\u00f3n', category:'biomol', game:'Transcripci\u00f3n y ARN', scoreKey:'biomol_transcripcion_best', playsKey:'biomol_transcripcion_plays', total:5},
+    {id:'biomol_traduccion', skill:'Traducci\u00f3n', category:'biomol', game:'Traducci\u00f3n', scoreKey:'biomol_traduccion_best', playsKey:'biomol_traduccion_plays', total:5},
+    {id:'biomol_mutaciones', skill:'Mutaciones', category:'biomol', game:'Mutaciones', scoreKey:'biomol_mutaciones_best', playsKey:'biomol_mutaciones_plays', total:5}
 ];
 
 // Participants array: [{name, scores:{id:score,...}}]
@@ -540,7 +547,7 @@ function removeParticipant(idx) {
 
 // === COMPUTE ===
 function computeRow(p) {
-    let total = 0, oncoSum = 0, oncoN = 0, nanoSum = 0, nanoN = 0;
+    let total = 0, oncoSum = 0, oncoN = 0, nanoSum = 0, nanoN = 0, biomolSum = 0, biomolN = 0;
     const skillScores = [];
     SKILLS.forEach(s => {
         const sc = p.scores[s.id] !== undefined ? p.scores[s.id] : null;
@@ -548,12 +555,15 @@ function computeRow(p) {
         if (sc !== null) {
             total += sc;
             if (s.category === 'onco') { oncoSum += sc; oncoN++; }
-            else { nanoSum += sc; nanoN++; }
+            else if (s.category === 'nano') { nanoSum += sc; nanoN++; }
+            else if (s.category === 'biomol') { biomolSum += sc; biomolN++; }
         }
     });
     const oncoAvg = oncoN > 0 ? (oncoSum / (oncoN * 5) * 100) : 0;
     const nanoAvg = nanoN > 0 ? (nanoSum / (nanoN * 5) * 100) : 0;
-    return {name: p.name, skillScores, total, oncoAvg, nanoAvg, scores: p.scores};
+    const biomolAvg = biomolN > 0 ? (biomolSum / (biomolN * 5) * 100) : 0;
+    const maxTotal = SKILLS.length * 5;
+    return {name: p.name, skillScores, total, maxTotal, oncoAvg, nanoAvg, biomolAvg, scores: p.scores};
 }
 
 function getLevel(score) {
@@ -589,7 +599,7 @@ function renderChips() {
         const total = Object.values(p.scores).reduce((a,b) => a+b, 0);
         return `<div class="p-chip">
             <span class="p-name">${esc(p.name)}</span>
-            <span class="p-score">${total}/30</span>
+            <span class="p-score">${total}/${SKILLS.length * 5}</span>
             <span class="p-remove" onclick="removeParticipant(${i})">&times;</span>
         </div>`;
     }).join('');
@@ -605,6 +615,7 @@ function renderRanking() {
         else if (sortCol === 'name') { va = a.name.toLowerCase(); vb = b.name.toLowerCase(); }
         else if (sortCol === 'onco') { va = a.oncoAvg; vb = b.oncoAvg; }
         else if (sortCol === 'nano') { va = a.nanoAvg; vb = b.nanoAvg; }
+        else if (sortCol === 'biomol') { va = a.biomolAvg; vb = b.biomolAvg; }
         else {
             const idx = SKILLS.findIndex(s => s.id === sortCol);
             va = a.skillScores[idx] !== null ? a.skillScores[idx] : -1;
@@ -626,6 +637,7 @@ function renderRanking() {
     hHTML += `<th onclick="sortBy('total')">Total${arrow('total')}</th>`;
     hHTML += `<th onclick="sortBy('onco')">Onco%${arrow('onco')}</th>`;
     hHTML += `<th onclick="sortBy('nano')">Nano%${arrow('nano')}</th>`;
+    hHTML += `<th onclick="sortBy('biomol')">Biomol%${arrow('biomol')}</th>`;
     hHTML += `</tr>`;
     document.getElementById('rankingHead').innerHTML = hHTML;
 
@@ -645,9 +657,11 @@ function renderRanking() {
                 bHTML += `<td class="score-cell ${cls}" title="${lvl.label}">${sc}/5</td>`;
             }
         });
-        bHTML += `<td class="total-score" style="color:${r.total >= 25 ? '#10b981' : r.total >= 15 ? '#a78bfa' : '#f87171'}">${r.total}/30</td>`;
+        const maxT = SKILLS.length * 5;
+        bHTML += `<td class="total-score" style="color:${r.total >= maxT*0.8 ? '#10b981' : r.total >= maxT*0.5 ? '#a78bfa' : '#f87171'}">${r.total}/${maxT}</td>`;
         bHTML += `<td class="macro-cell onco">${Math.round(r.oncoAvg)}%</td>`;
         bHTML += `<td class="macro-cell nano">${Math.round(r.nanoAvg)}%</td>`;
+        bHTML += `<td class="macro-cell biomol">${Math.round(r.biomolAvg)}%</td>`;
         bHTML += `</tr>`;
     });
     document.getElementById('rankingBody').innerHTML = bHTML;

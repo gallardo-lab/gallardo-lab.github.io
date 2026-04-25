@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioLab &mdash; Traducción</title>
+    <meta name="description" content="Domina la traducción: código genético degenerado, aminoacil-tRNA sintetasas, estructura ribosómica, iniciación (Kozak) y terminación a nivel licenciatura.">
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X5BT5RP5WF"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-X5BT5RP5WF');
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Inter',sans-serif;background:#060a18;color:#e2e8f0;min-height:100vh;overflow-x:hidden;}
+        body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+            background:radial-gradient(ellipse at 30% 20%,rgba(59,130,246,0.08) 0%,transparent 55%),
+                        radial-gradient(ellipse at 70% 70%,rgba(16,185,129,0.06) 0%,transparent 50%);}
+
+        .game-header{position:sticky;top:0;z-index:100;background:rgba(6,10,24,0.92);backdrop-filter:blur(16px);
+            border-bottom:1px solid rgba(59,130,246,0.2);padding:0.6rem 1rem;}
+        .game-header-inner{max-width:700px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;}
+        .game-title{font-family:'Orbitron',monospace;font-weight:900;font-size:0.85rem;
+            background:linear-gradient(135deg,#60a5fa,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+        .hud{display:flex;gap:0.75rem;align-items:center;}
+        .hud-item{font-family:'Orbitron',monospace;font-size:0.6rem;padding:3px 10px;border-radius:12px;
+            border:1px solid rgba(59,130,246,0.3);color:#93c5fd;background:rgba(59,130,246,0.08);}
+        .hud-item .v{font-weight:700;color:#bfdbfe;}
+
+        main{max-width:700px;margin:0 auto;padding:1rem 1rem 3rem;position:relative;z-index:1;}
+        .back-link{display:inline-block;font-size:0.7rem;color:#60a5fa;text-decoration:none;margin-bottom:1rem;transition:color 0.2s;}
+        .back-link:hover{color:#93c5fd;}
+
+        /* Quiz area */
+        .quiz-container{background:rgba(15,23,42,0.7);border:1px solid rgba(59,130,246,0.15);
+            border-radius:16px;padding:1.5rem;backdrop-filter:blur(8px);}
+        .step-indicator{font-family:'Orbitron',monospace;font-size:0.55rem;color:#64748b;margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.1em;}
+
+        .question{font-size:1rem;font-weight:600;color:#e2e8f0;line-height:1.5;margin-bottom:1.25rem;}
+
+        .options{display:flex;flex-direction:column;gap:0.6rem;}
+        .option-btn{
+            width:100%;text-align:left;padding:0.9rem 1.1rem;border-radius:12px;
+            background:rgba(30,41,59,0.6);border:1px solid rgba(71,85,105,0.3);
+            color:#cbd5e1;font-size:0.82rem;line-height:1.5;cursor:pointer;
+            transition:all 0.25s;font-family:'Inter',sans-serif;
+        }
+        .option-btn:hover:not(:disabled){border-color:rgba(59,130,246,0.5);background:rgba(59,130,246,0.08);color:#e2e8f0;transform:translateX(4px);}
+        .option-btn.correct{border-color:rgba(16,185,129,0.6);background:rgba(16,185,129,0.12);color:#6ee7b7;}
+        .option-btn.wrong{border-color:rgba(239,68,68,0.5);background:rgba(239,68,68,0.08);color:#fca5a5;}
+        .option-btn:disabled{cursor:default;opacity:0.7;}
+
+        .feedback{margin-top:1rem;padding:1rem;border-radius:12px;font-size:0.8rem;line-height:1.6;display:none;}
+        .feedback.correct{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);color:#a7f3d0;}
+        .feedback.wrong{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);color:#fecaca;}
+        .feedback.show{display:block;animation:fadeIn 0.3s ease;}
+
+        .science-box{margin-top:0.75rem;padding:0.75rem;border-radius:8px;
+            background:rgba(59,130,246,0.06);border-left:3px solid rgba(59,130,246,0.4);
+            font-size:0.72rem;color:#93c5fd;line-height:1.6;}
+        .science-box strong{color:#bfdbfe;}
+
+        .continue-btn{
+            margin-top:1rem;padding:10px 24px;border-radius:10px;border:none;
+            background:linear-gradient(135deg,#3b82f6,#60a5fa);color:#fff;
+            font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:600;
+            cursor:pointer;transition:all 0.2s;display:none;
+        }
+        .continue-btn:hover{transform:scale(1.03);box-shadow:0 4px 12px rgba(59,130,246,0.3);}
+        .continue-btn.show{display:inline-block;animation:fadeIn 0.3s ease;}
+
+        /* Finale */
+        .finale{display:none;text-align:center;padding:2rem 1rem;}
+        .finale.show{display:block;animation:fadeIn 0.5s ease;}
+        .finale-title{font-family:'Orbitron',monospace;font-size:1.4rem;font-weight:900;margin-bottom:0.5rem;}
+        .finale-score{font-family:'Orbitron',monospace;font-size:2rem;margin:1rem 0;}
+        .finale-msg{font-size:0.85rem;color:#94a3b8;line-height:1.6;max-width:500px;margin:0 auto 1.5rem;}
+        .finale-actions{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;}
+        .finale-btn{font-family:'Orbitron',monospace;font-size:0.65rem;padding:10px 20px;border-radius:10px;cursor:pointer;transition:all 0.2s;text-decoration:none;}
+        .finale-btn.primary{background:linear-gradient(135deg,#3b82f6,#60a5fa);color:#fff;border:none;}
+        .finale-btn.secondary{background:rgba(30,41,59,0.6);border:1px solid rgba(100,116,139,0.3);color:#94a3b8;}
+        .finale-btn:hover{transform:scale(1.03);}
+
+        /* Lives */
+        .lives{display:flex;gap:3px;align-items:center;}
+        .life{width:12px;height:12px;border-radius:50%;transition:all 0.3s;}
+        .life.active{background:#3b82f6;box-shadow:0 0 6px rgba(59,130,246,0.5);}
+        .life.lost{background:#1e293b;border:1px solid rgba(71,85,105,0.3);}
+
+        @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+        .ref-section{margin-top:2rem;padding-top:1rem;border-top:1px solid rgba(71,85,105,0.15);}
+        .ref-section h3{font-family:'Orbitron',monospace;font-size:0.65rem;color:#64748b;margin-bottom:0.5rem;}
+        .ref-section p{font-size:0.6rem;color:#475569;line-height:1.6;margin-bottom:0.3rem;}
+        .ref-section a{color:#60a5fa;text-decoration:none;}
+
+        .footer{text-align:center;margin-top:2rem;font-size:0.6rem;color:#334155;}
+        .footer a{color:#60a5fa;text-decoration:none;}
+    </style>
+</head>
+<body>
+
+<div class="game-header">
+    <div class="game-header-inner">
+        <span class="game-title">Traducción: Del ARN a la Proteína</span>
+        <div class="hud">
+            <span class="hud-item">Paso <span class="v" id="hudStep">1</span>/5</span>
+            <span class="hud-item">Puntos <span class="v" id="hudScore">0</span></span>
+            <div class="lives" id="hudLives"></div>
+        </div>
+    </div>
+</div>
+
+<main>
+    <a href="biolab.html" class="back-link">&larr; BioLab Interactive</a>
+
+    <!-- Quiz -->
+    <div class="quiz-container" id="quizContainer">
+        <div class="step-indicator" id="stepIndicator">Pregunta 1 de 5</div>
+        <div class="question" id="questionText"></div>
+        <div class="options" id="optionsContainer"></div>
+        <div class="feedback" id="feedback"></div>
+        <button class="continue-btn" id="continueBtn" onclick="game.nextStep()">Continuar &rarr;</button>
+    </div>
+
+    <!-- Finale -->
+    <div class="finale" id="finale">
+        <div class="finale-title" id="finaleTitle"></div>
+        <div class="finale-score" id="finaleScore"></div>
+        <div class="finale-msg" id="finaleMsg"></div>
+        <div class="finale-actions">
+            <button class="finale-btn primary" onclick="location.reload()">Jugar de nuevo</button>
+            <a href="mapa_misiones.html" class="finale-btn secondary">Mapa de Misiones</a>
+            <a href="biolab.html" class="finale-btn secondary">BioLab</a>
+        </div>
+    </div>
+
+    <!-- References -->
+    <div class="ref-section" id="refSection" style="display:none;">
+        <h3>Referencias científicas</h3>
+        <p>1. Alberts B, et al. <em>Molecular Biology of the Cell</em>. 7th ed. W.W. Norton; 2022. Capítulos 6-7.</p>
+        <p>2. Ramakrishnan V. Ribosome structure and the mechanism of translation. <em>Cell</em>. 2002;108(4):557-572. <a href="https://pubmed.ncbi.nlm.nih.gov/11892344/" target="_blank">PMID 11892344</a></p>
+        <p>3. Kozak M. Initiation of translation in prokaryotes and eukaryotes. <em>Mol Biol Evol</em>. 1983;1(1):87-108. <a href="https://pubmed.ncbi.nlm.nih.gov/6337582/" target="_blank">PMID 6337582</a></p>
+    </div>
+
+    <div class="footer">
+        <p>BioLab Interactive &mdash; UANL Facultad de Medicina &middot; <a href="https://orcid.org/0000-0002-7816-4967" target="_blank">ORCID</a></p>
+    </div>
+</main>
+
+<script>
+const STEPS = [
+    {
+        question: "¿Cuáles son las propiedades del código genético y por qué es 'degenerado'?",
+        options: [
+            {text:"Es degenerado porque 64 codones especifican 20 aminoácidos (múltiples codones → mismo aa). También es universal, no superpuesto (triplete) y leído desde un punto fijo (no solapado)", correct:true},
+            {text:"Es degenerado porque los primeros codones difieren de los últimos; algunos aminoácidos no tienen asignación", correct:false},
+            {text:"Es degenerado porque se lee en ambas direcciones (5'→3' y 3'→5') dependiendo del contexto", correct:false}
+        ],
+        feedback_ok: "Correcto. La degeneración (sinonimia o redundancia) está concentrada en la tercera posición (wobble). Por ejemplo, leucina tiene 6 codones (UUA, UUG, CUU, CUC, CUA, CUG). Universalidad: el mismo código en prácticamente todos los organismos.",
+        feedback_fail: "No. El código es degenerado de forma sistemática: múltiples codones codifican el mismo aa, especialmente por diferencias en posición 3.",
+        science: "<strong>Implicancia: Codon usage</strong> — Aunque degenerado, organismos prefieren ciertos codones (codon bias) relacionados con abundancia de tRNA. En extremófilos termófilos, predominan codones G-C para mayor estabilidad."
+    },
+    {
+        question: "¿Cuál es el papel de las aminoacil-tRNA sintetasas (aaRS) y por qué se las llama 'el segundo código genético'?",
+        options: [
+            {text:"Cargan el tRNA correcto con el amino ácido correcto (identidad aminoacídica). Se llaman '2º código' porque de su fidelidad depende la exactitud traduccional, independientemente del reconocimiento de codón", correct:true},
+            {text:"Reconocen el codón mRNA directamente y catalizan la unión peptídica en el ribosoma", correct:false},
+            {text:"Descodifican el mRNA mediante reconocimiento de anticodón; son el equivalente a factores de transcripción", correct:false}
+        ],
+        feedback_ok: "Exacto. Existen ~20 aaRS (una por aminoácido), cada una reconoce el tRNA cognado (~identity elements en aceptor stem, variable loop, D-loop) e incrementa la fidelidad a ~10⁻⁴ errores. Aunque el anticodón del tRNA reconoce el codón, si aaRS carga el aa equivocado, el error se propaga.",
+        feedback_fail: "No. Las aaRS no trabajan en el ribosoma; cargan tRNAs en el citoplasma. El segundo código hace referencia a su rol crítico en la fidelidad traduccional.",
+        science: "<strong>Ingeniería genética:</strong> Sistemas de 'mutagénesis dirigida' insertos en tRNA y aaRS permiten incorporar aminoácidos no naturales (ncAA) en proteínas recombinantes, creando proteínas modificadas con propiedades nuevas."
+    },
+    {
+        question: "¿Cuál es la estructura del ribosoma eukariota y dónde ocurren las reacciones clave?",
+        options: [
+            {text:"Ribosoma 80S = subunidad 40S (rRNA 18S) + subunidad 60S (rRNA 28S/5.8S/5S). Sitios A, P, E para tRNA. Peptidil transferasa (rRNA 28S) cataliza unión peptídica; es una ribozima", correct:true},
+            {text:"Ribosoma 80S consta de rRNA + 80 proteínas; la peptidil transferasa es una proteína catalítica", correct:false},
+            {text:"Ribosoma 80S solo contiene rRNA 16S; prokariotas tienen 70S con rRNA 23S", correct:false}
+        ],
+        feedback_ok: "Correcto. El ribosoma es principalmente rRNA (>60%), con >80 proteínas. La peptidil transferasa es parte del rRNA 28S (sitio catalítico), demostrando que los ribosomas son ribozimas. Sitios A (entrante), P (péptido), E (salida) son donde residen los tRNAs.",
+        feedback_fail: "Incorrecto. La peptidil transferasa en eukariotas es rRNA (ribozima), no proteína. El ribosoma es mayormente ARN.",
+        science: "<strong>Resolución estructural:</strong> Venkatraman Ramakrishnan ganó el Nobel (2009) por la estructura de rayos X del ribosoma bacteriano 70S. Demuestra que la catalisis es rRNA, no proteína—un cambio paradigmático."
+    },
+    {
+        question: "¿Cómo se inicia la traducción en eukariotas y qué es la secuencia Kozak?",
+        options: [
+            {text:"Se inicia en AUG (codón de metionina). La subunidad 40S se une al 5' cap mRNA y escanea hasta encontrar AUG en contexto favorable (secuencia Kozak: GCCRCCAUGG, donde R = purina). El contexto nucleotídico -3/+4 de AUG influye eficiencia iniciación", correct:true},
+            {text:"Se inicia siempre en el primer AUG; Kozak es un factor de elongación sin relación con selección de codón", correct:false},
+            {text:"Eukariotas reconocen directamente ribosome binding sites como prokariotas; Kozak es irrelevante", correct:false}
+        ],
+        feedback_ok: "Exacto. Kozak (1987) demostró que nucleótidos flanqueantes a AUG modulan eficiencia: GCCRCCAUGG es óptimo (R = A o G). Un contexto pobre puede permitir reiniciación en AUG aguas abajo. Esto es crítico en IVT (in vitro transcription-translation) y proteínas recombinantes.",
+        feedback_fail: "No. El contexto Kozak es crítico: AUG en contexto subóptimo puede ser ignorado y el escaneo continúa. Hugo usa este conocimiento en síntesis de proteínas in vitro.",
+        science: "<strong>Aplicación en Hugo's IVT:</strong> Para maximizar expresión en sistemas de síntesis in vitro, la elección del contexto Kozak alrededor del ATG es esencial. Genoma sintético y proteómica recombinante dependen de esto."
+    },
+    {
+        question: "¿Cómo termina la traducción y cuáles son los codones STOP?",
+        options: [
+            {text:"Codones STOP (UAA, UAG, UGA) no son reconocidos por tRNA, sino por factores de liberación (RF1 reconoce UAA/UAG; RF2 reconoce UAA/UGA en prokariotas; eRF1 reconoce todos en eukariotas). La peptidasa libera el polipéptido y el ribosoma se desensambla", correct:true},
+            {text:"STOP codones son reconocidos por tRNA de terminación especial; eukariotas no tienen factores de liberación", correct:false},
+            {text:"La terminación ocurre cuando se agota el ATP; los codones STOP son secundarios", correct:false}
+        ],
+        feedback_ok: "Correcto. Los factores de liberación (release factors, RF) son proteínas que actúan cuando un codón STOP entra en sitio A. El dominio GGQ de RF cataliza hidrólisis de la unión ester entre polipéptido y tRNA-P, liberando la proteína. Luego RRF/EF-G disocian subunidades.",
+        feedback_fail: "No. Los codones STOP no son tRNA; son reconocidos por proteínas factores de liberación específicas.",
+        science: "<strong>Mutaciones clínicas:</strong> Mutaciones que convierten codones STOP en sentido (readthrough mutations) o crean STOP prematuros (nonsense mutations) causan enfermedades. Fármacos como aminoglucósidos pueden inducir readthrough, útil en fibrosis quística (CFTR con STOP prematuro)."
+    }
+];
+
+// Fisher-Yates shuffle
+function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+const game = {
+    current: 0,
+    score: 0,
+    total: STEPS.length,
+    lives: 3,
+    answered: false,
+
+    init() {
+        this.renderLives();
+        this.showStep();
+        // Track
+        const plays = parseInt(localStorage.getItem('biomol_traduccion_plays') || '0') + 1;
+        localStorage.setItem('biomol_traduccion_plays', plays);
+        gtag('event', 'game_start', {game: 'biomol_traduccion', play_number: plays});
+    },
+
+    renderLives() {
+        const el = document.getElementById('hudLives');
+        let h = '';
+        for (let i = 0; i < 3; i++) {
+            h += '<div class="life ' + (i < this.lives ? 'active' : 'lost') + '"></div>';
+        }
+        el.innerHTML = h;
+    },
+
+    showStep() {
+        if (this.current >= this.total) { this.showFinale(); return; }
+        this.answered = false;
+        const step = STEPS[this.current];
+        document.getElementById('stepIndicator').textContent = 'Pregunta ' + (this.current + 1) + ' de ' + this.total;
+        document.getElementById('hudStep').textContent = this.current + 1;
+        document.getElementById('questionText').textContent = step.question;
+
+        const shuffled = shuffle(step.options);
+        const container = document.getElementById('optionsContainer');
+        container.innerHTML = '';
+        shuffled.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = opt.text;
+            btn.onclick = () => this.answer(opt.correct, btn, step);
+            container.appendChild(btn);
+        });
+
+        document.getElementById('feedback').className = 'feedback';
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('continueBtn').className = 'continue-btn';
+    },
+
+    answer(correct, btn, step) {
+        if (this.answered) return;
+        this.answered = true;
+
+        document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+        const fb = document.getElementById('feedback');
+
+        if (correct) {
+            this.score++;
+            btn.classList.add('correct');
+            fb.className = 'feedback correct show';
+            fb.innerHTML = step.feedback_ok + '<div class="science-box">' + step.science + '</div>';
+        } else {
+            this.lives = Math.max(0, this.lives - 1);
+            btn.classList.add('wrong');
+            // Highlight correct
+            document.querySelectorAll('.option-btn').forEach(b => {
+                const opt = STEPS[this.current].options.find(o => o.text === b.textContent);
+                if (opt && opt.correct) b.classList.add('correct');
+            });
+            fb.className = 'feedback wrong show';
+            fb.innerHTML = step.feedback_fail + '<div class="science-box">' + step.science + '</div>';
+        }
+
+        this.renderLives();
+        document.getElementById('hudScore').textContent = this.score;
+
+        gtag('event', 'decision', {game: 'biomol_traduccion', step: this.current + 1, correct: correct});
+
+        setTimeout(() => {
+            document.getElementById('continueBtn').className = 'continue-btn show';
+        }, 2000);
+    },
+
+    nextStep() {
+        this.current++;
+        if (this.lives <= 0) { this.showFinale(); return; }
+        this.showStep();
+    },
+
+    showFinale() {
+        document.getElementById('quizContainer').style.display = 'none';
+        const finale = document.getElementById('finale');
+        finale.className = 'finale show';
+        document.getElementById('refSection').style.display = 'block';
+
+        const pct = Math.round((this.score / this.total) * 100);
+        let title, msg;
+        if (this.score === this.total) {
+            title = 'Maestro de la Traducción';
+            msg = 'Dominas el código genético, aminoacil-tRNA sintetasas, estructura ribosómica, Kozak e iniciación/terminación. Eres un experto en síntesis proteica.';
+        } else if (this.score >= 3) {
+            title = 'Buen conocimiento de traducción';
+            msg = 'Tienes bases sólidas. Repasa Kozak, factores de liberación y la estructura del ribosoma para alcanzar la maestría.';
+        } else {
+            title = 'Refuerza tu comprensión';
+            msg = 'La traducción es donde se realiza la información genética. Estudia el código, el ribosoma y los factores de iniciación/terminación.';
+        }
+
+        document.getElementById('finaleTitle').textContent = title;
+        document.getElementById('finaleScore').innerHTML = '<span style="color:' + (pct >= 80 ? '#10b981' : pct >= 60 ? '#60a5fa' : '#f87171') + '">' + this.score + '/' + this.total + '</span>';
+        document.getElementById('finaleMsg').textContent = msg;
+
+        // Save best score
+        const prev = JSON.parse(localStorage.getItem('biomol_traduccion_best') || 'null');
+        if (!prev || this.score > prev.score) {
+            localStorage.setItem('biomol_traduccion_best', JSON.stringify({score:this.score, total:this.total, lives:this.lives}));
+        }
+
+        gtag('event', 'game_complete', {game: 'biomol_traduccion', score: this.score, total: this.total, lives: this.lives});
+    }
+};
+
+document.addEventListener('DOMContentLoaded', () => game.init());
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
