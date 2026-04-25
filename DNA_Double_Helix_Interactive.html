@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DNA Double Helix — 24 bp Interactive</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a1a; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; }
+  canvas { display: block; }
+  #controls {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 10px; z-index: 10;
+  }
+  #controls button {
+    padding: 8px 18px; border: 1px solid rgba(255,255,255,0.3); border-radius: 20px;
+    background: rgba(10,10,30,0.7); color: #ccc; font-size: 13px; cursor: pointer;
+    backdrop-filter: blur(8px); transition: all 0.2s;
+  }
+  #controls button:hover { background: rgba(60,60,120,0.7); color: #fff; }
+  #controls button.active { background: rgba(80,120,255,0.5); color: #fff; border-color: rgba(80,120,255,0.8); }
+  #info {
+    position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+    color: rgba(255,255,255,0.5); font-size: 12px; text-align: center;
+    pointer-events: none; z-index: 10;
+  }
+  #phase-label {
+    position: fixed; top: 50px; left: 50%; transform: translateX(-50%);
+    color: rgba(180,200,255,0.7); font-size: 14px; font-weight: 500;
+    pointer-events: none; z-index: 10; transition: opacity 0.4s;
+  }
+  #seq-display {
+    position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
+    font-family: 'SF Mono', 'Menlo', 'Courier New', monospace; font-size: 11px;
+    line-height: 1.6; color: rgba(255,255,255,0.4); z-index: 10; pointer-events: none;
+  }
+  .bp-sense { color: rgba(100,180,255,0.7); }
+  .bp-anti { color: rgba(255,120,100,0.7); }
+  .bp-bond { color: rgba(255,255,255,0.25); }
+</style>
+</head>
+<body>
+<div id="info">DNA Double Helix — 24 bp B-form &nbsp;|&nbsp; Drag to rotate &nbsp;|&nbsp; Scroll to zoom</div>
+<div id="phase-label"></div>
+<div id="seq-display"></div>
+<div id="controls">
+  <button id="btn-rotate" class="active" onclick="setMode('rotate')">Rotate</button>
+  <button id="btn-zipper" onclick="setMode('zipper')">Zipper</button>
+  <button id="btn-manual" onclick="setMode('manual')">Manual</button>
+  <button id="btn-bg" onclick="toggleBg()">Light BG</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ============================================================
+//  DNA PARAMETERS (B-form)
+// ============================================================
+const NUM_BP        = 24;
+const RISE_PER_BP   = 0.34;          // nm — used as scene units
+const TWIST_PER_BP  = Math.PI / 5;   // 36° per bp
+const HELIX_RADIUS  = 1.0;
+const LINEAR_HALF_W = 0.9;           // half-width of the flat ladder
+const BP_SEQUENCE   = "ATGCTAGCAATGCCTTAGGCATGC";
+const COMPLEMENT    = { A:"T", T:"A", G:"C", C:"G" };
+const NUC_COLORS    = { A:0x4488ff, T:0xff6644, G:0x44cc66, C:0xffcc22 };
+const BACKBONE_CLR1 = 0x5588dd;
+const BACKBONE_CLR2 = 0xdd5555;
+
+// ============================================================
+//  THREE.JS SETUP
+// ============================================================
+const scene    = new THREE.Scene();
+const camera   = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 100);
+camera.position.set(0, 0, 12);
+
+const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setClearColor(0x0a0a1a, 1);
+document.body.appendChild(renderer.domElement);
+
+// Lights
+scene.add(new THREE.AmbientLight(0x334466, 0.6));
+const d1 = new THREE.DirectionalLight(0xaaccff, 0.8); d1.position.set(5,8,5);  scene.add(d1);
+const d2 = new THREE.DirectionalLight(0xffaa88, 0.4); d2.position.set(-5,-3,-5); scene.add(d2);
+const pl = new THREE.PointLight(0x6688ff, 0.3, 20);   pl.position.set(0,0,5);  scene.add(pl);
+
+// ============================================================
+//  DNA GROUP & GLOBALS
+// ============================================================
+const dnaGroup  = new THREE.Group();
+scene.add(dnaGroup);
+
+const totalH    = (NUM_BP - 1) * RISE_PER_BP;
+const yOffset   = -totalH / 2;
+const basePairs = [];
+let backbone1Mesh, backbone2Mesh;
+
+// ============================================================
+//  MATERIALS
+// ============================================================
+const bbMat1 = new THREE.MeshPhongMaterial({ color:BACKBONE_CLR1, shininess:80, specular:0x224488, transparent:true, opacity:0.9 });
+const bbMat2 = new THREE.MeshPhongMaterial({ color:BACKBONE_CLR2, shininess:80, specular:0x882244, transparent:true, opacity:0.9 });
+const bondMatTemplate = new THREE.MeshPhongMaterial({ color:0xffffff, shininess:40, transparent:true, opacity:0.35 });
+
+function nucMat(n) {
+  return new THREE.MeshPhongMaterial({ color:NUC_COLORS[n], shininess:100, specular:0x444444, transparent:true, opacity:0.95 });
+}
+
+// ============================================================
+//  POSITION FUNCTION — helix ↔ linear ↔ separated
+//
+//  twist   : 0 = flat ladder, 1 = full B-DNA helix
+//  sep     : lateral separation per strand (0 = touching)
+// ============================================================
+function getPos(bpIdx, strand, twist, sep) {
+  const y     = bpIdx * RISE_PER_BP + yOffset;
+  const angle = bpIdx * TWIST_PER_BP * twist + (strand === 2 ? Math.PI * twist : 0);
+
+  // Helix positions
+  const hx = HELIX_RADIUS * Math.cos(angle);
+  const hz = HELIX_RADIUS * Math.sin(angle);
+
+  // Linear positions — both strands flat on the X axis
+  const sign = strand === 1 ? -1 : 1;
+  const lx   = sign * LINEAR_HALF_W;
+  const lz   = 0;
+
+  // Interpolate helix → linear
+  const x = hx * twist + lx * (1 - twist);
+  const z = hz * twist + lz * (1 - twist);
+
+  // Add separation (move each strand outward along its local X)
+  const sepDir = strand === 1 ? -1 : 1;
+  return new THREE.Vector3(x + sepDir * sep, y, z);
+}
+
+// ============================================================
+//  BUILD BASE PAIRS (once)
+// ============================================================
+function buildBasePairs() {
+  for (let i = 0; i < NUM_BP; i++) {
+    const sense = BP_SEQUENCE[i];
+    const anti  = COMPLEMENT[sense];
+    const bpGrp = new THREE.Group();
+
+    const sGeo  = new THREE.SphereGeometry(0.14, 16, 12);
+    const sMesh = new THREE.Mesh(sGeo, nucMat(sense));
+    bpGrp.add(sMesh);
+
+    const aGeo  = new THREE.SphereGeometry(0.14, 16, 12);
+    const aMesh = new THREE.Mesh(aGeo, nucMat(anti));
+    bpGrp.add(aMesh);
+
+    const nBonds = (sense==='G'||sense==='C') ? 3 : 2;
+    const bonds  = [];
+    for (let b = 0; b < nBonds; b++) {
+      const bg = new THREE.CylinderGeometry(0.02, 0.02, 1, 6);
+      const bm = new THREE.Mesh(bg, bondMatTemplate.clone());
+      bpGrp.add(bm);
+      bonds.push(bm);
+    }
+
+    // Backbone connector stubs
+    const st1 = new THREE.Mesh(new THREE.CylinderGeometry(0.04,0.04,0.1,6), bbMat1);
+    const st2 = new THREE.Mesh(new THREE.CylinderGeometry(0.04,0.04,0.1,6), bbMat2);
+    bpGrp.add(st1, st2);
+
+    dnaGroup.add(bpGrp);
+    basePairs.push({ i, sense, anti, sMesh, aMesh, bonds, st1, st2, bpGrp });
+  }
+}
+
+// ============================================================
+//  UPDATE ONE BASE PAIR to given twist + separation
+// ============================================================
+function updateBP(bp, twist, sep) {
+  const p1  = getPos(bp.i, 1, twist, sep);
+  const p2  = getPos(bp.i, 2, twist, sep);
+  bp.sMesh.position.copy(p1);
+  bp.aMesh.position.copy(p2);
+
+  const mid  = p1.clone().add(p2).multiplyScalar(0.5);
+  const dist = p1.distanceTo(p2);
+  const dir  = p2.clone().sub(p1).normalize();
+
+  // Hydrogen bonds
+  for (let b = 0; b < bp.bonds.length; b++) {
+    const off = (b - (bp.bonds.length-1)/2) * 0.06;
+    const bond = bp.bonds[b];
+    bond.position.copy(mid);
+    bond.position.y += off;
+    bond.scale.y = dist * 0.85;
+    bond.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), dir);
+
+    // Fade out H-bonds as strands separate
+    const fadeStart = 0.4;
+    bond.material.opacity = sep > fadeStart
+      ? Math.max(0, 0.35 * (1 - (sep - fadeStart) / 0.8))
+      : 0.35;
+    bond.visible = bond.material.opacity > 0.01;
+  }
+
+  // Backbone stubs
+  bp.st1.position.copy(p1).add(dir.clone().multiplyScalar(0.05));
+  bp.st1.scale.y = 0.8;
+  bp.st1.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), dir);
+  bp.st2.position.copy(p2).sub(dir.clone().multiplyScalar(0.05));
+  bp.st2.scale.y = 0.8;
+  bp.st2.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), dir);
+}
+
+// ============================================================
+//  REBUILD BACKBONE TUBES from current nucleotide positions
+// ============================================================
+function rebuildBackbones() {
+  if (backbone1Mesh) { dnaGroup.remove(backbone1Mesh); backbone1Mesh.geometry.dispose(); }
+  if (backbone2Mesh) { dnaGroup.remove(backbone2Mesh); backbone2Mesh.geometry.dispose(); }
+
+  const pts1 = basePairs.map(bp => bp.sMesh.position.clone());
+  const pts2 = basePairs.map(bp => bp.aMesh.position.clone());
+
+  if (pts1.length > 2) {
+    const c1 = new THREE.CatmullRomCurve3(pts1);
+    const c2 = new THREE.CatmullRomCurve3(pts2);
+    backbone1Mesh = new THREE.Mesh(new THREE.TubeGeometry(c1, 160, 0.07, 8, false), bbMat1);
+    backbone2Mesh = new THREE.Mesh(new THREE.TubeGeometry(c2, 160, 0.07, 8, false), bbMat2);
+    dnaGroup.add(backbone1Mesh, backbone2Mesh);
+  }
+}
+
+// ============================================================
+//  INITIAL BUILD
+// ============================================================
+buildBasePairs();
+basePairs.forEach(bp => updateBP(bp, 1, 0));
+rebuildBackbones();
+
+// Sequence sidebar
+(function buildSeqDisplay() {
+  let h = '';
+  for (let i = 0; i < NUM_BP; i++) {
+    const s = BP_SEQUENCE[i], a = COMPLEMENT[s];
+    const b = (s==='G'||s==='C') ? '\u2261' : '=';
+    h += `<div><span class="bp-sense">${s}</span><span class="bp-bond"> ${b} </span><span class="bp-anti">${a}</span></div>`;
+  }
+  document.getElementById('seq-display').innerHTML = h;
+})();
+
+// ============================================================
+//  ANIMATION STATE
+// ============================================================
+let mode           = 'rotate';
+let zipperTime     = 0;
+let autoRotSpeed   = 0.003;
+let isDarkBg       = true;
+let mouseDown      = false;
+let lastMouse      = { x:0, y:0 };
+let rotY = 0, rotX = 0, targetZoom = 12;
+
+// Easing helpers
+function easeIO(t)   { return t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; }
+function easeOutQ(t)  { return 1-(1-t)*(1-t); }
+function clamp01(t)   { return Math.max(0, Math.min(1, t)); }
+function lerp(a,b,t)  { return a + (b-a)*t; }
+
+// ============================================================
+//  ZIPPER PHASE TIMELINE  (total cycle ≈ 10 units)
+//
+//  0.0 – 1.5   Helix → Linear   (untwist)
+//  1.5 – 1.8   Hold linear
+//  1.8 – 4.5   Zipper open  (slow, sequential)
+//  4.5 – 5.5   Hold open
+//  5.5 – 8.2   Zipper close (slow, sequential)
+//  8.2 – 8.5   Hold linear
+//  8.5 – 10.0  Linear → Helix   (retwist)
+// 10.0 – 11.0  Hold helix, then loop
+// ============================================================
+const Z_UNTWIST_S  = 0.0,  Z_UNTWIST_E  = 1.5;
+const Z_HOLD_LIN1S = 1.5,  Z_HOLD_LIN1E = 1.8;
+const Z_OPEN_S     = 1.8,  Z_OPEN_E     = 4.5;
+const Z_HOLD_OPEN_S= 4.5,  Z_HOLD_OPEN_E= 5.5;
+const Z_CLOSE_S    = 5.5,  Z_CLOSE_E    = 8.2;
+const Z_HOLD_LIN2S = 8.2,  Z_HOLD_LIN2E = 8.5;
+const Z_RETWIST_S  = 8.5,  Z_RETWIST_E  = 10.0;
+const Z_HOLD_HLX_S = 10.0, Z_HOLD_HLX_E = 11.0;
+const Z_CYCLE       = Z_HOLD_HLX_E;
+
+const ZIPPER_SPEED  = 0.006;   // slower overall
+const MAX_SEP       = 1.4;     // max strand separation
+
+function zipperFrame(t) {
+  const phaseLabel = document.getElementById('phase-label');
+  phaseLabel.style.opacity = 1;
+
+  // --- Determine global twist and per-bp separation ---
+  let twist = 1;           // 1 = helix, 0 = linear
+  const seps = new Array(NUM_BP).fill(0);
+
+  if (t < Z_UNTWIST_E) {
+    // ---- UNTWIST ----
+    const p = clamp01((t - Z_UNTWIST_S) / (Z_UNTWIST_E - Z_UNTWIST_S));
+    twist = 1 - easeIO(p);
+    phaseLabel.textContent = 'Unwinding Helix → Linear Duplex';
+
+  } else if (t < Z_HOLD_LIN1E) {
+    twist = 0;
+    phaseLabel.textContent = 'Linear Double-Stranded DNA';
+
+  } else if (t < Z_OPEN_E) {
+    // ---- ZIPPER OPEN (slow, top→bottom) ----
+    twist = 0;
+    const openDur = Z_OPEN_E - Z_OPEN_S;
+    const elapsed = t - Z_OPEN_S;
+    phaseLabel.textContent = 'Denaturing — Strand Separation';
+
+    for (let i = 0; i < NUM_BP; i++) {
+      // Each bp starts opening after a staggered delay
+      const bpFrac   = i / (NUM_BP - 1);             // 0 = first bp, 1 = last
+      const bpDelay  = bpFrac * openDur * 0.7;        // stagger over 70 % of the phase
+      const bpLocal  = clamp01((elapsed - bpDelay) / (openDur * 0.45)); // each bp takes 45% of phase to fully open
+      seps[i] = easeOutQ(bpLocal) * MAX_SEP;
+    }
+
+  } else if (t < Z_HOLD_OPEN_E) {
+    // ---- HOLD OPEN ----
+    twist = 0;
+    seps.fill(MAX_SEP);
+    phaseLabel.textContent = 'Denatured — Single Strands';
+
+  } else if (t < Z_CLOSE_E) {
+    // ---- ZIPPER CLOSE (slow, top→bottom) ----
+    twist = 0;
+    const closeDur = Z_CLOSE_E - Z_CLOSE_S;
+    const elapsed  = t - Z_CLOSE_S;
+    phaseLabel.textContent = 'Reannealing — Base Pairing';
+
+    for (let i = 0; i < NUM_BP; i++) {
+      const bpFrac   = i / (NUM_BP - 1);
+      const bpDelay  = bpFrac * closeDur * 0.7;
+      const bpLocal  = clamp01((elapsed - bpDelay) / (closeDur * 0.45));
+      seps[i] = (1 - easeIO(bpLocal)) * MAX_SEP;
+    }
+
+  } else if (t < Z_HOLD_LIN2E) {
+    twist = 0;
+    phaseLabel.textContent = 'Linear Double-Stranded DNA';
+
+  } else if (t < Z_RETWIST_E) {
+    // ---- RETWIST ----
+    const p = clamp01((t - Z_RETWIST_S) / (Z_RETWIST_E - Z_RETWIST_S));
+    twist = easeIO(p);
+    phaseLabel.textContent = 'Rewinding → B-DNA Helix';
+
+  } else {
+    twist = 1;
+    phaseLabel.textContent = 'Native B-DNA Duplex';
+    if (t > Z_CYCLE - 0.4) phaseLabel.style.opacity = Math.max(0, (Z_CYCLE - t) / 0.4);
+  }
+
+  // Apply to every base pair
+  for (let i = 0; i < NUM_BP; i++) {
+    updateBP(basePairs[i], twist, seps[i]);
+  }
+  rebuildBackbones();
+}
+
+// ============================================================
+//  MAIN ANIMATION LOOP
+// ============================================================
+function animate() {
+  requestAnimationFrame(animate);
+
+  if (mode === 'rotate') {
+    rotY += autoRotSpeed;
+    basePairs.forEach(bp => updateBP(bp, 1, 0));
+    rebuildBackbones();
+  }
+
+  if (mode === 'zipper') {
+    rotY += autoRotSpeed * 0.3;   // gentle rotation during zipper
+    zipperTime += ZIPPER_SPEED;
+    if (zipperTime > Z_CYCLE) zipperTime = 0;
+    zipperFrame(zipperTime);
+  }
+
+  if (mode === 'manual') {
+    // positions stay as-is; user drags
+    basePairs.forEach(bp => updateBP(bp, 1, 0));
+    rebuildBackbones();
+  }
+
+  dnaGroup.rotation.y = rotY;
+  dnaGroup.rotation.x = rotX;
+  camera.position.z += (targetZoom - camera.position.z) * 0.05;
+  renderer.render(scene, camera);
+}
+
+// ============================================================
+//  INTERACTION
+// ============================================================
+renderer.domElement.addEventListener('mousedown', e => {
+  mouseDown = true; lastMouse.x = e.clientX; lastMouse.y = e.clientY;
+});
+renderer.domElement.addEventListener('mousemove', e => {
+  if (!mouseDown) return;
+  rotY += (e.clientX - lastMouse.x) * 0.005;
+  rotX += (e.clientY - lastMouse.y) * 0.005;
+  rotX  = Math.max(-Math.PI/3, Math.min(Math.PI/3, rotX));
+  lastMouse.x = e.clientX; lastMouse.y = e.clientY;
+});
+renderer.domElement.addEventListener('mouseup',    () => mouseDown = false);
+renderer.domElement.addEventListener('mouseleave',  () => mouseDown = false);
+renderer.domElement.addEventListener('wheel', e => {
+  targetZoom = Math.max(5, Math.min(25, targetZoom + e.deltaY * 0.01));
+});
+
+// Touch
+renderer.domElement.addEventListener('touchstart', e => {
+  if (e.touches.length===1) { mouseDown=true; lastMouse.x=e.touches[0].clientX; lastMouse.y=e.touches[0].clientY; }
+}, {passive:true});
+renderer.domElement.addEventListener('touchmove', e => {
+  if (!mouseDown||e.touches.length!==1) return;
+  rotY += (e.touches[0].clientX-lastMouse.x)*0.005;
+  rotX += (e.touches[0].clientY-lastMouse.y)*0.005;
+  rotX  = Math.max(-Math.PI/3, Math.min(Math.PI/3, rotX));
+  lastMouse.x=e.touches[0].clientX; lastMouse.y=e.touches[0].clientY;
+}, {passive:true});
+renderer.domElement.addEventListener('touchend', () => mouseDown=false);
+
+// ============================================================
+//  UI CONTROLS
+// ============================================================
+function setMode(m) {
+  mode = m;
+  zipperTime = 0;
+  document.querySelectorAll('#controls button').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-'+m).classList.add('active');
+  document.getElementById('phase-label').style.opacity = 0;
+  if (m !== 'zipper') {
+    basePairs.forEach(bp => updateBP(bp, 1, 0));
+    rebuildBackbones();
+  }
+}
+
+function toggleBg() {
+  isDarkBg = !isDarkBg;
+  const btn = document.getElementById('btn-bg');
+  if (isDarkBg) {
+    renderer.setClearColor(0x0a0a1a,1); document.body.style.background='#0a0a1a';
+    document.getElementById('info').style.color='rgba(255,255,255,0.5)'; btn.textContent='Light BG';
+  } else {
+    renderer.setClearColor(0xf5f5f5,1); document.body.style.background='#f5f5f5';
+    document.getElementById('info').style.color='rgba(0,0,0,0.4)'; btn.textContent='Dark BG';
+  }
+}
+
+window.addEventListener('resize', () => {
+  camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+// Subtle particles
+(function(){
+  const N=200, pos=new Float32Array(N*3);
+  for(let i=0;i<N*3;i++) pos[i]=(Math.random()-.5)*30;
+  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  scene.add(new THREE.Points(g, new THREE.PointsMaterial({color:0x4466aa,size:0.03,transparent:true,opacity:0.4})));
+})();
+
+animate();
+</script>
+</body>
+</html>
