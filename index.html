@@ -376,6 +376,43 @@
       color:#0c5460;
       border:1px solid #bee5eb;
     }
+    .status-preprint{
+      background:#e8daef;
+      color:#6c3483;
+      border:1px solid #bb8fce;
+    }
+    .status-published{
+      background:#d4efdf;
+      color:#1e8449;
+      border:1px solid #82e0aa;
+    }
+    .tools-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+      gap:12px;
+      margin-top:12px;
+    }
+    .tool-card{
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      border-radius:8px;
+      padding:14px;
+      transition:box-shadow 0.2s;
+    }
+    .tool-card:hover{ box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+    .tool-card h4{ font-size:14px; margin-bottom:4px; color:#0b2545; }
+    .tool-card p{ font-size:12px; color:#475569; margin:0; }
+    .tool-card .tool-tags{ margin-top:6px; }
+    .tool-card .tool-tags span{
+      display:inline-block;
+      font-size:10px;
+      background:#e8f4fd;
+      color:#2a6f97;
+      padding:1px 6px;
+      border-radius:4px;
+      margin-right:4px;
+      margin-bottom:3px;
+    }
     .contact{ text-align:center; font-size:16px; }
     .contact a{ font-weight:800; }
     section[id]{ scroll-margin-top:68px; }
@@ -537,6 +574,10 @@
       <a href="#pipeline">
         <span data-lang="en">Pipeline</span>
         <span data-lang="es" style="display:none;">En proceso</span>
+      </a>
+      <a href="#biotools">
+        <span data-lang="en">BioTools</span>
+        <span data-lang="es" style="display:none;">BioTools</span>
       </a>
       <a href="#synergy">
         <span data-lang="en">Activities</span>
@@ -852,6 +893,12 @@
   </h2>
   <div data-lang="en">
     <div class="pub">
+      <b>bioRxiv (2026)</b> – Post-GWAS functional annotation of the RPTOR locus identifies rs12950541 as a candidate regulatory variant for type 2 diabetes and metabolic traits.
+      <span class="pub-status status-preprint">Preprint</span><br>
+      DOI: <a href="https://doi.org/10.64898/2026.04.26.720864" target="_blank" rel="noopener noreferrer">10.64898/2026.04.26.720864</a>
+      &middot; <a href="https://github.com/hugoleonid2008-ops/RPTOR-PostGWAS-rs12950541" target="_blank" rel="noopener noreferrer">Pipeline &amp; Data</a>
+    </div>
+    <div class="pub">
       <b>Cancers (2025)</b> – Genetic insights into breast cancer in Northeastern Mexico: unveiling gene-environment interactions and links to obesity/metabolic diseases.<br>
       DOI: <a href="https://doi.org/10.3390/cancers17060982" target="_blank" rel="noopener noreferrer">10.3390/cancers17060982</a>
     </div>
@@ -877,6 +924,12 @@
     </p>
   </div>
   <div data-lang="es" style="display:none;">
+    <div class="pub">
+      <b>bioRxiv (2026)</b> – Post-GWAS functional annotation of the RPTOR locus identifies rs12950541 as a candidate regulatory variant for type 2 diabetes and metabolic traits.
+      <span class="pub-status status-preprint">Preprint</span><br>
+      DOI: <a href="https://doi.org/10.64898/2026.04.26.720864" target="_blank" rel="noopener noreferrer">10.64898/2026.04.26.720864</a>
+      &middot; <a href="https://github.com/hugoleonid2008-ops/RPTOR-PostGWAS-rs12950541" target="_blank" rel="noopener noreferrer">Pipeline y datos</a>
+    </div>
     <div class="pub">
       <b>Cancers (2025)</b> – Genetic insights into breast cancer in Northeastern Mexico: unveiling gene-environment interactions and links to obesity/metabolic diseases.<br>
       DOI: <a href="https://doi.org/10.3390/cancers17060982" target="_blank" rel="noopener noreferrer">10.3390/cancers17060982</a>
@@ -913,6 +966,12 @@
   <div data-lang="en">
     <p class="smallnote">Active manuscripts and ongoing experimental work. Collaborators welcome — <a href="mailto:hugo.gallardobl@uanl.edu.mx?subject=Collaboration%20interest">contact to discuss</a>.</p>
     <div class="pub">
+      <b>RPTOR post-GWAS (rs12950541) — Pipeline PostGWAS Gallardo v1</b>
+      <span class="pub-status status-preprint">Preprint</span><br>
+      10-stage functional annotation pipeline. RPTOR ranked #1 L2G across 31 credible sets; 1,047 colocalizations with adiposity traits; novel RPTOR-208/ABCC8 RNA-protein interaction.
+      <a href="https://github.com/hugoleonid2008-ops/RPTOR-PostGWAS-rs12950541" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+    <div class="pub">
       <b>Myc/Max interaction inhibition — mechanistic validation</b>
       <span class="pub-status status-inprep">In preparation</span><br>
       Competitive blockade strategy with downstream pathway profiling; experiment-ready endpoints defined.
@@ -922,9 +981,20 @@
       <span class="pub-status status-inprep">In preparation</span><br>
       Receptor-guided construct with endosomal routing characterization in HER2+ cell lines.
     </div>
+    <div class="pub">
+      <b>PostGWAS pipeline series — ANKRD55, TCF7L2, cross-loci comparative</b>
+      <span class="pub-status status-inprep">In preparation</span><br>
+      Systematic application of Pipeline PostGWAS Gallardo v1 to additional T2D GWAS loci.
+    </div>
   </div>
   <div data-lang="es" style="display:none;">
     <p class="smallnote">Manuscritos activos y trabajo experimental en curso. Se invita a colaboradores — <a href="mailto:hugo.gallardobl@uanl.edu.mx?subject=Inter%C3%A9s%20en%20colaboraci%C3%B3n">escríbenos para discutir</a>.</p>
+    <div class="pub">
+      <b>RPTOR post-GWAS (rs12950541) — Pipeline PostGWAS Gallardo v1</b>
+      <span class="pub-status status-preprint">Preprint</span><br>
+      Pipeline de anotación funcional de 10 etapas. RPTOR #1 en L2G en 31 conjuntos credibles; 1,047 colocalizaciones con rasgos de adiposidad; interacción novedosa RPTOR-208/ABCC8 ARN-proteína.
+      <a href="https://github.com/hugoleonid2008-ops/RPTOR-PostGWAS-rs12950541" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
     <div class="pub">
       <b>Inhibición de interacción Myc/Max — validación mecanística</b>
       <span class="pub-status status-inprep">En preparación</span><br>
@@ -934,6 +1004,69 @@
       <b>Nanosistema dirigido a HER2 — estudio de enrutamiento intracelular</b>
       <span class="pub-status status-inprep">En preparación</span><br>
       Constructo guiado por receptor con caracterización de enrutamiento endosomal en líneas HER2+.
+    </div>
+    <div class="pub">
+      <b>Serie pipeline PostGWAS — ANKRD55, TCF7L2, comparativo multi-locus</b>
+      <span class="pub-status status-inprep">En preparación</span><br>
+      Aplicación sistemática del Pipeline PostGWAS Gallardo v1 a loci adicionales de GWAS en T2D.
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATIONAL SOFTWARE -->
+<section id="biotools" class="section">
+  <h2>
+    <span data-lang="en">Educational Software</span>
+    <span data-lang="es" style="display:none;">Software educativo</span>
+  </h2>
+  <div data-lang="en">
+    <p class="smallnote">Open-access interactive games for undergraduate biochemistry and molecular biology courses. Built with HTML5/JS — no installation required. <a href="https://hugoleonid2008-ops.github.io/gallardo-biotools/" target="_blank" rel="noopener noreferrer">Gallardo BioTools portal</a> &middot; <a href="https://github.com/hugoleonid2008-ops/gallardo-biotools" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <h4>Cit&oacute;polis</h4>
+        <p>Tower-defense game teaching cancer cell biology: cell signaling, immune evasion, apoptosis, and DNA repair pathways. Includes PARP, immunotherapy, and p53 expansion missions.</p>
+        <div class="tool-tags"><span>Cancer Biology</span><span>Cell Signaling</span><span>Gamification</span></div>
+      </div>
+      <div class="tool-card">
+        <h4>NanoMisi&oacute;n</h4>
+        <p>Scenario-based quiz on nanomedicine: nanoparticle design, EPR effect, active targeting with aptamers, and drug delivery strategy. Congress multiplayer mode with real-time Firebase leaderboard.</p>
+        <div class="tool-tags"><span>Nanomedicine</span><span>Drug Delivery</span><span>Multiplayer</span></div>
+      </div>
+      <div class="tool-card">
+        <h4>Oro: Caballo de Troya</h4>
+        <p>Interactive narrative on gold nanoparticles as Trojan horses for targeted therapy — synthesis, functionalization, and intracellular delivery.</p>
+        <div class="tool-tags"><span>AuNPs</span><span>Targeted Therapy</span><span>Narrative</span></div>
+      </div>
+      <div class="tool-card">
+        <h4>BioMol Track (5 games)</h4>
+        <p>Five-module series covering DNA structure, replication, transcription, translation, and mutations. Progressive difficulty with visual molecular models.</p>
+        <div class="tool-tags"><span>Molecular Biology</span><span>Central Dogma</span><span>5 Modules</span></div>
+      </div>
+    </div>
+  </div>
+  <div data-lang="es" style="display:none;">
+    <p class="smallnote">Juegos interactivos de acceso abierto para cursos de bioquímica y biología molecular a nivel licenciatura. Desarrollados en HTML5/JS — sin instalación. <a href="https://hugoleonid2008-ops.github.io/gallardo-biotools/" target="_blank" rel="noopener noreferrer">Portal Gallardo BioTools</a> &middot; <a href="https://github.com/hugoleonid2008-ops/gallardo-biotools" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <h4>Cit&oacute;polis</h4>
+        <p>Juego tower-defense sobre biología celular del cáncer: señalización celular, evasión inmune, apoptosis y vías de reparación del ADN. Incluye misiones de expansión PARP, inmunoterapia y p53.</p>
+        <div class="tool-tags"><span>Biología del cáncer</span><span>Señalización</span><span>Gamificación</span></div>
+      </div>
+      <div class="tool-card">
+        <h4>NanoMisi&oacute;n</h4>
+        <p>Quiz basado en escenarios de nanomedicina: diseño de nanopartículas, efecto EPR, targeting activo con aptámeros y estrategia de entrega de fármacos. Modo multijugador para congresos con leaderboard en tiempo real vía Firebase.</p>
+        <div class="tool-tags"><span>Nanomedicina</span><span>Drug Delivery</span><span>Multijugador</span></div>
+      </div>
+      <div class="tool-card">
+        <h4>Oro: Caballo de Troya</h4>
+        <p>Narrativa interactiva sobre nanopartículas de oro como caballos de Troya para terapia dirigida — síntesis, funcionalización y entrega intracelular.</p>
+        <div class="tool-tags"><span>AuNPs</span><span>Terapia dirigida</span><span>Narrativa</span></div>
+      </div>
+      <div class="tool-card">
+        <h4>BioMol Track (5 juegos)</h4>
+        <p>Serie de cinco módulos que cubren estructura del ADN, replicación, transcripción, traducción y mutaciones. Dificultad progresiva con modelos moleculares visuales.</p>
+        <div class="tool-tags"><span>Biología Molecular</span><span>Dogma Central</span><span>5 Módulos</span></div>
+      </div>
     </div>
   </div>
 </section>
