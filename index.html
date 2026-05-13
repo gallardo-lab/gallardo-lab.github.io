@@ -88,20 +88,32 @@
     ]
   }
   </script>
+<!-- Schema.org ProfilePage
+       FIX 2026-05-13: dateCreated/dateModified migrated to full ISO 8601 datetime
+       with timezone offset (CST, Monterrey) to satisfy Google's stricter
+       ProfilePage validator. Added @id, url, name, inLanguage, and about
+       for richer academic SEO signal. -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
-    "dateCreated": "2025-01-01",
-    "dateModified": "2026-03-05",
+    "@id": "https://hugoleonid2008-ops.github.io/hugo-gallardo/#profilepage",
+    "url": "https://hugoleonid2008-ops.github.io/hugo-gallardo/",
+    "name": "Hugo Leonid Gallardo-Blanco — Web Biosketch",
+    "inLanguage": ["en", "es"],
+    "dateCreated": "2025-01-01T00:00:00-06:00",
+    "dateModified": "2026-05-13T18:00:00-06:00",
     "mainEntity": {
       "@type": "Person",
       "@id": "https://orcid.org/0000-0002-7816-4967",
       "name": "Hugo Leonid Gallardo-Blanco"
+    },
+    "about": {
+      "@id": "https://orcid.org/0000-0002-7816-4967"
     }
   }
   </script>
-  <style>
+    <style>
     :root{
       --ink:#0b2545;
       --accent:#2a6f97;
