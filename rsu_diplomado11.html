@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa Mental RSU — Dr. Hugo Leonid Gallardo-Blanco</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: #f0f4f8;
+    min-height: 100vh;
+  }
+
+  /* ── PORTADA ─────────────────────────────────────────────── */
+  .cover {
+    background: linear-gradient(135deg, #003865 0%, #005a9c 50%, #0077c8 100%);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 40px;
+    page-break-after: always;
+  }
+
+  .cover-uanl-badge {
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 12px;
+    padding: 10px 24px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  .cover-icon {
+    font-size: 80px;
+    margin-bottom: 24px;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+  }
+
+  .cover h1 {
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 12px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .cover h1 span {
+    color: #7dd3fc;
+  }
+
+  .cover-subtitle {
+    font-size: 18px;
+    font-weight: 300;
+    opacity: 0.85;
+    margin-bottom: 48px;
+    max-width: 560px;
+  }
+
+  .cover-divider {
+    width: 80px;
+    height: 3px;
+    background: rgba(255,255,255,0.4);
+    margin: 0 auto 40px;
+    border-radius: 2px;
+  }
+
+  .cover-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 15px;
+    opacity: 0.9;
+  }
+
+  .cover-meta .name {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .cover-meta .dept {
+    font-size: 14px;
+    opacity: 0.75;
+  }
+
+  .cover-footer {
+    position: absolute;
+    bottom: 32px;
+    font-size: 12px;
+    opacity: 0.5;
+    letter-spacing: 1px;
+  }
+
+  /* ── PÁGINA DEL MAPA ──────────────────────────────────────── */
+  .map-page {
+    background: #fafbfd;
+    min-height: 100vh;
+    padding: 32px 24px 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .map-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .map-header h2 {
+    font-size: 13px;
+    color: #64748b;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  /* ── SVG CONTAINER ────────────────────────────────────────── */
+  .svg-wrapper {
+    width: 100%;
+    max-width: 1400px;
+  }
+
+  svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.06));
+  }
+
+  /* ── LEGEND ───────────────────────────────────────────────── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 28px;
+    max-width: 1000px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #475569;
+  }
+
+  .legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── REFLECTION SECTION ───────────────────────────────────── */
+  .reflection {
+    background: white;
+    border-radius: 16px;
+    padding: 32px 40px;
+    max-width: 900px;
+    margin: 36px auto 0;
+    border-left: 5px solid #005a9c;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+
+  .reflection h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #003865;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .reflection p {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #374151;
+    margin-bottom: 12px;
+  }
+
+  .reflection p:last-child { margin-bottom: 0; }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .tag {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  @media print {
+    body { background: white; }
+    .cover { min-height: 297mm; }
+    .map-page { min-height: 297mm; }
+    .reflection { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 1 — PORTADA
+═══════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-uanl-badge">Diplomado en Formación Docente · Facultad de Medicina, UANL</div>
+
+  <div class="cover-icon">🎓</div>
+
+  <h1>Responsabilidad<br><span>Social Universitaria</span></h1>
+  <p class="cover-subtitle">Mapa mental: comprensión conceptual y aprendizaje para la práctica docente</p>
+
+  <div class="cover-divider"></div>
+
+  <div class="cover-meta">
+    <div class="name">Dr. en C. Hugo Leonid Gallardo-Blanco</div>
+    <div>Servicio de Oncología</div>
+    <div class="dept">Hospital Universitario · Universidad Autónoma de Nuevo León</div>
+    <br>
+    <div class="dept" style="opacity:0.6">Producto Final 11 · Mayo 2026</div>
+  </div>
+
+  <div class="cover-footer">UANL · Facultad de Medicina · 2026</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 2 — MAPA MENTAL
+═══════════════════════════════════════════════════════ -->
+<div class="map-page">
+  <div class="map-header">
+    <h2>Mapa Mental · Producto Final 11</h2>
+  </div>
+
+  <div class="svg-wrapper">
+    <img
+      src="mapa_rsu_diplomado11.png"
+      alt="Mapa Mental RSU — Dr. Hugo Leonid Gallardo-Blanco"
+      style="width:100%; height:auto; border-radius:12px; display:block;"
+    />
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#7c3aed"></div>Objetivos</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#0369a1"></div>Principios</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#065f46"></div>Educación</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#b45309"></div>Valores</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#be123c"></div>Servicio</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#0f766e"></div>Transparencia</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#9d174d"></div>Compromiso docente</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#94a3b8"></div>Nodos contextuales</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 3 — REFLEXIÓN DOCENTE
+═══════════════════════════════════════════════════════ -->
+<div class="map-page" style="min-height:auto; padding-top:48px; padding-bottom:64px;">
+
+  <div class="map-header">
+    <h2>Reflexión docente · Aprendizaje personal</h2>
+  </div>
+
+  <div class="reflection">
+    <h3>💡 Lo que la RSU significa para mi práctica en Oncología y Bioquímica</h3>
+
+    <p>La Responsabilidad Social Universitaria no es una declaración institucional que se cumple en el papel: es la orientación que da sentido a cada decisión docente cotidiana. En mi caso, el cruce entre tres roles —docente de laboratorio de Bioquímica, investigador en nanomedicina oncológica y académico del Servicio de Oncología del Hospital Universitario— hace que la RSU sea, al mismo tiempo, un principio ético y una práctica verificable.</p>
+
+    <p>El primero de mis aprendizajes es que <strong>la docencia responsable comienza por leer el contexto del estudiante.</strong> En el laboratorio, veintiséis estudiantes de primer año traen consigo sobrecarga académica, presión por el rendimiento y, con frecuencia, vulnerabilidad emocional que pasa desapercibida en el aula magistral pero se hace visible en el trabajo práctico semanal. Atender esas señales —canalizarlas, no solucionarlas— es ya un acto de responsabilidad social.</p>
+
+    <p>El segundo aprendizaje es que <strong>la investigación adquiere valor social solo cuando sus resultados pueden llegar a quienes los necesitan.</strong> Desarrollar aptámeros anti-HER2 o pipelines bioinformáticos abiertos no es un fin en sí mismo: es una forma de hacer ciencia que le debe algo a la sociedad que la financia. La difusión, las asesorías a tesistas, las patentes PCT y los recursos abiertos son, en este sentido, extensiones directas de la RSU.</p>
+
+    <p>El tercer aprendizaje es sobre <strong>la transparencia como práctica concreta, no como valor abstracto.</strong> Compartir rúbricas claras con los estudiantes, publicar en acceso abierto, declinar invitaciones editoriales de bajo filtro y mantener un perfil ORCID verificable son formas de rendición de cuentas que la universidad necesita de sus docentes-investigadores, especialmente en el contexto del SNII y de la acreditación de facultades de medicina exigida desde 2023 por la ECFMG.</p>
+
+    <p>Finalmente, <strong>el compromiso docente no se agota en el salón:</strong> se extiende a la codirección de tesis, a la formación de postdocs, a la participación en revisiones de manuscritos con criterio crítico y a la construcción de materiales como los juegos interactivos BioLab —diseñados precisamente para hacer accesible el conocimiento biomédico complejo a través de la gamificación, en cumplimiento del principio de formación integral que la RSU exige a la universidad.</p>
+
+    <div class="tag-row">
+      <span class="tag">RSU · UANL 2030</span>
+      <span class="tag">Lab Bioquímica</span>
+      <span class="tag">Oncología HU</span>
+      <span class="tag">Nanomedicina HER2</span>
+      <span class="tag">BioLab Games</span>
+      <span class="tag">Ciencia abierta</span>
+      <span class="tag">ISO 26000</span>
+      <span class="tag">Formación integral</span>
+      <span class="tag">ECFMG RS 2023</span>
+      <span class="tag">Transparencia académica</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
