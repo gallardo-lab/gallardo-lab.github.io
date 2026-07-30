@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://gallardo-lab.github.io/</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.00</priority>
   </url>
@@ -13,8 +13,8 @@
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://gallardo-lab.github.io/LIBAC_onepager.pdf</loc>
-    <lastmod>2026-05-13</lastmod>
+    <loc>https://gallardo-lab.github.io/gallardo-lab_onepager.pdf</loc>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.70</priority>
   </url>
